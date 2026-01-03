@@ -30,14 +30,22 @@
   "hooks": {
     "SessionStart": [
       {
-        "type": "command",
-        "command": ".claude/scripts/session-start.sh"
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/session-start.sh"
+          }
+        ]
       }
     ],
     "Stop": [
       {
-        "type": "command",
-        "command": ".claude/scripts/session-end.sh"
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/session-end.sh"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -68,10 +76,14 @@
         ]
       }
     ],
-    "PreCommit": [
+    "UserPromptSubmit": [
       {
-        "type": "command",
-        "command": ".claude/scripts/learning-observer.sh --pre-commit"
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/learning-observer.sh --prompt-submit"
+          }
+        ]
       }
     ]
   },
