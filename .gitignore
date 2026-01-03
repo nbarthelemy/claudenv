@@ -1,0 +1,26 @@
+# Claude Code local settings (user-specific)
+.claude/settings.local.json
+.claude/CLAUDE.local.md
+
+# Logs and backups
+.claude/logs/*
+!.claude/logs/.gitkeep
+.claude/backups/*
+!.claude/backups/.gitkeep
+
+# Autonomy pause file
+.claude/.autonomy-paused
+
+# Generated project files (project-specific, not part of framework)
+.claude/project-context.json
+.claude/SPEC.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

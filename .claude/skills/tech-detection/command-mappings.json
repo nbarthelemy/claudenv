@@ -1,0 +1,167 @@
+{
+  "_description": "Maps detected technologies to allowed bash commands",
+
+  "packageManagers": {
+    "npm": ["npm *", "npx *"],
+    "yarn": ["yarn *", "npx *"],
+    "pnpm": ["pnpm *", "pnpx *", "npx *"],
+    "bun": ["bun *", "bunx *"],
+    "cargo": ["cargo *"],
+    "go": ["go *"],
+    "pip": ["pip *", "pip3 *"],
+    "poetry": ["poetry *"],
+    "bundler": ["bundle *", "gem *"],
+    "composer": ["composer *"]
+  },
+
+  "languages": {
+    "javascript": ["node *"],
+    "typescript": ["tsc *", "tsx *", "ts-node *"],
+    "python": ["python *", "python3 *"],
+    "ruby": ["ruby *", "irb *"],
+    "go": ["go *"],
+    "rust": ["rustc *", "cargo *"],
+    "php": ["php *"],
+    "java": ["java *", "javac *", "gradle *", "mvn *"],
+    "csharp": ["dotnet *"],
+    "swift": ["swift *", "swiftc *"],
+    "kotlin": ["kotlin *", "kotlinc *"]
+  },
+
+  "frameworks": {
+    "nextjs": ["next *"],
+    "nuxt": ["nuxt *"],
+    "react": [],
+    "vue": ["vue *"],
+    "angular": ["ng *"],
+    "svelte": ["svelte-kit *"],
+    "astro": ["astro *"],
+    "remix": ["remix *"],
+    "gatsby": ["gatsby *"],
+    "express": [],
+    "fastify": [],
+    "nestjs": ["nest *"],
+    "hono": [],
+    "django": ["django-admin *", "python manage.py *"],
+    "flask": ["flask *"],
+    "fastapi": ["uvicorn *"],
+    "rails": ["rails *", "rake *"],
+    "sinatra": []
+  },
+
+  "testRunners": {
+    "jest": ["jest *"],
+    "vitest": ["vitest *"],
+    "playwright": ["playwright *"],
+    "cypress": ["cypress *"],
+    "pytest": ["pytest *"],
+    "phpunit": ["phpunit *"],
+    "rspec": ["rspec *"]
+  },
+
+  "databases": {
+    "prisma": ["prisma *"],
+    "drizzle": ["drizzle-kit *"],
+    "sequelize": ["sequelize *"],
+    "typeorm": ["typeorm *"],
+    "mongoose": [],
+    "postgresql": ["psql *", "pg_dump *", "createdb *", "dropdb *"],
+    "mysql": ["mysql *", "mysqldump *"],
+    "sqlite": ["sqlite3 *"],
+    "mongodb": ["mongosh *", "mongo *"],
+    "redis": ["redis-cli *"]
+  },
+
+  "cloudPlatforms": {
+    "aws": [
+      "aws *",
+      "sam *",
+      "cdk *",
+      "amplify *",
+      "eb *"
+    ],
+    "gcp": [
+      "gcloud *",
+      "gsutil *",
+      "bq *",
+      "firebase *"
+    ],
+    "azure": [
+      "az *",
+      "func *"
+    ],
+    "heroku": [
+      "heroku *"
+    ],
+    "vercel": [
+      "vercel *",
+      "vc *"
+    ],
+    "netlify": [
+      "netlify *",
+      "ntl *"
+    ],
+    "fly": [
+      "fly *",
+      "flyctl *"
+    ],
+    "railway": [
+      "railway *"
+    ],
+    "digitalocean": [
+      "doctl *"
+    ],
+    "cloudflare": [
+      "wrangler *"
+    ],
+    "supabase": [
+      "supabase *"
+    ],
+    "firebase": [
+      "firebase *"
+    ]
+  },
+
+  "containerization": {
+    "docker": [
+      "docker *",
+      "docker-compose *",
+      "docker compose *"
+    ],
+    "kubernetes": [
+      "kubectl *",
+      "helm *",
+      "k9s *"
+    ],
+    "podman": [
+      "podman *"
+    ]
+  },
+
+  "monorepoTools": {
+    "turbo": ["turbo *"],
+    "nx": ["nx *"],
+    "lerna": ["lerna *"]
+  },
+
+  "linters": {
+    "eslint": ["eslint *"],
+    "prettier": ["prettier *"],
+    "biome": ["biome *"],
+    "black": ["black *"],
+    "ruff": ["ruff *"],
+    "rubocop": ["rubocop *"],
+    "gofmt": ["gofmt *", "goimports *"],
+    "rustfmt": ["rustfmt *", "cargo fmt *"]
+  },
+
+  "buildTools": {
+    "webpack": ["webpack *"],
+    "vite": ["vite *"],
+    "esbuild": ["esbuild *"],
+    "rollup": ["rollup *"],
+    "parcel": ["parcel *"],
+    "make": ["make *"],
+    "cmake": ["cmake *"]
+  }
+}

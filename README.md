@@ -1,0 +1,234 @@
+# Claudenv
+
+> Complete Claude Code infrastructure for autonomous development
+
+Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infrastructure for any project. It provides:
+
+- **Autonomous operation** with configurable permission levels
+- **Tech stack detection** for 50+ languages, frameworks, and cloud platforms
+- **Project specification interviews** to clarify architecture and requirements
+- **Learning system** that observes patterns and suggests automations
+- **Self-extending** via meta-agent that creates new skills for unfamiliar tech
+
+## Quick Start
+
+### Option 1: Git Clone
+
+```bash
+# Clone the framework
+git clone https://github.com/nbarthelemy/claudenv.git
+
+# Copy to your project
+cp -r claudenv/.claude /path/to/your/project/
+
+# Navigate to your project
+cd /path/to/your/project
+
+# Start Claude and run bootstrap
+claude
+> /claudenv
+```
+
+### Option 2: Curl One-Liner
+
+```bash
+curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh | bash
+```
+
+## What You Get
+
+### Commands
+
+| Command | Description |
+|---------|-------------|
+| `/claudenv` | Bootstrap infrastructure for current project |
+| `/interview` | Conduct project specification interview |
+| `/infrastructure:status` | Show system overview |
+| `/health:check` | Verify infrastructure integrity |
+| `/learn:review` | Review pending automation proposals |
+| `/learn:implement` | Implement a learning proposal |
+| `/analyze-patterns` | Force pattern analysis |
+| `/backup:create` | Create infrastructure backup |
+| `/backup:restore` | Restore from backup |
+| `/autonomy:pause` | Temporarily reduce autonomy |
+| `/autonomy:resume` | Restore autonomy level |
+| `/debug:agent` | Debug a specific skill |
+| `/debug:hooks` | Debug hook configuration |
+| `/infrastructure:export` | Export for sharing |
+| `/infrastructure:import` | Import from export |
+| `/infrastructure:upgrade` | Check for updates |
+
+### Skills (Auto-Invoked)
+
+| Skill | Purpose |
+|-------|---------|
+| `tech-detection` | Detects project stack and configures permissions |
+| `interview-agent` | Conducts comprehensive specification interviews |
+| `learning-agent` | Observes patterns and suggests automations |
+| `meta-agent` | Creates new skills for unfamiliar technologies |
+
+### Detected Technologies
+
+**Languages:** JavaScript, TypeScript, Python, Ruby, Go, Rust, PHP, Java, C#, Swift, Kotlin
+
+**Frameworks:** Next.js, Nuxt, React, Vue, Angular, Svelte, Astro, Remix, Express, Fastify, NestJS, Django, Flask, FastAPI, Rails
+
+**Cloud Platforms:** AWS, GCP, Azure, Heroku, Vercel, Netlify, Fly.io, Railway, DigitalOcean, Cloudflare, Supabase, Firebase
+
+**Databases:** PostgreSQL, MySQL, MongoDB, Redis, SQLite, Prisma, Drizzle, TypeORM
+
+## Directory Structure
+
+```
+.claude/
+├── CLAUDE.md           # Framework instructions & autonomy rules
+├── settings.json       # Permissions & hooks configuration
+├── version.json        # Framework version
+├── commands/           # Slash commands (16 included)
+├── skills/             # Auto-invoked skills (4 included)
+│   ├── tech-detection/
+│   ├── interview-agent/
+│   ├── learning-agent/
+│   └── meta-agent/
+├── rules/              # Modular instruction sets
+├── scripts/            # Shell scripts for hooks
+├── templates/          # Templates for generation
+├── learning/           # Pattern observations
+├── logs/               # Execution logs (gitignored)
+└── backups/            # Infrastructure backups (gitignored)
+```
+
+## Autonomy Levels
+
+### High (Default)
+
+Claude operates with maximum independence:
+- Full file read/write access
+- Run any non-destructive command
+- All local git operations
+- Install dev dependencies
+- Create skills and automations
+- Auto-fix errors (3 retries)
+
+### What Requires Approval
+
+Even at high autonomy:
+- Push to remote repositories
+- Deploy to any environment
+- Access secrets/credentials
+- Modify CI/CD pipelines
+- Database migrations on remote
+- Publish packages
+
+## How It Works
+
+### 1. Bootstrap (`/claudenv`)
+
+When you run `/claudenv`, the framework:
+1. Runs tech detection script
+2. Analyzes confidence level
+3. Generates `project-context.json`
+4. Updates `settings.json` with tech-specific permissions
+5. Migrates existing CLAUDE.md (preserving all content)
+6. Initializes learning system
+7. Runs health check
+
+### 2. Interview (`/interview`)
+
+For new projects or unclear requirements:
+1. Silently reads all existing documentation
+2. Analyzes codebase for existing decisions
+3. Asks targeted questions (one at a time)
+4. Provides researched options with tradeoffs
+5. Creates comprehensive `SPEC.md`
+6. Updates project context
+
+### 3. Learning
+
+The learning agent continuously:
+1. Observes development patterns
+2. Detects repeated manual steps
+3. Auto-creates skills/hooks at threshold (3 occurrences)
+4. Proposes agents for new technologies (2 occurrences)
+
+### 4. Self-Extension
+
+When encountering unfamiliar technology:
+1. Meta-agent researches documentation
+2. Creates specialized skill with best practices
+3. Adds appropriate permissions
+4. Notifies user of creation
+
+## Customization
+
+### Local Overrides
+
+Create `.claude/settings.local.json` for personal settings (gitignored):
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(custom-command:*)"],
+    "deny": []
+  },
+  "env": {
+    "MY_API_KEY": "..."
+  }
+}
+```
+
+### Adding Skills
+
+Create `.claude/skills/my-skill/SKILL.md`:
+
+```markdown
+---
+name: my-skill
+description: What this skill does. Include trigger keywords.
+allowed-tools: Read, Write, Bash(*)
+---
+
+# My Skill
+
+Instructions for this skill...
+```
+
+### Adding Commands
+
+Create `.claude/commands/my-command.md`:
+
+```markdown
+---
+description: What this command does
+allowed-tools: Read, Write
+---
+
+# /my-command
+
+Instructions for this command...
+```
+
+## Requirements
+
+- Claude Code CLI
+- Bash shell
+- Optional: `jq` for JSON parsing (falls back to Python)
+
+## Contributing
+
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test with `/health:check`
+5. Submit a pull request
+
+## License
+
+MIT License - see [LICENSE](LICENSE)
+
+## Credits
+
+Created by [@nbarthelemy](https://github.com/nbarthelemy)
+
+Built for use with [Claude Code](https://claude.com/claude-code) by Anthropic.

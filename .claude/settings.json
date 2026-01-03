@@ -1,0 +1,57 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "MultiEdit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "LS(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "TodoRead(*)",
+      "TodoWrite(*)",
+      "mcp__ide__getDiagnostics(*)",
+      "mcp__ide__getProblems(*)",
+      "mcp__ide__openFile(*)",
+      "mcp__ide__getOpenEditors(*)",
+      "mcp__ide__getCurrentSelection(*)",
+      "mcp__ide__getLatestSelection(*)",
+      "mcp__ide__getTerminalContents(*)",
+      "mcp__ide__getWorkspaceFolders(*)",
+      "mcp__ide__toggleTerminal(*)",
+      "mcp__ide__runTask(*)"
+    ],
+    "deny": []
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": ".claude/scripts/session-start.sh"
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": ".claude/scripts/session-end.sh"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date -Iseconds)] File modified: $CLAUDE_TOOL_INPUT\" >> .claude/logs/file-edits.log"
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "CLAUDENV_VERSION": "1.0.0"
+  }
+}
