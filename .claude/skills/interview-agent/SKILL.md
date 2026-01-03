@@ -198,3 +198,18 @@ Secondary updates: `project-context.json`, `settings.json`
 - `.claude/skills/interview-agent/spec-template.md` - SPEC template
 - `.claude/templates/project-context.json.template` - Context template
 - `.claude/settings.json` - Permissions to update
+
+---
+
+## Delegation
+
+Hand off to other skills when:
+
+| Condition | Delegate To |
+|-----------|-------------|
+| Tech stack needs detection | `tech-detection` - to analyze project |
+| User discusses UI/design preferences | `frontend-design` - for design expertise |
+| Unfamiliar technology mentioned | `meta-agent` - to research and create skill |
+| Patterns observed during interview | `learning-agent` - to capture for automation |
+
+**Auto-delegation**: After interview completes, automatically trigger tech-detection to update permissions based on chosen stack.

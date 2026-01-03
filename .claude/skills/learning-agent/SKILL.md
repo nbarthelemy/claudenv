@@ -15,7 +15,7 @@ description: >
 
   TRIGGERS - Automatic: After file modifications (via hook), before git commits,
   at session end, when dependencies added, after task completion.
-allowed-tools: Read, Write, Glob, Grep, Bash(*), Edit
+allowed-tools: Read, Write, Glob, Grep, Bash(*), Edit, WebSearch, WebFetch
 auto-invoke: true
 ---
 
@@ -203,3 +203,18 @@ Detect when Claude repeatedly:
 - **Post-file-edit hook**: File patterns captured
 - **Pre-commit hook**: Pending learnings surfaced
 - **Session-end hook**: Summary generated
+
+---
+
+## Delegation
+
+Hand off to other skills when:
+
+| Condition | Delegate To |
+|-----------|-------------|
+| Pattern suggests new skill needed | `meta-agent` - to create the skill |
+| Pattern involves UI/styling | `frontend-design` - for design expertise |
+| Pattern requires tech stack analysis | `tech-detection` - to understand stack |
+| Pattern unclear, needs user input | `interview-agent` - to clarify requirements |
+
+**Auto-delegation**: When a pattern reaches threshold (3 occurrences) and type is "skill", automatically invoke meta-agent to create it.

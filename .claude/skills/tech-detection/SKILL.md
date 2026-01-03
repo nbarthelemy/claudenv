@@ -12,7 +12,7 @@ description: >
   TRIGGERS - Phrases: "what stack is this", "what's this project using",
   "detect the technologies", "analyze this project", "set up permissions",
   "bootstrap infrastructure", "identify frameworks".
-allowed-tools: Bash(*), Read, Glob, Grep, Write, Edit
+allowed-tools: Bash(*), Read, Glob, Grep, Write, Edit, WebSearch, WebFetch
 auto-invoke: true
 ---
 
@@ -110,3 +110,18 @@ If confidence is LOW:
 - `.claude/skills/tech-detection/command-mappings.json` - Tech→commands map
 - `.claude/project-context.json` - Output location
 - `.claude/settings.json` - Permissions to update
+
+---
+
+## Delegation
+
+Hand off to other skills when:
+
+| Condition | Delegate To |
+|-----------|-------------|
+| Tech stack confidence is LOW | `interview-agent` - to clarify requirements |
+| New/unfamiliar technology detected 2+ times | `meta-agent` - to create specialist skill |
+| Frontend tech detected (React, Vue, Tailwind, etc.) | `frontend-design` - for UI/styling tasks |
+| Architecture decisions needed | `interview-agent` - to gather requirements |
+
+**Auto-delegation**: When detection completes with LOW confidence, automatically suggest invoking the interview-agent.
