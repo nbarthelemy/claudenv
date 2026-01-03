@@ -5,9 +5,11 @@
 Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infrastructure for any project. It provides:
 
 - **Autonomous operation** with configurable permission levels
+- **Autonomous loops** for persistent, iterative development (like Ralph Wiggum)
 - **Tech stack detection** for 50+ languages, frameworks, and cloud platforms
 - **Project specification interviews** to clarify architecture and requirements
 - **Learning system** that observes patterns and suggests automations
+- **Frontend design expertise** with anti-AI-slop design principles
 - **Self-extending** via meta-agent that creates new skills for unfamiliar tech
 
 ## Quick Start
@@ -43,6 +45,12 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 |---------|-------------|
 | `/claudenv` | Bootstrap infrastructure for current project |
 | `/interview` | Conduct project specification interview |
+| `/loop` | Start autonomous iterative development loop |
+| `/loop:status` | Check current loop progress |
+| `/loop:pause` | Pause active loop |
+| `/loop:resume` | Resume paused loop |
+| `/loop:cancel` | Stop and cancel active loop |
+| `/loop:history` | View past loop runs |
 | `/infrastructure:status` | Show system overview |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
@@ -66,6 +74,8 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `interview-agent` | Conducts comprehensive specification interviews |
 | `learning-agent` | Observes patterns and suggests automations |
 | `meta-agent` | Creates new skills for unfamiliar technologies |
+| `frontend-design` | Creates distinctive, production-grade UI with anti-AI-slop aesthetics |
+| `loop-agent` | Manages autonomous iterative development loops |
 
 ### Detected Technologies
 
@@ -84,16 +94,19 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 ├── CLAUDE.md           # Framework instructions & autonomy rules
 ├── settings.json       # Permissions & hooks configuration
 ├── version.json        # Framework version
-├── commands/           # Slash commands (16 included)
-├── skills/             # Auto-invoked skills (4 included)
+├── commands/           # Slash commands (22 included)
+├── skills/             # Auto-invoked skills (6 included)
 │   ├── tech-detection/
 │   ├── interview-agent/
 │   ├── learning-agent/
-│   └── meta-agent/
+│   ├── meta-agent/
+│   ├── frontend-design/
+│   └── loop-agent/
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
 ├── learning/           # Pattern observations
+├── loop/               # Autonomous loop state & history
 ├── logs/               # Execution logs (gitignored)
 └── backups/            # Infrastructure backups (gitignored)
 ```
@@ -151,7 +164,44 @@ The learning agent continuously:
 3. Auto-creates skills/hooks at threshold (3 occurrences)
 4. Proposes agents for new technologies (2 occurrences)
 
-### 4. Self-Extension
+### 4. Autonomous Loops (`/loop`)
+
+For persistent, iterative development:
+
+```bash
+# Basic loop - iterate until condition met
+/loop "Fix all TypeScript errors" --until "Found 0 errors" --max 10
+
+# Test-driven development loop
+/loop "Implement user auth" --mode tdd --verify "npm test" --until-exit 0
+
+# Overnight build with limits
+/loop "Build complete API" --until "COMPLETE" --max 50 --max-time 8h --max-cost $20
+```
+
+**Completion Conditions:**
+- `--until "<text>"` - Exit when output contains exact phrase
+- `--until-exit <code>` - Exit when verification command returns code
+- `--until-regex "<pattern>"` - Exit when output matches regex
+
+**Safety Limits:**
+- `--max <n>` - Maximum iterations (default: 20)
+- `--max-time <duration>` - Maximum time (default: 2h)
+- `--max-cost <amount>` - Maximum estimated cost
+
+**Loop Modes:**
+- `--mode standard` - Basic iteration (default)
+- `--mode tdd` - Test-driven development
+- `--mode refine` - Quality refinement
+
+**Loop Control:**
+- `/loop:status` - Check progress
+- `/loop:pause` - Pause with checkpoint
+- `/loop:resume` - Resume from checkpoint
+- `/loop:cancel` - Stop and archive
+- `/loop:history` - View past loops
+
+### 5. Self-Extension
 
 When encountering unfamiliar technology:
 1. Meta-agent researches documentation
