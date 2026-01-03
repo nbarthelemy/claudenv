@@ -66,6 +66,11 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 |---------|-------------|
 | `/claudenv` | Bootstrap infrastructure for current project |
 | `/interview` | Conduct project specification interview |
+| `/loop` | Start autonomous iterative development loop |
+| `/loop:status` | Check current loop progress |
+| `/loop:pause` | Pause active loop |
+| `/loop:resume` | Resume paused loop |
+| `/loop:cancel` | Stop and cancel active loop |
 | `/infrastructure:status` | Show system overview |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
@@ -80,6 +85,7 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `learning-agent` | Pattern observation, automation suggestions |
 | `meta-agent` | Creating new skills for unfamiliar tech |
 | `frontend-design` | UI, UX, CSS, styling, Tailwind, layout, animation, visual design, typography, colors, theme, polish, "make it look better" |
+| `loop-agent` | Autonomous iterative loops, persistent development, "keep going until done" |
 
 ### Directory Structure
 
@@ -95,9 +101,45 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
 ├── learning/           # Pattern observations
+├── loop/               # Autonomous loop state & history
 ├── logs/               # Execution logs
 └── backups/            # Auto-backups
 ```
+
+---
+
+## Autonomous Loop System
+
+For persistent, iterative development use `/loop`:
+
+```bash
+# Basic loop - iterate until condition met
+/loop "Fix all TypeScript errors" --until "Found 0 errors" --max 10
+
+# Test-driven loop
+/loop "Implement user auth" --mode tdd --verify "npm test" --until-exit 0
+
+# Overnight build
+/loop "Build complete API" --until "API_COMPLETE" --max 50 --max-time 8h
+```
+
+**Loop Commands:**
+- `/loop "<task>" [options]` - Start loop
+- `/loop:status` - Check progress
+- `/loop:pause` - Pause loop
+- `/loop:resume` - Resume loop
+- `/loop:cancel` - Stop loop
+- `/loop:history` - View past loops
+
+**Completion Options:**
+- `--until "<text>"` - Exit when output contains exact phrase
+- `--until-exit <code>` - Exit when verify command returns code
+- `--until-regex "<pattern>"` - Exit when output matches regex
+
+**Safety Limits:**
+- `--max <n>` - Maximum iterations (default: 20)
+- `--max-time <duration>` - Maximum time (default: 2h)
+- `--max-cost <amount>` - Maximum estimated cost
 
 ---
 
