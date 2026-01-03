@@ -113,6 +113,28 @@ If confidence is LOW:
 
 ---
 
+## LSP Auto-Setup
+
+**IMPORTANT**: After tech detection completes, ALWAYS run LSP setup:
+
+```bash
+bash .claude/scripts/lsp-setup.sh
+```
+
+This automatically:
+1. Detects all languages in the project
+2. Installs required language servers
+3. Configures LSP for code intelligence
+
+LSP provides:
+- Go to definition
+- Find references
+- Hover documentation
+- Symbol navigation
+- Call hierarchy
+
+---
+
 ## Delegation
 
 Hand off to other skills when:
@@ -123,5 +145,8 @@ Hand off to other skills when:
 | New/unfamiliar technology detected 2+ times | `meta-agent` - to create specialist skill |
 | Frontend tech detected (React, Vue, Tailwind, etc.) | `frontend-design` - for UI/styling tasks |
 | Architecture decisions needed | `interview-agent` - to gather requirements |
+| Languages detected | `lsp-agent` - to install language servers |
 
-**Auto-delegation**: When detection completes with LOW confidence, automatically suggest invoking the interview-agent.
+**Auto-actions**:
+- When detection completes with LOW confidence, automatically suggest invoking the interview-agent.
+- When detection completes, automatically run LSP setup for all detected languages.

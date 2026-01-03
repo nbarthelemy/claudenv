@@ -71,6 +71,8 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `/loop:pause` | Pause active loop |
 | `/loop:resume` | Resume paused loop |
 | `/loop:cancel` | Stop and cancel active loop |
+| `/lsp` | Auto-detect and install LSP servers |
+| `/lsp:status` | Check LSP server status |
 | `/infrastructure:status` | Show system overview |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
@@ -86,6 +88,7 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `meta-agent` | Creating new skills for unfamiliar tech |
 | `frontend-design` | UI, UX, CSS, styling, Tailwind, layout, animation, visual design, typography, colors, theme, polish, "make it look better" |
 | `loop-agent` | Autonomous iterative loops, persistent development, "keep going until done" |
+| `lsp-agent` | Auto-detects and installs language servers for code intelligence |
 
 ### Directory Structure
 
@@ -102,6 +105,7 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 ├── templates/          # Templates for generation
 ├── learning/           # Pattern observations
 ├── loop/               # Autonomous loop state & history
+├── lsp-config.json     # Installed LSP servers (generated)
 ├── logs/               # Execution logs
 └── backups/            # Auto-backups
 ```
@@ -140,6 +144,28 @@ For persistent, iterative development use `/loop`:
 - `--max <n>` - Maximum iterations (default: 20)
 - `--max-time <duration>` - Maximum time (default: 2h)
 - `--max-cost <amount>` - Maximum estimated cost
+
+---
+
+## LSP Code Intelligence
+
+Language servers are **automatically installed** during `/claudenv` and when new languages are detected.
+
+**Supported Languages:** TypeScript, Python, Go, Rust, Ruby, PHP, Java, C/C++, C#, Lua, Bash, YAML, JSON, HTML/CSS, Markdown, Terraform, Svelte, Vue, GraphQL, and more.
+
+**LSP Operations:**
+- `goToDefinition` - Jump to where a symbol is defined
+- `findReferences` - Find all usages of a symbol
+- `hover` - Get documentation and type info
+- `documentSymbol` - List all symbols in a file
+- `workspaceSymbol` - Search symbols across workspace
+- `incomingCalls` / `outgoingCalls` - Call hierarchy
+
+**Commands:**
+- `/lsp` - Manually trigger LSP detection and installation
+- `/lsp:status` - Check which servers are installed
+
+LSP is preferred over grep/search for code navigation - it understands code semantically.
 
 ---
 

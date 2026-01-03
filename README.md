@@ -10,6 +10,7 @@ Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infr
 - **Project specification interviews** to clarify architecture and requirements
 - **Learning system** that observes patterns and suggests automations
 - **Frontend design expertise** with anti-AI-slop design principles
+- **Auto-LSP setup** with 25+ language servers for code intelligence
 - **Self-extending** via meta-agent that creates new skills for unfamiliar tech
 
 ## Quick Start
@@ -51,6 +52,8 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `/loop:resume` | Resume paused loop |
 | `/loop:cancel` | Stop and cancel active loop |
 | `/loop:history` | View past loop runs |
+| `/lsp` | Auto-detect and install LSP servers |
+| `/lsp:status` | Check LSP server status |
 | `/infrastructure:status` | Show system overview |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
@@ -76,6 +79,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `meta-agent` | Creates new skills for unfamiliar technologies |
 | `frontend-design` | Creates distinctive, production-grade UI with anti-AI-slop aesthetics |
 | `loop-agent` | Manages autonomous iterative development loops |
+| `lsp-agent` | Auto-detects and installs language servers for code intelligence |
 
 ### Detected Technologies
 
@@ -94,14 +98,15 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 ├── CLAUDE.md           # Framework instructions & autonomy rules
 ├── settings.json       # Permissions & hooks configuration
 ├── version.json        # Framework version
-├── commands/           # Slash commands (22 included)
-├── skills/             # Auto-invoked skills (6 included)
+├── commands/           # Slash commands (24 included)
+├── skills/             # Auto-invoked skills (7 included)
 │   ├── tech-detection/
 │   ├── interview-agent/
 │   ├── learning-agent/
 │   ├── meta-agent/
 │   ├── frontend-design/
-│   └── loop-agent/
+│   ├── loop-agent/
+│   └── lsp-agent/
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
@@ -201,7 +206,32 @@ For persistent, iterative development:
 - `/loop:cancel` - Stop and archive
 - `/loop:history` - View past loops
 
-### 5. Self-Extension
+### 5. LSP Code Intelligence
+
+Language servers are **automatically installed** during `/claudenv` and when new file types are detected:
+
+**Supported Languages:**
+- TypeScript, JavaScript, Python, Go, Rust, Ruby, PHP
+- Java, C#, C/C++, Lua, Bash/Shell
+- YAML, JSON, HTML/CSS, Markdown
+- Terraform, Svelte, Vue, GraphQL, Elixir, Kotlin, Scala
+
+**LSP Operations:**
+```
+goToDefinition    - Jump to symbol definition
+findReferences    - Find all usages
+hover             - Get documentation/type info
+documentSymbol    - List symbols in file
+workspaceSymbol   - Search symbols across project
+incomingCalls     - Find what calls this function
+outgoingCalls     - Find what this function calls
+```
+
+**Commands:**
+- `/lsp` - Manually trigger LSP detection
+- `/lsp:status` - Check installed servers
+
+### 6. Self-Extension
 
 When encountering unfamiliar technology:
 1. Meta-agent researches documentation
