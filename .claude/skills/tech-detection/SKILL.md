@@ -1,7 +1,19 @@
 ---
 name: tech-detection
-description: Detects project tech stack, languages, frameworks, package managers, cloud platforms, and generates appropriate permissions. Use when analyzing a project, detecting stack, setting up permissions, or bootstrapping infrastructure.
+description: >
+  Detects project tech stack, languages, frameworks, package managers, cloud platforms,
+  and generates appropriate permissions.
+
+  TRIGGERS - Keywords: tech stack, stack detection, detect stack, analyze project,
+  project analysis, what technologies, what framework, what language, package manager,
+  dependencies, bootstrap, setup, initialize, /claudenv, infrastructure setup,
+  permissions, project context, environment detection.
+
+  TRIGGERS - Phrases: "what stack is this", "what's this project using",
+  "detect the technologies", "analyze this project", "set up permissions",
+  "bootstrap infrastructure", "identify frameworks".
 allowed-tools: Bash(*), Read, Glob, Grep, Write, Edit
+auto-invoke: true
 ---
 
 # Tech Detection Skill

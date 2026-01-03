@@ -46,8 +46,27 @@
           {
             "type": "command",
             "command": "echo \"[$(date -Iseconds)] File modified: $CLAUDE_TOOL_INPUT\" >> .claude/logs/file-edits.log"
+          },
+          {
+            "type": "command",
+            "command": ".claude/scripts/learning-observer.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/learning-observer.sh"
+          }
+        ]
+      }
+    ],
+    "PreCommit": [
+      {
+        "type": "command",
+        "command": ".claude/scripts/learning-observer.sh --pre-commit"
       }
     ]
   },

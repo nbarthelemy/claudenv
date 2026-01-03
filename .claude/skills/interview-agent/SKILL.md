@@ -1,8 +1,24 @@
 ---
 name: interview-agent
-description: Conducts comprehensive project specification interviews to clarify architecture, tech stack, design decisions, and implementation details. Use when requirements are unclear, user invokes /interview, tech stack confidence is low, or project appears new/empty.
+description: >
+  Conducts comprehensive project specification interviews to clarify architecture,
+  tech stack, design decisions, and implementation details.
+
+  TRIGGERS - Keywords: interview, specification, spec, requirements, architecture,
+  design decisions, project setup, new project, empty project, unclear requirements,
+  /interview, SPEC.md, project planning, tech decisions, stack decisions,
+  clarify requirements, gather requirements, requirements gathering.
+
+  TRIGGERS - Phrases: "what should we build", "help me plan", "new project",
+  "start a project", "define the architecture", "unclear what to build",
+  "need to specify", "create a spec", "interview me", "ask me questions",
+  "help me decide", "what technology should".
+
+  TRIGGERS - Conditions: tech stack confidence LOW, project appears empty,
+  no existing SPEC.md, architecture decisions needed.
 allowed-tools: Read, Write, Edit, WebSearch, WebFetch, Bash(*), Glob, Grep
 model: opus
+auto-invoke: true
 ---
 
 # Interview Agent Skill

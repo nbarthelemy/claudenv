@@ -1,7 +1,22 @@
 ---
 name: learning-agent
-description: Continuously observes development patterns to identify automation opportunities. Always active in background. Detects repeated patterns, suggests skills/hooks/commands, auto-creates at threshold. Use when analyzing patterns, reviewing learnings, or implementing suggestions.
+description: >
+  Continuously observes development patterns to identify automation opportunities.
+  Always active in background. Detects repeated patterns, suggests skills/hooks/commands,
+  auto-creates automations at threshold (3 occurrences).
+
+  TRIGGERS - Keywords: patterns, learnings, observations, automation, repeated tasks,
+  /learn:review, /learn:implement, /analyze-patterns, pending automations,
+  skill suggestions, hook suggestions, command suggestions, optimization opportunities.
+
+  TRIGGERS - Phrases: "analyze patterns", "review learnings", "what have you learned",
+  "create automation", "automate this", "I keep doing this", "repeated task",
+  "optimize workflow", "suggest improvements", "pending suggestions".
+
+  TRIGGERS - Automatic: After file modifications (via hook), before git commits,
+  at session end, when dependencies added, after task completion.
 allowed-tools: Read, Write, Glob, Grep, Bash(*), Edit
+auto-invoke: true
 ---
 
 # Learning Agent Skill
