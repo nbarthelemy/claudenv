@@ -79,6 +79,7 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `interview-agent` | Specification interviews, requirements gathering |
 | `learning-agent` | Pattern observation, automation suggestions |
 | `meta-agent` | Creating new skills for unfamiliar tech |
+| `frontend-design` | UI, UX, CSS, styling, Tailwind, layout, animation, visual design, typography, colors, theme, polish, "make it look better" |
 
 ### Directory Structure
 
