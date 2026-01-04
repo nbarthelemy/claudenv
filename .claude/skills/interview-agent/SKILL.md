@@ -17,7 +17,6 @@ description: >
   TRIGGERS - Conditions: tech stack confidence LOW, project appears empty,
   no existing SPEC.md, architecture decisions needed.
 allowed-tools: Read, Write, Edit, WebSearch, WebFetch, Bash(*), Glob, Grep
-model: opus
 auto-invoke: true
 ---
 

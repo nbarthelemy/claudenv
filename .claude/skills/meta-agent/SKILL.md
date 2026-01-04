@@ -15,7 +15,6 @@ description: >
   TRIGGERS - Automatic: New technology encountered 2+ times without existing skill,
   learning agent proposes new agent, repeated documentation lookups for same technology.
 allowed-tools: Write, Read, Glob, Grep, WebFetch, WebSearch, Edit, Bash(*)
-model: opus
 auto-invoke: true
 ---
 

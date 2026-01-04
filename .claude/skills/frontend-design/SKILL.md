@@ -25,7 +25,6 @@ description: >
   *.module.css, *.module.scss, tailwind.config.*, postcss.config.*, styles/*,
   components/*.tsx, components/*.jsx, components/*.vue, components/*.svelte.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(npm:*), Bash(npx:*), WebSearch, WebFetch
-model: opus
 auto-invoke: true
 ---
 
