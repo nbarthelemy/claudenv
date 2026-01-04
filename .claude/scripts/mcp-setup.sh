@@ -67,9 +67,9 @@ install_mcp() {
             return 1
             ;;
         "claudeinchrome"|"claude-in-chrome")
-            echo -e "${YELLOW}⚠ mcp__claude-in-chrome__* is provided by Chrome extension${NC}"
-            echo "  Install from: https://claude.ai/chrome"
-            return 1
+            echo -e "${YELLOW}⚠ Chrome automation now uses /chrome command${NC}"
+            echo "  No MCP server needed - just run /chrome in Claude"
+            return 0
             ;;
         *)
             echo -e "${YELLOW}⚠ Unknown MCP server: $mcp_name${NC}"

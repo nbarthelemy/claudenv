@@ -13,7 +13,6 @@
       "WebSearch",
       "TodoRead",
       "TodoWrite",
-      "mcp__ide__*",
       "Bash(cat:*)",
       "Bash(ls:*)",
       "Bash(find:*)",
@@ -117,8 +116,7 @@
       "Bash(shutdown:*)",
       "Bash(reboot:*)",
       "Bash(mkfs:*)",
-      "Bash(dd:*)",
-      "Bash(git push:*)"
+      "Bash(dd:*)"
     ]
   },
   "hooks": {
