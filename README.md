@@ -10,7 +10,7 @@ Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infr
 - **Project specification interviews** to clarify architecture and requirements
 - **Learning system** that observes patterns and suggests automations
 - **Frontend design expertise** with anti-AI-slop design principles
-- **Auto-LSP setup** with 25+ language servers for code intelligence
+- **Auto-LSP setup** with official Anthropic plugins + 25+ language servers
 - **Self-extending** via meta-agent that creates new skills for unfamiliar tech
 
 ## Quick Start
@@ -144,12 +144,17 @@ Even at high autonomy:
 
 When you run `/claudenv`, the framework:
 1. Runs tech detection script
-2. Analyzes confidence level
-3. Generates `project-context.json`
-4. Updates `settings.json` with tech-specific permissions
-5. Migrates existing CLAUDE.md (preserving all content)
-6. Initializes learning system
-7. Runs health check
+2. Analyzes confidence level (HIGH/MEDIUM/LOW)
+3. **Auto-runs `/interview` if confidence is LOW**
+4. Generates `project-context.json`
+5. Updates `settings.json` with tech-specific permissions
+6. Migrates existing CLAUDE.md (preserving all content)
+7. Initializes learning system
+8. Installs LSP servers (plugins first, then binaries)
+9. **Validates all required files were created**
+10. Runs health check
+
+**Post-Init Validation:** The bootstrap verifies all required files, directories, and configurations exist before reporting success. Missing items are auto-created.
 
 ### 2. Interview (`/interview`)
 
@@ -208,13 +213,32 @@ For persistent, iterative development:
 
 ### 5. LSP Code Intelligence
 
-Language servers are **automatically installed** during `/claudenv` and when new file types are detected:
+Language servers are **automatically installed** during `/claudenv` and when new file types are detected.
 
-**Supported Languages:**
-- TypeScript, JavaScript, Python, Go, Rust, Ruby, PHP
-- Java, C#, C/C++, Lua, Bash/Shell
-- YAML, JSON, HTML/CSS, Markdown
-- Terraform, Svelte, Vue, GraphQL, Elixir, Kotlin, Scala
+**Installation Priority:**
+1. **Official Anthropic Plugins** (preferred) - Pre-configured for Claude Code
+2. **System Package Managers** (fallback) - npm, pip, brew, cargo, etc.
+
+**Official Anthropic Plugins:**
+
+| Language | Plugin |
+|----------|--------|
+| TypeScript/JS | `typescript-lsp@claude-plugins-official` |
+| Python | `pyright-lsp@claude-plugins-official` |
+| Go | `gopls-lsp@claude-plugins-official` |
+| Rust | `rust-analyzer-lsp@claude-plugins-official` |
+| C/C++ | `clangd-lsp@claude-plugins-official` |
+| C# | `csharp-lsp@claude-plugins-official` |
+| Java | `jdtls-lsp@claude-plugins-official` |
+| PHP | `php-lsp@claude-plugins-official` |
+| Ruby | `ruby-lsp@claude-plugins-official` |
+| Lua | `lua-lsp@claude-plugins-official` |
+| Swift | `swift-lsp@claude-plugins-official` |
+| Kotlin | `kotlin-lsp@claude-plugins-official` |
+
+**Additional Supported Languages:**
+- Bash/Shell, YAML, JSON, HTML/CSS, Markdown
+- Terraform, Svelte, Vue, GraphQL, Elixir, Scala, Zig
 
 **LSP Operations:**
 ```
