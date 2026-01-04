@@ -1,12 +1,30 @@
 {
   "$schema": "https://claudenv.dev/schemas/lsp-mappings.json",
-  "_comment": "Maps file extensions and languages to LSP servers",
+  "_comment": "Maps file extensions and languages to LSP servers. Prefers official Anthropic plugins.",
+
+  "anthropic_plugins": {
+    "_comment": "Official Anthropic Claude Code plugins - install these first via /plugin install",
+    "typescript": "typescript-lsp@claude-plugins-official",
+    "python": "pyright-lsp@claude-plugins-official",
+    "go": "gopls-lsp@claude-plugins-official",
+    "rust": "rust-analyzer-lsp@claude-plugins-official",
+    "c": "clangd-lsp@claude-plugins-official",
+    "cpp": "clangd-lsp@claude-plugins-official",
+    "csharp": "csharp-lsp@claude-plugins-official",
+    "java": "jdtls-lsp@claude-plugins-official",
+    "php": "php-lsp@claude-plugins-official",
+    "lua": "lua-lsp@claude-plugins-official",
+    "swift": "swift-lsp@claude-plugins-official",
+    "ruby": "ruby-lsp@claude-plugins-official",
+    "kotlin": "kotlin-lsp@claude-plugins-official"
+  },
 
   "servers": {
     "typescript-language-server": {
       "name": "TypeScript Language Server",
       "languages": ["javascript", "typescript", "javascriptreact", "typescriptreact"],
       "extensions": [".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"],
+      "plugin": "typescript-lsp@claude-plugins-official",
       "install": {
         "npm": "npm install -g typescript-language-server typescript",
         "pnpm": "pnpm add -g typescript-language-server typescript",
@@ -22,6 +40,7 @@
       "name": "Pyright",
       "languages": ["python"],
       "extensions": [".py", ".pyi", ".pyw"],
+      "plugin": "pyright-lsp@claude-plugins-official",
       "install": {
         "npm": "npm install -g pyright",
         "pip": "pip install pyright"
@@ -49,6 +68,7 @@
       "name": "Go Language Server",
       "languages": ["go"],
       "extensions": [".go"],
+      "plugin": "gopls-lsp@claude-plugins-official",
       "install": {
         "go": "go install golang.org/x/tools/gopls@latest"
       },
@@ -62,6 +82,7 @@
       "name": "Rust Analyzer",
       "languages": ["rust"],
       "extensions": [".rs"],
+      "plugin": "rust-analyzer-lsp@claude-plugins-official",
       "install": {
         "rustup": "rustup component add rust-analyzer",
         "brew": "brew install rust-analyzer"
@@ -76,6 +97,7 @@
       "name": "Solargraph",
       "languages": ["ruby"],
       "extensions": [".rb", ".rake", ".gemspec"],
+      "plugin": "ruby-lsp@claude-plugins-official",
       "install": {
         "gem": "gem install solargraph"
       },
@@ -89,6 +111,7 @@
       "name": "Intelephense",
       "languages": ["php"],
       "extensions": [".php", ".phtml"],
+      "plugin": "php-lsp@claude-plugins-official",
       "install": {
         "npm": "npm install -g intelephense"
       },
@@ -102,6 +125,7 @@
       "name": "Clangd",
       "languages": ["c", "cpp", "objective-c", "objective-cpp"],
       "extensions": [".c", ".cpp", ".cc", ".cxx", ".h", ".hpp", ".hxx", ".m", ".mm"],
+      "plugin": "clangd-lsp@claude-plugins-official",
       "install": {
         "brew": "brew install llvm",
         "apt": "apt install clangd"
@@ -116,6 +140,7 @@
       "name": "Eclipse JDT Language Server",
       "languages": ["java"],
       "extensions": [".java"],
+      "plugin": "jdtls-lsp@claude-plugins-official",
       "install": {
         "brew": "brew install jdtls"
       },
@@ -129,6 +154,7 @@
       "name": "OmniSharp",
       "languages": ["csharp"],
       "extensions": [".cs", ".csx"],
+      "plugin": "csharp-lsp@claude-plugins-official",
       "install": {
         "brew": "brew install omnisharp/omnisharp-roslyn/omnisharp-mono",
         "dotnet": "dotnet tool install -g omnisharp"
@@ -143,6 +169,7 @@
       "name": "Lua Language Server",
       "languages": ["lua"],
       "extensions": [".lua"],
+      "plugin": "lua-lsp@claude-plugins-official",
       "install": {
         "brew": "brew install lua-language-server"
       },
@@ -326,6 +353,7 @@
       "name": "Kotlin Language Server",
       "languages": ["kotlin"],
       "extensions": [".kt", ".kts"],
+      "plugin": "kotlin-lsp@claude-plugins-official",
       "install": {
         "brew": "brew install kotlin-language-server"
       },

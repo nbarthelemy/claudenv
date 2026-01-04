@@ -1,6 +1,10 @@
 #!/bin/bash
 # LSP Setup Script - Automatic language server installation
 # Usage: lsp-setup.sh <action> [args]
+#
+# PRIORITY: Official Anthropic plugins > System package managers
+# The script will output plugin installation commands for Claude to run,
+# then install binaries as fallback.
 
 set -e
 
@@ -17,6 +21,41 @@ mkdir -p "$CLAUDE_DIR/logs"
 log() {
     echo "[$(date -Iseconds)] $1" >> "$LOG_FILE"
     echo "$1"
+}
+
+# Get Anthropic plugin for a language
+get_anthropic_plugin() {
+    local lang="$1"
+
+    if command -v jq &>/dev/null && [ -f "$MAPPINGS_FILE" ]; then
+        jq -r ".anthropic_plugins[\"$lang\"] // empty" "$MAPPINGS_FILE" 2>/dev/null
+    else
+        # Fallback mappings for common languages
+        case "$lang" in
+            javascript|typescript|javascriptreact|typescriptreact) echo "typescript-lsp@claude-plugins-official" ;;
+            python) echo "pyright-lsp@claude-plugins-official" ;;
+            go) echo "gopls-lsp@claude-plugins-official" ;;
+            rust) echo "rust-analyzer-lsp@claude-plugins-official" ;;
+            c|cpp) echo "clangd-lsp@claude-plugins-official" ;;
+            csharp) echo "csharp-lsp@claude-plugins-official" ;;
+            java) echo "jdtls-lsp@claude-plugins-official" ;;
+            php) echo "php-lsp@claude-plugins-official" ;;
+            lua) echo "lua-lsp@claude-plugins-official" ;;
+            swift) echo "swift-lsp@claude-plugins-official" ;;
+            ruby) echo "ruby-lsp@claude-plugins-official" ;;
+            kotlin) echo "kotlin-lsp@claude-plugins-official" ;;
+            *) echo "" ;;
+        esac
+    fi
+}
+
+# Get plugin for a server
+get_plugin_for_server() {
+    local server="$1"
+
+    if command -v jq &>/dev/null && [ -f "$MAPPINGS_FILE" ]; then
+        jq -r ".servers[\"$server\"].plugin // empty" "$MAPPINGS_FILE" 2>/dev/null
+    fi
 }
 
 # Detect available package managers
@@ -272,6 +311,8 @@ detect_and_setup() {
     local needed_servers=""
     local installed_servers=""
     local new_servers=""
+    local plugins_to_install=""
+    local unique_plugins=""
 
     # Map extensions to languages
     while IFS= read -r ext; do
@@ -284,9 +325,17 @@ detect_and_setup() {
 
     log "Detected languages:$languages"
 
-    # Get required servers
+    # Get required servers and plugins
     for lang in $languages; do
         local server=$(get_server_for_language "$lang")
+        local plugin=$(get_anthropic_plugin "$lang")
+
+        # Track unique plugins
+        if [ -n "$plugin" ] && [[ "$unique_plugins" != *"$plugin"* ]]; then
+            unique_plugins="$unique_plugins $plugin"
+            plugins_to_install="$plugins_to_install $plugin"
+        fi
+
         if [ -n "$server" ] && [[ "$servers" != *"$server"* ]]; then
             servers="$servers $server"
             if is_server_installed "$server"; then
@@ -297,32 +346,56 @@ detect_and_setup() {
         fi
     done
 
-    # Install missing servers
-    for server in $needed_servers; do
-        if install_server "$server"; then
-            new_servers="$new_servers $server"
-        fi
-    done
+    # Output summary with plugin recommendations FIRST
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "🔧 LSP AUTO-SETUP"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "Languages detected:$languages"
+    echo ""
+
+    # PRIORITY 1: Recommend Anthropic plugins
+    if [ -n "$plugins_to_install" ]; then
+        echo "📦 RECOMMENDED: Install official Anthropic plugins first:"
+        echo ""
+        for plugin in $plugins_to_install; do
+            echo "   /plugin install $plugin"
+        done
+        echo ""
+        echo "   Plugins provide pre-configured LSP integration."
+        echo ""
+    fi
+
+    # PRIORITY 2: Install missing server binaries
+    if [ -n "$needed_servers" ]; then
+        echo "📥 Installing required binaries..."
+        for server in $needed_servers; do
+            if install_server "$server"; then
+                new_servers="$new_servers $server"
+            fi
+        done
+    fi
 
     # Update config
     update_config "$languages" "$servers"
 
-    # Output summary
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "🔧 LSP AUTO-SETUP COMPLETE"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo ""
-    echo "Languages:$languages"
+    # Final summary
     echo ""
     if [ -n "$new_servers" ]; then
-        echo "Installed:$new_servers"
+        echo "✅ Binaries installed:$new_servers"
     fi
     if [ -n "$installed_servers" ]; then
-        echo "Already available:$installed_servers"
+        echo "✅ Already available:$installed_servers"
     fi
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    # Return plugin list for Claude to install
+    if [ -n "$plugins_to_install" ]; then
+        echo ""
+        echo "PLUGINS_TO_INSTALL:$plugins_to_install"
+    fi
 }
 
 # Status check

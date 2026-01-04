@@ -34,6 +34,42 @@ optimal code intelligence for all languages in the project.
 
 ---
 
+## Installation Priority
+
+**IMPORTANT**: Always prefer official Anthropic plugins over system installations.
+
+### Priority Order:
+
+1. **Anthropic Claude Code Plugins** (preferred)
+   - Pre-configured for Claude Code integration
+   - Install via: `/plugin install <name>@claude-plugins-official`
+
+2. **System Package Managers** (fallback if no plugin)
+   - npm, pip, brew, cargo, etc.
+   - Only install binary if plugin requires it
+
+### Available Anthropic Plugins:
+
+| Language | Plugin Command |
+|----------|---------------|
+| TypeScript/JS | `/plugin install typescript-lsp@claude-plugins-official` |
+| Python | `/plugin install pyright-lsp@claude-plugins-official` |
+| Go | `/plugin install gopls-lsp@claude-plugins-official` |
+| Rust | `/plugin install rust-analyzer-lsp@claude-plugins-official` |
+| C/C++ | `/plugin install clangd-lsp@claude-plugins-official` |
+| C# | `/plugin install csharp-lsp@claude-plugins-official` |
+| Java | `/plugin install jdtls-lsp@claude-plugins-official` |
+| PHP | `/plugin install php-lsp@claude-plugins-official` |
+| Lua | `/plugin install lua-lsp@claude-plugins-official` |
+| Swift | `/plugin install swift-lsp@claude-plugins-official` |
+| Ruby | `/plugin install ruby-lsp@claude-plugins-official` |
+| Kotlin | `/plugin install kotlin-lsp@claude-plugins-official` |
+
+**Note**: Plugins require the binary to be installed on the system. Install the plugin first,
+then install the binary if needed (the plugin will show an error if binary is missing).
+
+---
+
 ## LSP Operations Available
 
 Claude Code provides these LSP operations:
