@@ -54,7 +54,11 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `/loop:history` | View past loop runs |
 | `/lsp` | Auto-detect and install LSP servers |
 | `/lsp:status` | Check LSP server status |
-| `/infrastructure:status` | Show system overview |
+| `/claudenv:status` | Show system overview |
+| `/claudenv:update` | Quick update to latest version |
+| `/claudenv:upgrade` | Full upgrade with changelog |
+| `/claudenv:export` | Export for sharing |
+| `/claudenv:import` | Import from export |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/learn:implement` | Implement a learning proposal |
@@ -65,9 +69,6 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `/autonomy:resume` | Restore autonomy level |
 | `/debug:agent` | Debug a specific skill |
 | `/debug:hooks` | Debug hook configuration |
-| `/infrastructure:export` | Export for sharing |
-| `/infrastructure:import` | Import from export |
-| `/infrastructure:upgrade` | Check for updates |
 
 ### Skills (Auto-Invoked)
 
@@ -311,6 +312,26 @@ allowed-tools: Read, Write
 
 Instructions for this command...
 ```
+
+## Updating
+
+To update an existing Claudenv installation to the latest version:
+
+```bash
+/claudenv:update
+```
+
+This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
+
+## Changelog
+
+### v1.0.1
+- **Fixed:** Permissions format now uses correct `Bash(command:*)` syntax
+- **Added:** `/claudenv:update` command for easy updates
+- **Changed:** Renamed `/infrastructure:*` commands to `/claudenv:*` namespace
+
+### v1.0.0
+- Initial release
 
 ## Requirements
 
