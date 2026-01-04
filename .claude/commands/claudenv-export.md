@@ -3,7 +3,7 @@ description: Export Claudenv infrastructure for sharing with other projects or t
 allowed-tools: Bash(*)
 ---
 
-# /infrastructure:export - Export Infrastructure
+# /claudenv:export - Export Infrastructure
 
 Create a sanitized, shareable export of the Claudenv infrastructure.
 

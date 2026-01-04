@@ -3,7 +3,7 @@ description: Check for and apply Claudenv infrastructure updates.
 allowed-tools: Bash(*), Read, Write, WebFetch
 ---
 
-# /infrastructure:upgrade - Upgrade Infrastructure
+# /claudenv:upgrade - Upgrade Infrastructure
 
 Check for updates to the Claudenv framework and apply them.
 

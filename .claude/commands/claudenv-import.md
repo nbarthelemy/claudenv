@@ -3,15 +3,15 @@ description: Import Claudenv infrastructure from another project or export file.
 allowed-tools: Bash(*), Read, Write
 ---
 
-# /infrastructure:import [path] - Import Infrastructure
+# /claudenv:import [path] - Import Infrastructure
 
 Import infrastructure from an export file or another project.
 
 ## Usage
 
 ```
-/infrastructure:import [path-to-export.tar.gz]
-/infrastructure:import [path-to-.claude-directory]
+/claudenv:import [path-to-export.tar.gz]
+/claudenv:import [path-to-.claude-directory]
 ```
 
 ## Process

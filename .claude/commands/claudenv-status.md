@@ -3,7 +3,7 @@ description: Display full Claudenv infrastructure status overview including dete
 allowed-tools: Read, Glob, Bash(*)
 ---
 
-# /infrastructure:status - System Overview
+# /claudenv:status - System Overview
 
 Display comprehensive status of the Claudenv infrastructure.
 
@@ -46,7 +46,7 @@ Display comprehensive status of the Claudenv infrastructure.
    - [project-specific skills...]
 
 📝 **Commands:** [N] available
-   /claudenv, /interview, /infrastructure:status, ...
+   /claudenv, /interview, /claudenv:status, ...
 
 🪝 **Hooks:** [Enabled/Disabled]
    - SessionStart: [active/inactive]

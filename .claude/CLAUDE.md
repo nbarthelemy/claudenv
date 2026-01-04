@@ -73,7 +73,7 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `/loop:cancel` | Stop and cancel active loop |
 | `/lsp` | Auto-detect and install LSP servers |
 | `/lsp:status` | Check LSP server status |
-| `/infrastructure:status` | Show system overview |
+| `/claudenv:status` | Show system overview |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/analyze-patterns` | Force pattern analysis |

@@ -16,7 +16,7 @@ See [.claude/CLAUDE.md](.claude/CLAUDE.md) for:
 
 - `/claudenv` - Bootstrap infrastructure
 - `/interview` - Project specification
-- `/infrastructure:status` - System overview
+- `/claudenv:status` - System overview
 - `/health:check` - Verify integrity
 - `/learn:review` - Review suggestions
 
