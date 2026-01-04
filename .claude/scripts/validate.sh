@@ -1,6 +1,9 @@
 #!/bin/bash
 # Infrastructure Validation Script
-# Used by /health:check command
+# Used by /health:check and /claudenv commands
+# Validates all required files exist and are properly configured
+
+set -e
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "🏥 Running Health Checks"
@@ -9,41 +12,111 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 PASSED=0
 WARNINGS=0
 ERRORS=0
+FIXES_APPLIED=0
 
-# Function to check and report
+# Auto-fix mode (pass --fix to enable)
+AUTO_FIX=false
+if [[ "$1" == "--fix" ]]; then
+    AUTO_FIX=true
+    echo "🔧 Auto-fix mode enabled"
+    echo ""
+fi
+
+# Function to check and report (critical - causes failure)
 check() {
     local name="$1"
     local condition="$2"
+    local fix_cmd="$3"
 
     if eval "$condition"; then
         echo "✅ $name"
         PASSED=$((PASSED + 1))
     else
-        echo "❌ $name"
-        ERRORS=$((ERRORS + 1))
+        if [[ "$AUTO_FIX" == "true" ]] && [[ -n "$fix_cmd" ]]; then
+            echo "🔧 $name - fixing..."
+            eval "$fix_cmd" 2>/dev/null && {
+                echo "   ✅ Fixed"
+                PASSED=$((PASSED + 1))
+                FIXES_APPLIED=$((FIXES_APPLIED + 1))
+            } || {
+                echo "❌ $name - fix failed"
+                ERRORS=$((ERRORS + 1))
+            }
+        else
+            echo "❌ $name"
+            ERRORS=$((ERRORS + 1))
+        fi
     fi
 }
 
+# Function for warnings (non-critical)
 warn() {
     local name="$1"
     local condition="$2"
+    local fix_cmd="$3"
 
     if eval "$condition"; then
         echo "✅ $name"
         PASSED=$((PASSED + 1))
     else
-        echo "⚠️  $name"
-        WARNINGS=$((WARNINGS + 1))
+        if [[ "$AUTO_FIX" == "true" ]] && [[ -n "$fix_cmd" ]]; then
+            echo "🔧 $name - fixing..."
+            eval "$fix_cmd" 2>/dev/null && {
+                echo "   ✅ Fixed"
+                PASSED=$((PASSED + 1))
+                FIXES_APPLIED=$((FIXES_APPLIED + 1))
+            } || {
+                echo "⚠️  $name - fix failed"
+                WARNINGS=$((WARNINGS + 1))
+            }
+        else
+            echo "⚠️  $name"
+            WARNINGS=$((WARNINGS + 1))
+        fi
     fi
 }
 
 echo ""
 echo "## Core Files"
 
-check "settings.json exists" "[ -f '.claude/settings.json' ]"
-check "settings.json is valid JSON" "cat .claude/settings.json | python3 -m json.tool > /dev/null 2>&1 || jq . .claude/settings.json > /dev/null 2>&1"
-check "CLAUDE.md exists" "[ -f '.claude/CLAUDE.md' ]"
-check "version.json exists" "[ -f '.claude/version.json' ]"
+check "settings.json exists" \
+    "[ -f '.claude/settings.json' ]"
+
+check "settings.json is valid JSON" \
+    "python3 -m json.tool .claude/settings.json > /dev/null 2>&1 || jq . .claude/settings.json > /dev/null 2>&1"
+
+check "CLAUDE.md exists" \
+    "[ -f '.claude/CLAUDE.md' ]"
+
+check "version.json exists" \
+    "[ -f '.claude/version.json' ]"
+
+echo ""
+echo "## Required Directories"
+
+check "commands/ exists" \
+    "[ -d '.claude/commands' ]" \
+    "mkdir -p .claude/commands"
+
+check "skills/ exists" \
+    "[ -d '.claude/skills' ]" \
+    "mkdir -p .claude/skills"
+
+check "scripts/ exists" \
+    "[ -d '.claude/scripts' ]" \
+    "mkdir -p .claude/scripts"
+
+check "learning/ exists" \
+    "[ -d '.claude/learning' ]" \
+    "mkdir -p .claude/learning"
+
+check "logs/ exists" \
+    "[ -d '.claude/logs' ]" \
+    "mkdir -p .claude/logs"
+
+check "backups/ exists" \
+    "[ -d '.claude/backups' ]" \
+    "mkdir -p .claude/backups"
 
 echo ""
 echo "## Skills"
@@ -87,8 +160,19 @@ for script in .claude/scripts/*.sh; do
             echo "   ✅ $script_name (executable)"
             PASSED=$((PASSED + 1))
         else
-            echo "   ⚠️  $script_name (not executable)"
-            WARNINGS=$((WARNINGS + 1))
+            if [[ "$AUTO_FIX" == "true" ]]; then
+                chmod +x "$script" && {
+                    echo "   🔧 $script_name - made executable"
+                    PASSED=$((PASSED + 1))
+                    FIXES_APPLIED=$((FIXES_APPLIED + 1))
+                } || {
+                    echo "   ⚠️  $script_name (not executable)"
+                    WARNINGS=$((WARNINGS + 1))
+                }
+            else
+                echo "   ⚠️  $script_name (not executable)"
+                WARNINGS=$((WARNINGS + 1))
+            fi
         fi
     fi
 done
@@ -96,31 +180,61 @@ done
 echo ""
 echo "## Learning Files"
 
-warn "observations.md exists" "[ -f '.claude/learning/observations.md' ]"
-warn "pending-skills.md exists" "[ -f '.claude/learning/pending-skills.md' ]"
-warn "pending-agents.md exists" "[ -f '.claude/learning/pending-agents.md' ]"
-warn "pending-commands.md exists" "[ -f '.claude/learning/pending-commands.md' ]"
-warn "pending-hooks.md exists" "[ -f '.claude/learning/pending-hooks.md' ]"
+warn "observations.md exists" \
+    "[ -f '.claude/learning/observations.md' ]" \
+    "echo '# Development Pattern Observations\n\n> Maintained by learning-agent skill.\n\n---\n\n## Session Log\n' > .claude/learning/observations.md"
+
+warn "pending-skills.md exists" \
+    "[ -f '.claude/learning/pending-skills.md' ]" \
+    "touch .claude/learning/pending-skills.md"
+
+warn "pending-agents.md exists" \
+    "[ -f '.claude/learning/pending-agents.md' ]" \
+    "touch .claude/learning/pending-agents.md"
+
+warn "pending-commands.md exists" \
+    "[ -f '.claude/learning/pending-commands.md' ]" \
+    "touch .claude/learning/pending-commands.md"
+
+warn "pending-hooks.md exists" \
+    "[ -f '.claude/learning/pending-hooks.md' ]" \
+    "touch .claude/learning/pending-hooks.md"
 
 echo ""
 echo "## Project Context"
 
-warn "project-context.json exists" "[ -f '.claude/project-context.json' ]"
+warn "project-context.json exists" \
+    "[ -f '.claude/project-context.json' ]"
+
 if [ -f ".claude/project-context.json" ]; then
-    warn "project-context.json is valid JSON" "cat .claude/project-context.json | python3 -m json.tool > /dev/null 2>&1 || jq . .claude/project-context.json > /dev/null 2>&1"
+    warn "project-context.json is valid JSON" \
+        "python3 -m json.tool .claude/project-context.json > /dev/null 2>&1 || jq . .claude/project-context.json > /dev/null 2>&1"
 fi
 
-warn "SPEC.md exists" "[ -f '.claude/SPEC.md' ]"
+warn "SPEC.md exists" \
+    "[ -f '.claude/SPEC.md' ]"
+
+echo ""
+echo "## LSP Configuration"
+
+warn "lsp-config.json exists" \
+    "[ -f '.claude/lsp-config.json' ]"
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Summary: $PASSED passed, $WARNINGS warnings, $ERRORS errors"
+if [[ $FIXES_APPLIED -gt 0 ]]; then
+    echo "         $FIXES_APPLIED issues auto-fixed"
+fi
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Suggest fixes
-if [ $WARNINGS -gt 0 ] || [ $ERRORS -gt 0 ]; then
+# Suggest fixes if not in auto-fix mode
+if [[ "$AUTO_FIX" != "true" ]] && ([ $WARNINGS -gt 0 ] || [ $ERRORS -gt 0 ]); then
     echo ""
-    echo "Suggested fixes:"
+    echo "💡 Run with --fix to auto-repair issues:"
+    echo "   bash .claude/scripts/validate.sh --fix"
+    echo ""
+    echo "Manual fixes:"
 
     # Check for non-executable scripts
     for script in .claude/scripts/*.sh; do
@@ -137,6 +251,11 @@ if [ $WARNINGS -gt 0 ] || [ $ERRORS -gt 0 ]; then
     # Check for missing SPEC
     if [ ! -f ".claude/SPEC.md" ]; then
         echo "  Run /interview to create project specification"
+    fi
+
+    # Check for missing LSP config
+    if [ ! -f ".claude/lsp-config.json" ]; then
+        echo "  Run /lsp to setup language servers"
     fi
 fi
 

@@ -1,114 +1,174 @@
 ---
 description: Bootstrap Claude Code infrastructure for current project. Detects tech stack, generates permissions, migrates CLAUDE.md, and initializes all systems.
-allowed-tools: Bash(*), Write, Edit, Read, Glob, Grep, WebSearch, WebFetch
+allowed-tools: Bash, Write, Edit, Read, Glob, Grep, WebSearch, WebFetch
 ---
 
 # /claudenv - Infrastructure Bootstrap
 
 You are initializing the Claudenv infrastructure for this project.
 
-## Current Project State
-
-!ls -la
-!find . -name "CLAUDE.md" -o -name "claude.md" 2>/dev/null | head -10
-
 ## Bootstrap Process
 
-Execute these steps in order:
+Execute these steps in order. After each step, validate success before proceeding.
 
-### Step 1: Detect Tech Stack
+### Step 1: Prepare Infrastructure
 
-Run the tech detection to understand this project:
+Run the bootstrap preparation script:
 
 ```bash
-.claude/scripts/detect-stack.sh
+bash .claude/scripts/bootstrap.sh
 ```
 
-Analyze the output and determine:
-- Primary language(s)
-- Framework(s)
-- Package manager
-- Test runner
-- Database/ORM
-- Deployment targets
-- Detection confidence (HIGH/MEDIUM/LOW)
+This creates required directories and initializes learning files.
 
-### Step 2: Confidence Check
+**Validation**: Verify these exist:
+- `.claude/logs/` directory
+- `.claude/backups/` directory
+- `.claude/learning/` directory
+- `.claude/learning/observations.md`
 
-If detection confidence is LOW or the project appears new/empty:
-- Recommend running `/interview` before continuing
-- Ask user if they want to proceed with interview or continue with defaults
+If any are missing, create them.
 
-If detection confidence is HIGH or MEDIUM:
-- Continue with bootstrap
+### Step 2: Detect Tech Stack
 
-### Step 3: Generate project-context.json
+Run tech detection:
 
-Create `.claude/project-context.json` with detected information:
+```bash
+bash .claude/scripts/detect-stack.sh
+```
+
+Parse the JSON output and extract:
+- `packageManager` - npm, yarn, pnpm, pip, cargo, etc.
+- `languages` - array of detected languages
+- `frameworks` - array of detected frameworks
+- `testRunner` - jest, vitest, pytest, etc.
+- `database` - prisma, drizzle, mongoose, etc.
+- `cloudPlatforms` - aws, gcp, heroku, vercel, etc.
+- `confidence` - high, medium, or low
+
+### Step 3: Handle Low Confidence
+
+**IMPORTANT**: If confidence is "low":
+
+1. Inform the user: "Detection confidence is LOW. This usually means the project is new or has minimal configuration."
+2. **Automatically run `/interview`** to gather requirements
+3. After interview completes, continue with remaining steps
+
+If confidence is "medium" or "high", continue without interview.
+
+### Step 4: Generate project-context.json
+
+Create `.claude/project-context.json` with ALL detected information:
 
 ```json
 {
   "detected": {
-    "languages": ["detected languages"],
-    "frameworks": ["detected frameworks"],
-    "packageManager": "detected or null",
-    "testRunner": "detected or null",
-    "database": "detected or null",
-    "orm": "detected or null",
+    "languages": ["from detection"],
+    "frameworks": ["from detection"],
+    "packageManager": "from detection or null",
+    "testRunner": "from detection or null",
+    "database": "from detection or null",
+    "cloudPlatforms": ["from detection"],
     "isMonorepo": false,
     "hasCICD": false,
     "cicdPlatform": null,
     "isContainerized": false,
     "isServerless": false,
     "serverlessPlatform": null,
-    "deploymentTargets": [],
-    "detectionConfidence": "high|medium|low",
-    "needsInterview": false
+    "detectionConfidence": "high|medium|low"
   },
   "filePatterns": {
-    "source": ["detected globs"],
-    "test": ["detected globs"],
-    "config": ["detected globs"]
+    "source": ["src/**/*", "app/**/*", "lib/**/*"],
+    "test": ["**/*.test.*", "**/*.spec.*", "tests/**/*"],
+    "config": ["*.config.*", "*.json", "*.yaml", "*.toml"]
   },
-  "detectedAt": "ISO_DATE"
+  "initializedAt": "ISO_DATE",
+  "version": "1.0.0"
 }
 ```
 
-### Step 4: Update settings.json
+**Validation**: Read back the file and verify it's valid JSON.
 
-Based on detected tech stack, merge appropriate permissions into `.claude/settings.json`.
+### Step 5: Update settings.json Permissions
 
-Use the command mappings from `.claude/skills/tech-detection/command-mappings.json` to determine which commands to add.
+Based on detected tech stack, add appropriate command permissions.
 
-### Step 5: Migrate CLAUDE.md
+Read `.claude/skills/tech-detection/command-mappings.json` and merge relevant commands into `.claude/settings.json` allow list.
+
+For example:
+- If `npm` detected → ensure npm commands are allowed
+- If `prisma` detected → add prisma commands
+- If `gcp` detected → add gcloud commands
+
+**Validation**: Verify settings.json is still valid JSON after editing.
+
+### Step 6: Migrate CLAUDE.md
 
 Check for existing CLAUDE.md files:
-- If found at root: Migrate to `.claude/CLAUDE.md` preserving ALL content
-- If found in `.claude/`: Merge new sections with existing
-- If multiple found: Consolidate all with clear markers
-
-Follow the rules in `.claude/rules/migration.md` exactly.
-
-### Step 6: Initialize Learning System
-
-Ensure all learning files exist:
-- `.claude/learning/observations.md`
-- `.claude/learning/pending-agents.md`
-- `.claude/learning/pending-skills.md`
-- `.claude/learning/pending-commands.md`
-- `.claude/learning/pending-hooks.md`
-
-### Step 7: Validate & Report
-
-Run the health check to verify everything is set up correctly:
 
 ```bash
-.claude/scripts/validate.sh
+find . -maxdepth 2 -name "CLAUDE.md" -o -name "claude.md" 2>/dev/null
 ```
 
-### Final Report
+If found at project root (`./CLAUDE.md`):
+1. Read the ENTIRE content
+2. Check if `.claude/CLAUDE.md` already has migrated content
+3. If not migrated, preserve original in `.claude/CLAUDE.md` following `.claude/rules/migration.md`
+4. Create pointer file at root
 
-Provide a summary:
+**Validation**: If migration occurred, verify:
+- Original content is preserved in `.claude/CLAUDE.md`
+- Line count of new file >= original
+
+### Step 7: Run LSP Setup
+
+Install language servers for detected languages:
+
+```bash
+bash .claude/scripts/lsp-setup.sh
+```
+
+**Validation**: Check `.claude/lsp-config.json` was created or updated.
+
+### Step 8: Final Validation
+
+Run comprehensive validation to ensure everything was created:
+
+```bash
+bash .claude/scripts/validate.sh
+```
+
+**Required - ALL must pass:**
+- ✅ `.claude/settings.json` exists and is valid JSON
+- ✅ `.claude/CLAUDE.md` exists
+- ✅ `.claude/version.json` exists
+- ✅ `.claude/project-context.json` exists and is valid JSON
+- ✅ All skills have `SKILL.md` with valid frontmatter
+- ✅ All scripts in `.claude/scripts/` are executable
+
+**Required directories:**
+- ✅ `.claude/commands/`
+- ✅ `.claude/skills/`
+- ✅ `.claude/scripts/`
+- ✅ `.claude/learning/`
+- ✅ `.claude/logs/`
+- ✅ `.claude/backups/`
+
+**Learning files:**
+- ✅ `.claude/learning/observations.md`
+- ✅ `.claude/learning/pending-skills.md`
+- ✅ `.claude/learning/pending-agents.md`
+- ✅ `.claude/learning/pending-commands.md`
+- ✅ `.claude/learning/pending-hooks.md`
+
+**If ANY validation fails:**
+1. Create missing files/directories
+2. Fix permissions (`chmod +x` for scripts)
+3. Re-run validation until all pass
+
+### Step 9: Report Results
+
+Output a summary:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -116,20 +176,27 @@ Provide a summary:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📦 Detected Stack:
-   - Languages: [list]
-   - Frameworks: [list]
-   - Package Manager: [name]
+   Languages: [list]
+   Frameworks: [list]
+   Package Manager: [name]
+   Database/ORM: [name]
+   Cloud Platforms: [list]
+   Confidence: [HIGH/MEDIUM/LOW]
 
 🔧 Configured:
-   - [N] permissions added
-   - CLAUDE.md [migrated/created]
-   - Hooks [enabled/disabled]
+   ✅ project-context.json created
+   ✅ settings.json updated
+   ✅ CLAUDE.md [migrated/preserved/created]
+   ✅ Learning system initialized
+   ✅ LSP servers: [count] installed
+
+✅ Validation: [X] passed, [Y] warnings, [Z] errors
 
 📚 Available Commands:
-   /interview         - Clarify requirements
-   /infrastructure:status - System overview
-   /health:check      - Verify integrity
-   /learn:review      - Review suggestions
+   /interview    - Clarify requirements
+   /loop         - Autonomous development
+   /lsp:status   - Check language servers
+   /health:check - Verify integrity
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -137,6 +204,8 @@ Provide a summary:
 ## Error Handling
 
 If any step fails:
-1. Log the error to `.claude/logs/errors.log`
-2. Attempt recovery (up to 3 times)
-3. If still failing, inform user and suggest manual steps
+1. Log error to `.claude/logs/errors.log` with timestamp
+2. Attempt to fix automatically (up to 3 retries)
+3. If still failing, report specific error and suggested fix to user
+
+Never report success if validation has errors. Always fix issues first.
