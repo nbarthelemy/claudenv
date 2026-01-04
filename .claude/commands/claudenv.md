@@ -130,7 +130,23 @@ bash .claude/scripts/lsp-setup.sh
 
 **Validation**: Check `.claude/lsp-config.json` was created or updated.
 
-### Step 8: Final Validation
+### Step 8: MCP Server Setup
+
+Check for referenced MCP servers and install if possible:
+
+```bash
+bash .claude/scripts/mcp-setup.sh
+```
+
+This will:
+- Scan settings.json for `mcp__*` permission patterns
+- Install missing MCP servers that can be installed via CLI
+- Warn about extension-based MCPs (VS Code, Chrome) that require manual install
+
+**Note**: Extension-based MCPs (ide, claude-in-chrome) cannot be auto-installed.
+Inform user if they need to install VS Code extension or Chrome extension.
+
+### Step 10: Final Validation
 
 Run comprehensive validation to ensure everything was created:
 
@@ -166,7 +182,7 @@ bash .claude/scripts/validate.sh
 2. Fix permissions (`chmod +x` for scripts)
 3. Re-run validation until all pass
 
-### Step 9: Report Results
+### Step 11: Report Results
 
 Output a summary:
 
