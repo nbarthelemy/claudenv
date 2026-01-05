@@ -18,10 +18,10 @@ jq -r '.infrastructureVersion' .claude/version.json
 ```
 
 ```bash
-curl -sL "https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json" | jq -r '.infrastructureVersion'
+curl -sL "https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json?cb=`date +%s`" | jq -r '.infrastructureVersion'
 ```
 
-The first returns the CURRENT version, the second returns the LATEST version.
+The first returns the CURRENT version, the second returns the LATEST version (cache buster ensures fresh data).
 
 ### Step 2: Compare and Report
 
