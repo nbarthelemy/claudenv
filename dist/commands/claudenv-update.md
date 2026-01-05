@@ -11,16 +11,17 @@ Update Claudenv infrastructure to the latest version.
 
 ### Step 1: Check Versions
 
+Run these two commands separately (in parallel):
+
 ```bash
-# Current version
-CURRENT=$(cat .claude/version.json | jq -r '.infrastructureVersion')
-
-# Latest version (from GitHub)
-LATEST=$(curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json | jq -r '.infrastructureVersion')
-
-echo "Current: $CURRENT"
-echo "Latest: $LATEST"
+jq -r '.infrastructureVersion' .claude/version.json
 ```
+
+```bash
+curl -sL "https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json" | jq -r '.infrastructureVersion'
+```
+
+The first returns the CURRENT version, the second returns the LATEST version.
 
 ### Step 2: Compare and Report
 
