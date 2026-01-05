@@ -58,6 +58,7 @@
     "scripts/bootstrap.sh",
     "scripts/check-readme-update.sh",
     "scripts/detect-stack.sh",
+    "scripts/learn-review.sh",
     "scripts/learning-observer.sh",
     "scripts/loop-manager.sh",
     "scripts/lsp-check-new.sh",
