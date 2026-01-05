@@ -1,36 +1,25 @@
 ---
 name: meta-skill
-description: Creates new skills and agents for unfamiliar technologies. Use when needing to create a skill, make an agent, add support for unknown frameworks, or extend capabilities for new tech. Researches documentation and generates specialized agents.
+description: Creates new skills for unfamiliar technologies. Use when needing to create a skill, add support for unknown frameworks, or extend capabilities for new tech. Researches documentation and delegates to skill-creator for scaffolding.
 allowed-tools: Write, Read, Glob, Grep, WebFetch, WebSearch, Edit, Bash(*)
 ---
 
-# Meta-Agent Skill
+# Meta-Skill
 
-You are an expert agent architect with full autonomy to create new skills for any technology.
+Expert agent architect that creates new skills for any technology.
 
 ## Autonomy Level: Full
 
 - Create skills immediately when threshold reached (2+ uses of unfamiliar tech)
 - Notify after creation, don't ask before
 - Research documentation autonomously
-- Discover documentation sources via web search
-- Update project permissions as needed
-
-## Documentation Access
-
-You have **UNFETTERED** access to documentation. ALWAYS research before creating skills.
-
-**Process:**
-1. Search: "[technology] official documentation"
-2. Scrape key pages for API patterns
-3. Find best practices and common pitfalls
-4. Include doc URLs in created skill
+- Delegate to `skill-creator` for scaffolding
 
 ## When to Activate
 
 - New technology encountered 2+ times without existing skill
 - User explicitly requests skill creation
-- Learning agent proposes new agent
+- Learning agent proposes new skill
 - Repeated documentation lookups for same technology
 
 ## Skill Creation Process
@@ -43,99 +32,60 @@ WebSearch: "[technology] best practices 2025"
 WebSearch: "[technology] common patterns"
 ```
 
+Gather:
+- Official docs URLs
+- API patterns
+- Best practices
+- Common pitfalls
+
 ### Step 2: Analyze Requirements
 
 Determine:
 - Primary use cases
 - Required tools
-- Typical file patterns
+- File patterns that trigger it
 - Common workflows
 - Error patterns
 
-### Step 3: Design Skill
+### Step 3: Initialize with skill-creator
 
-Choose:
-- **Name**: kebab-case, descriptive (e.g., `stripe-integration`)
-- **Triggers**: Keywords that activate the skill
-- **Tools**: Minimal required set
-- **Model**: `sonnet` (default) or `opus` (complex)
-
-### Step 4: Create Skill Files
-
-Create directory: `.claude/skills/[name]/`
-
-Create `SKILL.md`:
-
-```markdown
----
-name: [kebab-case-name]
-description: [Action-oriented description with trigger keywords]
-allowed-tools: [Tools appropriate for this technology]
-model: sonnet
----
-
-# [Technology] Skill
-
-## Documentation Access
-
-You have UNFETTERED access to documentation.
-
-**Primary Documentation:**
-- [Discovered official docs URL]
-- [API reference URL]
-- [Guides URL]
-
-## Purpose
-
-[Clear description of what this skill handles]
-
-## Autonomy Level: Full
-
-- [Key capabilities]
-- Consult documentation freely
-- Delegate when appropriate
-
-## When to Activate
-
-- [Specific triggers]
-- [File patterns]
-- [Keywords]
-
-## Instructions
-
-1. [Step based on technology patterns]
-2. [Step based on best practices]
-3. [Step based on common workflows]
-
-## Common Patterns
-
-### [Pattern 1]
-[Code or process example]
-
-### [Pattern 2]
-[Code or process example]
-
-## Error Handling
-
-- [Common error 1]: [Resolution]
-- [Common error 2]: [Resolution]
-
-## Delegation
-
-- Hand off to [other skill] when: [condition]
+Run the scaffolding script:
+```bash
+python .claude/skills/skill-creator/scripts/init_skill.py <name> --path .claude/skills
 ```
 
-### Step 5: Update Infrastructure
+### Step 4: Populate Skill Content
 
-1. Update `.claude/settings.json` if new commands needed
-2. Log creation to `.claude/logs/auto-creations.log`
-3. Notify: "📦 Created skill: [name] for [technology]"
+Edit the generated `SKILL.md` with:
 
-## Skill Template
+**Frontmatter:**
+- `name`: kebab-case (e.g., `stripe-integration`)
+- `description`: What it does + trigger keywords (max 1024 chars)
+- `allowed-tools`: Minimal required set
 
-See `references/agent-template.md` for the full template.
+**Body:**
+- Documentation URLs discovered in research
+- Workflows based on best practices
+- Common patterns with examples
+- Error handling guidance
+- Delegation rules
 
-## Example Creation
+### Step 5: Add Resources
+
+Based on research, add:
+- `scripts/` - Automation for repetitive tasks
+- `references/` - Detailed docs, schemas, patterns
+- `assets/` - Templates, boilerplate
+
+### Step 6: Validate and Notify
+
+```bash
+python .claude/skills/skill-creator/scripts/quick_validate.py .claude/skills/<name>
+```
+
+Then notify: "Created skill: [name] for [technology]"
+
+## Example
 
 **Trigger**: Claude encounters Stripe integration twice
 
@@ -148,36 +98,34 @@ WebSearch: "Stripe webhooks best practices"
 → https://stripe.com/docs/webhooks/best-practices
 ```
 
-**Created Skill**: `.claude/skills/stripe-integration/SKILL.md`
-
-```markdown
----
-name: stripe-integration
-description: Handles Stripe payment integration, webhooks, checkout flows, and subscription management. Use for stripe, payment, checkout, subscription, webhook.
-allowed-tools: WebFetch, Read, Write, Edit, Bash(npm:*), Bash(curl:*)
-model: sonnet
----
-
-# Stripe Integration Skill
-
-## Documentation Access
-
-**Primary Documentation:**
-- https://stripe.com/docs/api
-- https://stripe.com/docs/webhooks
-- https://stripe.com/docs/checkout
-
-[... rest of skill content ...]
+**Initialize**:
+```bash
+python .claude/skills/skill-creator/scripts/init_skill.py stripe-integration --path .claude/skills
 ```
 
-**Notification**: "📦 Created skill: stripe-integration for Stripe payments"
+**Result**: `.claude/skills/stripe-integration/SKILL.md`
 
-## Quality Standards
+```yaml
+---
+name: stripe-integration
+description: Handles Stripe payments, webhooks, and subscriptions. Use for stripe, payment, checkout, subscription, webhook integration.
+allowed-tools: WebFetch, Read, Write, Edit, Bash(npm:*), Bash(curl:*)
+---
+```
 
-Created skills must:
-- [ ] Have clear, keyword-rich description
-- [ ] Include official documentation URLs
-- [ ] List appropriate tools only
-- [ ] Follow project conventions
-- [ ] Include error handling guidance
-- [ ] Specify delegation rules
+## Quality Checklist
+
+- [ ] Description under 1024 chars with trigger keywords
+- [ ] Official documentation URLs included
+- [ ] Minimal tool permissions
+- [ ] Error handling guidance
+- [ ] Delegation rules specified
+- [ ] Validated with quick_validate.py
+
+## Delegation
+
+| Condition | Delegate To |
+|-----------|-------------|
+| Need skill scaffolding | `skill-creator` |
+| Frontend/UI work | `frontend-design` |
+| LSP setup needed | `lsp-setup` |

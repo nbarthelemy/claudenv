@@ -81,6 +81,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `project-interview` | Conducts specification interviews |
 | `pattern-observer` | Observes patterns and suggests automations |
 | `meta-skill` | Creates new skills for unfamiliar technologies |
+| `skill-creator` | Scaffolds and validates skill directories |
 | `frontend-design` | Creates distinctive, production-grade UI |
 | `autonomous-loop` | Manages iterative development loops |
 | `lsp-setup` | Auto-detects and installs language servers |
@@ -353,6 +354,11 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v1.0.6
+- **Added:** `skill-creator` skill from Anthropic's official skills repo
+- **Added:** Scripts: `init_skill.py`, `quick_validate.py`, `package_skill.py`
+- **Changed:** `meta-skill` now delegates to `skill-creator` for scaffolding
 
 ### v1.0.5
 - **Changed:** Restructured skills to follow Agent Skills spec
