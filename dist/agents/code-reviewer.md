@@ -2,7 +2,6 @@
 name: code-reviewer
 description: Code quality specialist for reviews, best practices, patterns, refactoring suggestions, and maintainability. Use for code review, PR review, quality check, refactoring, patterns, best practices, or code quality assessment.
 tools: Read, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Code Reviewer

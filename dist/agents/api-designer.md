@@ -2,7 +2,6 @@
 name: api-designer
 description: API design specialist for REST, GraphQL, OpenAPI specs, versioning strategies, and developer experience. Use for API design, endpoints, schemas, OpenAPI, Swagger, GraphQL schemas, API versioning, or developer experience.
 tools: Read, Write, Edit, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # API Designer

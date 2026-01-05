@@ -2,7 +2,6 @@
 name: documentation-writer
 description: Documentation specialist for READMEs, API docs, code comments, architecture docs, and user guides. Use for documentation, docs, README, API docs, JSDoc, comments, architecture docs, or user guides.
 tools: Read, Write, Edit, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Documentation Writer

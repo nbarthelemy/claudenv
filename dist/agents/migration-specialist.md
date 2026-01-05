@@ -2,7 +2,6 @@
 name: migration-specialist
 description: Migration specialist for upgrades, refactoring, legacy modernization, and technology transitions. Use for migration, upgrade, refactor, modernize, legacy code, technology transition, or codebase migration.
 tools: Read, Write, Edit, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Migration Specialist

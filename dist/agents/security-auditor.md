@@ -2,7 +2,6 @@
 name: security-auditor
 description: Security specialist for vulnerability audits, authentication, encryption, OWASP compliance, and code hardening. Use for security review, vulnerabilities, auth, encryption, XSS, CSRF, SQL injection, OWASP, or security audit.
 tools: Read, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Security Auditor

@@ -2,7 +2,6 @@
 name: release-manager
 description: Release specialist for versioning, changelogs, deployment coordination, and release notes. Use for release, version, versioning, changelog, deployment, tagging, publish, or release notes.
 tools: Read, Write, Edit, Glob, Grep, Bash(git:*, npm:*)
-model: sonnet
 ---
 
 # Release Manager

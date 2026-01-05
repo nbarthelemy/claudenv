@@ -2,7 +2,6 @@
 name: frontend-developer
 description: Frontend specialist for UI implementation, React/Vue/Angular components, CSS/Tailwind styling, responsive design, and client-side performance. Use for UI, components, styling, layout, responsive, animations, or frontend architecture decisions.
 tools: Read, Write, Edit, Glob, Grep, Bash(npm:*, npx:*)
-model: sonnet
 ---
 
 # Frontend Developer

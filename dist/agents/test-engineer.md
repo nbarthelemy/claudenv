@@ -2,7 +2,6 @@
 name: test-engineer
 description: Testing specialist for unit tests, integration tests, e2e tests, coverage analysis, and TDD. Use for testing, tests, unit tests, e2e, integration tests, coverage, TDD, jest, playwright, vitest, or pytest.
 tools: Read, Write, Edit, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Test Engineer

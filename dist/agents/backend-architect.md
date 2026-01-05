@@ -2,7 +2,6 @@
 name: backend-architect
 description: Backend specialist for API design, database architecture, service layers, and system design. Use for APIs, endpoints, databases, services, microservices, serverless, authentication flows, or backend architecture decisions.
 tools: Read, Write, Edit, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Backend Architect

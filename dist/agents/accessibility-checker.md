@@ -2,7 +2,6 @@
 name: accessibility-checker
 description: Accessibility specialist for WCAG compliance, screen reader support, keyboard navigation, and inclusive design. Use for accessibility, a11y, WCAG, screen reader, ARIA, keyboard navigation, or inclusive design.
 tools: Read, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Accessibility Checker

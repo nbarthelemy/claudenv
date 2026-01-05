@@ -2,7 +2,6 @@
 name: performance-analyst
 description: Performance specialist for optimization, profiling, benchmarking, memory analysis, and scalability. Use for performance, optimization, slow, profiling, benchmarks, memory leaks, CPU usage, latency, or scalability issues.
 tools: Read, Glob, Grep, Bash(*)
-model: sonnet
 ---
 
 # Performance Analyst

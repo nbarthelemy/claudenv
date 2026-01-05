@@ -2,7 +2,6 @@
 name: orchestrator
 description: Orchestrates complex tasks by automatically spawning specialist subagents in parallel. Use proactively when detecting complex multi-domain tasks, large refactors, comprehensive reviews, or when task complexity exceeds thresholds. Analyzes tasks and routes to appropriate agents.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(*), Task, WebSearch
-model: sonnet
 ---
 
 # Orchestrator Skill
