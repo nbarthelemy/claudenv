@@ -100,7 +100,7 @@ Only ask about genuinely unclear areas. For each question:
 
 ### Phase 3: Write SPEC.md
 
-Use the template at `.claude/skills/interview-agent/spec-template.md`.
+Use the template at `references/spec-template.md`.
 
 Include:
 - Executive summary
@@ -178,7 +178,7 @@ Secondary updates: `project-context.json`, `settings.json`
 
 ## Files Used
 
-- `.claude/skills/interview-agent/spec-template.md` - SPEC template
+- `references/spec-template.md` - SPEC template
 - `.claude/templates/project-context.json.template` - Context template
 - `.claude/settings.json` - Permissions to update
 

@@ -133,7 +133,7 @@ You have UNFETTERED access to documentation.
 
 ## Skill Template
 
-See `.claude/skills/meta-agent/agent-template.md` for the full template.
+See `references/agent-template.md` for the full template.
 
 ## Example Creation
 

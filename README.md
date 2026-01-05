@@ -354,6 +354,11 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v1.0.5
+- **Changed:** Restructured skills to follow Agent Skills spec
+- **Changed:** Supporting files moved to `references/` (markdown) and `assets/` (JSON)
+- **Changed:** Updated internal path references
+
 ### v1.0.4
 - **Changed:** Renamed skills to clearer names (removed "-agent" suffix)
 - **Changed:** `/agents:triggers` → `/skills:triggers`

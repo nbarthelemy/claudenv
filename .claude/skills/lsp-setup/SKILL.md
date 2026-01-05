@@ -247,7 +247,7 @@ find . -type f -name "*.*" \
 
 ### Step 2: Map to LSP Servers
 
-Use `.claude/skills/lsp-agent/lsp-mappings.json` to determine required servers.
+Use `assets/lsp-mappings.json` to determine required servers.
 
 ### Step 3: Check Installed Servers
 

@@ -45,7 +45,7 @@ Parse the JSON output and assess:
 ### Step 4: Generate Permissions
 
 Based on detected tech, look up commands in:
-`.claude/skills/tech-detection/command-mappings.json`
+`assets/command-mappings.json`
 
 Merge the appropriate command sets into the project's settings.json.
 
@@ -95,7 +95,7 @@ If confidence is LOW:
 ## Files Used
 
 - `.claude/scripts/detect-stack.sh` - Detection script
-- `.claude/skills/tech-detection/command-mappings.json` - Tech→commands map
+- `assets/command-mappings.json` - Tech→commands map
 - `.claude/project-context.json` - Output location
 - `.claude/settings.json` - Permissions to update
 

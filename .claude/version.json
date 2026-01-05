@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "1.0.4",
+  "infrastructureVersion": "1.0.5",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-04T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "1.0.5": "Restructure skills to follow Agent Skills spec (references/, assets/)",
     "1.0.4": "Rename skills, fix descriptions for auto-invoke",
     "1.0.3": "Add /skills:triggers and /claudenv:audit commands",
     "1.0.2": "Add /claudenv:mcp command for MCP server management",
