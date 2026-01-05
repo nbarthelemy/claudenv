@@ -57,6 +57,7 @@
     "rules/permissions.md",
     "scripts/bootstrap.sh",
     "scripts/check-readme-update.sh",
+    "scripts/apply-update.sh",
     "scripts/check-update.sh",
     "scripts/claudenv-status.sh",
     "scripts/debug-hooks.sh",

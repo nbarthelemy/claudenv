@@ -34,57 +34,33 @@ Proceed with update?
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## Step 2: Create Backup (after user confirms)
+## Step 2: Apply Update (after user confirms)
 
-```bash
-BACKUP_DIR=".claude/backups/pre-update-$(date +%Y%m%d-%H%M%S)"
-mkdir -p "$BACKUP_DIR"
-cp -r .claude/settings.json .claude/version.json "$BACKUP_DIR/"
-cp -r .claude/commands .claude/skills .claude/scripts .claude/rules "$BACKUP_DIR/" 2>/dev/null || true
-[ -d .claude/agents ] && cp -r .claude/agents "$BACKUP_DIR/"
-[ -f .claude/CLAUDE.md ] && cp .claude/CLAUDE.md "$BACKUP_DIR/"
-echo "Backup: $BACKUP_DIR"
-```
+Run `bash .claude/scripts/apply-update.sh` to backup and apply the update.
 
-## Step 3: Download and Apply Updates
-
-```bash
-curl -sL https://github.com/nbarthelemy/claudenv/archive/refs/heads/main.tar.gz | tar -xz -C /tmp
-```
-
-Remove deprecated files, then copy framework files from manifest:
-
-```bash
-# Remove deprecated
-cat /tmp/claudenv-main/dist/manifest.json | jq -r '.deprecated[]' 2>/dev/null | while read file; do
-    rm -f ".claude/$file"
-done
-
-# Copy framework files
-cat /tmp/claudenv-main/dist/manifest.json | jq -r '.files[]' | while read file; do
-    mkdir -p ".claude/$(dirname "$file")"
-    cp "/tmp/claudenv-main/dist/$file" ".claude/$file"
-done
-
-# Copy version and manifest
-cp /tmp/claudenv-main/dist/version.json .claude/version.json
-cp /tmp/claudenv-main/dist/manifest.json .claude/manifest.json
-
-# Make scripts executable
-chmod +x .claude/scripts/*.sh
-
-# Cleanup
-rm -rf /tmp/claudenv-main
-```
-
-## Step 4: Report Results
-
+**If error** (`success: false`):
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Updated to v{latest}
+❌ Update Failed
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Backup: {backup_dir}
+Error: {error}
+Backup: {backupDir}
+
+Run /backup:restore to restore from backup.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**If success** (`success: true`):
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Updated to v{version}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Files updated: {filesUpdated}
+Files removed: {filesDeprecated}
+Backup: {backupDir}
+
 Run /health:check to verify.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
