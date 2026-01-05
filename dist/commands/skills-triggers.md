@@ -1,57 +1,29 @@
 ---
 description: List all available skills with their trigger keywords and phrases.
-allowed-tools: Read, Glob, Bash(*)
+allowed-tools: Bash
 ---
 
 # /skills:triggers - Skill Discovery
 
-Show all skills and what triggers them.
+1. Run `bash .claude/scripts/skills-triggers.sh` to collect skill data as JSON
+2. Format as a skill list:
 
-## Process
+**If no skills** (`count: 0`):
+```
+🎯 No skills installed. Run /claudenv to set up infrastructure.
+```
 
-1. Find all SKILL.md files in `.claude/skills/`
-2. Extract name and description from frontmatter
-3. Display in a scannable format
-
-## Output Format
-
+**If skills exist**:
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 Available Skills
+🎯 Available Skills ({count})
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-tech-detection
-  → tech stack, analyze project, bootstrap, /claudenv
+{for each skill}
+**{name}**
+  → {description truncated to ~80 chars}
 
-project-interview
-  → interview, specification, requirements, /interview
-
-pattern-observer
-  → patterns, learnings, automations, /learn:review
-
-autonomous-loop
-  → loop, iterate, "keep going until", /loop
-
-lsp-setup
-  → lsp, language server, go to definition
-
-meta-skill
-  → create skill, unfamiliar technology, extend
-
-frontend-design
-  → UI, CSS, Tailwind, "make it look better"
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-7 skills available
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## Instructions
-
-For each skill found:
-1. Read the SKILL.md file
-2. Extract the `name` field from frontmatter
-3. Extract key trigger words from description
-4. Format as: `name` followed by arrow and top 4-6 trigger words
-
-Keep output concise - show just enough triggers to understand what invokes each skill.
+Keep descriptions concise. Skills auto-invoke based on keywords in description.
