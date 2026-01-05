@@ -19,6 +19,14 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
     fi
 fi
 
+# Check for patterns that reached threshold and auto-create skills
+if [ -f ".claude/learning/.thresholds_reached" ] && [ -s ".claude/learning/.thresholds_reached" ]; then
+    # Run auto-create script if it exists
+    if [ -x ".claude/scripts/auto-create-skill.sh" ]; then
+        bash .claude/scripts/auto-create-skill.sh
+    fi
+fi
+
 # Check for new pending learnings
 PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null) || PENDING_SKILLS=0
 PENDING_COMMANDS=$(grep -c "^### " .claude/learning/pending-commands.md 2>/dev/null) || PENDING_COMMANDS=0

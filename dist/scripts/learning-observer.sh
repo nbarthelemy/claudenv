@@ -1,87 +1,138 @@
 #!/bin/bash
 # Learning Observer Hook Script
-# Triggered after file modifications and bash commands to capture patterns
+# Triggered after file modifications to capture and track patterns
+# Automatically detects when thresholds are reached for skill/agent creation
 
 LEARNING_DIR=".claude/learning"
-OBSERVATIONS_FILE="$LEARNING_DIR/observations.md"
 PATTERNS_FILE="$LEARNING_DIR/patterns.json"
+THRESHOLDS_FILE="$LEARNING_DIR/.thresholds_reached"
 
 # Ensure learning directory exists
 mkdir -p "$LEARNING_DIR"
 
-# Initialize patterns file if missing
-if [ ! -f "$PATTERNS_FILE" ]; then
-    echo '{"patterns":[],"last_analysis":"never"}' > "$PATTERNS_FILE"
-fi
+# Initialize patterns file if missing or invalid
+init_patterns_file() {
+    if [ ! -f "$PATTERNS_FILE" ] || ! jq empty "$PATTERNS_FILE" 2>/dev/null; then
+        cat > "$PATTERNS_FILE" << 'EOF'
+{
+  "version": 1,
+  "last_updated": null,
+  "file_patterns": {},
+  "directory_patterns": {},
+  "extension_patterns": {},
+  "thresholds": {
+    "skill_creation": 3,
+    "agent_proposal": 2
+  }
+}
+EOF
+    fi
+}
+
+init_patterns_file
 
 # Get current timestamp
 TIMESTAMP=$(date -Iseconds)
+TODAY=$(date +%Y-%m-%d)
 
-# Determine context
-CONTEXT=""
-if [ "$1" = "--pre-commit" ]; then
-    CONTEXT="pre-commit"
-elif [ -n "$CLAUDE_TOOL_NAME" ]; then
-    CONTEXT="$CLAUDE_TOOL_NAME"
-else
-    CONTEXT="unknown"
-fi
+# Get context from environment or argument
+CONTEXT="${CLAUDE_TOOL_NAME:-$1}"
+INPUT="${CLAUDE_TOOL_INPUT:-$2}"
 
-# Log observation (lightweight - just append to file)
-log_observation() {
-    local type="$1"
-    local detail="$2"
+# Exit if no context
+[ -z "$CONTEXT" ] && exit 0
 
-    # Create observations file if missing
-    if [ ! -f "$OBSERVATIONS_FILE" ]; then
-        cat > "$OBSERVATIONS_FILE" << 'EOF'
-# Learning Observations
+# Track file edit pattern
+track_file_pattern() {
+    local file_path="$1"
+    [ -z "$file_path" ] && return
 
-This file captures development patterns observed during sessions.
-The learning-agent skill analyzes these to suggest automations.
+    # Extract components
+    local dir_path=$(dirname "$file_path")
+    local extension="${file_path##*.}"
+    local filename=$(basename "$file_path")
 
----
+    # Update patterns.json using jq
+    local tmp_file=$(mktemp)
 
-## Observations Log
+    jq --arg fp "$file_path" \
+       --arg dp "$dir_path" \
+       --arg ext "$extension" \
+       --arg ts "$TIMESTAMP" \
+       --arg today "$TODAY" '
+        # Update file pattern
+        .file_patterns[$fp] = (
+            (.file_patterns[$fp] // {"count": 0, "first_seen": $today, "last_seen": null, "dates": []}) |
+            .count += 1 |
+            .last_seen = $today |
+            .dates = ((.dates + [$today]) | unique | .[-10:])
+        ) |
 
-EOF
-    fi
+        # Update directory pattern
+        .directory_patterns[$dp] = (
+            (.directory_patterns[$dp] // {"count": 0, "first_seen": $today, "files": []}) |
+            .count += 1 |
+            .files = ((.files + [$fp]) | unique | .[-20:])
+        ) |
 
-    # Append observation
-    echo "- [$TIMESTAMP] **$type**: $detail" >> "$OBSERVATIONS_FILE"
+        # Update extension pattern
+        .extension_patterns[$ext] = (
+            (.extension_patterns[$ext] // {"count": 0, "first_seen": $today}) |
+            .count += 1
+        ) |
+
+        .last_updated = $ts
+    ' "$PATTERNS_FILE" > "$tmp_file" && mv "$tmp_file" "$PATTERNS_FILE"
 }
 
-# Capture file modification patterns
-if [ "$CONTEXT" = "Write" ] || [ "$CONTEXT" = "Edit" ] || [ "$CONTEXT" = "MultiEdit" ]; then
-    # Extract file extension pattern
-    if [ -n "$CLAUDE_TOOL_INPUT" ]; then
-        FILE_EXT="${CLAUDE_TOOL_INPUT##*.}"
-        log_observation "file_modify" "Modified .$FILE_EXT file"
+# Check if any patterns have reached thresholds
+check_thresholds() {
+    local skill_threshold=$(jq -r '.thresholds.skill_creation // 3' "$PATTERNS_FILE")
+
+    # Find directory patterns that have reached threshold
+    local triggered=$(jq -r --argjson threshold "$skill_threshold" '
+        .directory_patterns | to_entries |
+        map(select(.value.count >= $threshold)) |
+        map(.key) | join("\n")
+    ' "$PATTERNS_FILE")
+
+    if [ -n "$triggered" ]; then
+        # Write triggered patterns to thresholds file
+        echo "$triggered" | while read -r dir; do
+            if [ -n "$dir" ] && ! grep -q "^$dir$" "$THRESHOLDS_FILE" 2>/dev/null; then
+                echo "$dir" >> "$THRESHOLDS_FILE"
+            fi
+        done
     fi
-fi
+}
 
-# Capture bash command patterns
-if [ "$CONTEXT" = "Bash" ]; then
-    if [ -n "$CLAUDE_TOOL_INPUT" ]; then
-        # Extract command name (first word)
-        CMD_NAME=$(echo "$CLAUDE_TOOL_INPUT" | awk '{print $1}')
-        log_observation "bash_cmd" "Ran: $CMD_NAME"
-    fi
-fi
+# Main logic based on context
+case "$CONTEXT" in
+    Write|Edit|MultiEdit)
+        # Extract file path from input (first argument or JSON)
+        if [ -n "$INPUT" ]; then
+            # Try to extract file_path from JSON-like input
+            file_path=$(echo "$INPUT" | grep -oE '"file_path"\s*:\s*"[^"]+"' | head -1 | sed 's/.*"file_path"\s*:\s*"\([^"]*\)".*/\1/')
 
-# Pre-commit analysis trigger
-if [ "$CONTEXT" = "pre-commit" ]; then
-    log_observation "milestone" "Pre-commit checkpoint"
+            # If not found, assume input is the file path
+            [ -z "$file_path" ] && file_path="$INPUT"
 
-    # Count recent observations
-    if [ -f "$OBSERVATIONS_FILE" ]; then
-        OBS_COUNT=$(grep -c "^\- \[" "$OBSERVATIONS_FILE" 2>/dev/null || echo "0")
-
-        # If significant activity, mark for analysis
-        if [ "$OBS_COUNT" -gt 10 ]; then
-            echo "$TIMESTAMP" > "$LEARNING_DIR/.needs_analysis"
+            track_file_pattern "$file_path"
+            check_thresholds
         fi
-    fi
-fi
+        ;;
+    --check-thresholds)
+        check_thresholds
+        # Output any patterns that reached threshold
+        if [ -f "$THRESHOLDS_FILE" ] && [ -s "$THRESHOLDS_FILE" ]; then
+            echo "PATTERNS_REACHED_THRESHOLD"
+            cat "$THRESHOLDS_FILE"
+        fi
+        ;;
+    --reset)
+        rm -f "$THRESHOLDS_FILE"
+        echo "Thresholds reset"
+        ;;
+esac
 
 exit 0

@@ -67,6 +67,7 @@
     "scripts/pre-commit.sh",
     "scripts/session-end.sh",
     "scripts/session-start.sh",
+    "scripts/auto-create-skill.sh",
     "scripts/validate.sh",
     "skills/agent-creator/SKILL.md",
     "skills/agent-creator/references/tech-agent-mappings.md",
