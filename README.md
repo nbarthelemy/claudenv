@@ -59,6 +59,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `/claudenv:upgrade` | Full upgrade with changelog |
 | `/claudenv:export` | Export for sharing |
 | `/claudenv:import` | Import from export |
+| `/claudenv:mcp` | Detect and install MCP servers |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/learn:implement` | Implement a learning proposal |
@@ -99,7 +100,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 ├── CLAUDE.md           # Framework instructions & autonomy rules
 ├── settings.json       # Permissions & hooks configuration
 ├── version.json        # Framework version
-├── commands/           # Slash commands (24 included)
+├── commands/           # Slash commands (26 included)
 ├── skills/             # Auto-invoked skills (7 included)
 │   ├── tech-detection/
 │   ├── interview-agent/
@@ -256,7 +257,33 @@ outgoingCalls     - Find what this function calls
 - `/lsp` - Manually trigger LSP detection
 - `/lsp:status` - Check installed servers
 
-### 6. Self-Extension
+### 6. MCP Server Management
+
+Claudenv can detect and install MCP (Model Context Protocol) servers referenced in your project settings.
+
+**Available MCP Servers:**
+
+| Server | Description |
+|--------|-------------|
+| `filesystem` | File system access |
+| `github` | GitHub API access |
+| `postgres` | PostgreSQL database |
+| `sqlite` | SQLite database |
+| `puppeteer` | Browser automation |
+| `memory` | Persistent memory |
+| `fetch` | HTTP requests |
+| `slack` | Slack integration |
+
+**Extension-Based Servers:**
+- `ide` - VS Code extension (install "Claude Code" extension)
+- `claude-in-chrome` - Chrome extension (install from claude.ai/chrome)
+
+**Commands:**
+- `/claudenv:mcp` - Auto-detect and install missing MCPs
+- `/claudenv:mcp list` - List installed and referenced MCPs
+- `/claudenv:mcp install <name>` - Install a specific MCP server
+
+### 7. Self-Extension
 
 When encountering unfamiliar technology:
 1. Meta-agent researches documentation
@@ -324,6 +351,11 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v1.0.2
+- **Added:** `/claudenv:mcp` command for MCP server management
+- **Added:** MCP auto-detection and installation support
+- **Added:** Documentation for 8 official MCP servers
 
 ### v1.0.1
 - **Fixed:** Permissions format now uses correct `Bash(command:*)` syntax
