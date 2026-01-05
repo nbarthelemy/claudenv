@@ -48,6 +48,27 @@ rm -rf /tmp/claudenv
 echo -e "\n@rules/claudenv.md" >> .claude/CLAUDE.md
 ```
 
+## Repository Structure
+
+```
+claudenv/
+├── CLAUDE.md          # Dev instructions (NOT distributed to users)
+├── README.md          # This file
+├── install.sh         # User installer script
+├── LICENSE
+├── .claude/           # Symlinks for self-dogfooding
+└── dist/              # Distributable content → user's .claude/
+    ├── settings.json
+    ├── version.json
+    ├── rules/claudenv.md   # Framework instructions
+    ├── commands/           # 28 slash commands
+    ├── skills/             # 8 auto-invoked skills
+    ├── scripts/            # Automation scripts
+    └── ...
+```
+
+When you install claudenv, the contents of `dist/` are copied to your project's `.claude/` directory.
+
 ## What You Get
 
 ### Commands
@@ -106,37 +127,32 @@ echo -e "\n@rules/claudenv.md" >> .claude/CLAUDE.md
 
 **Databases:** PostgreSQL, MySQL, MongoDB, Redis, SQLite, Prisma, Drizzle, TypeORM
 
-## Directory Structure
+## Installed Structure (Your Project)
+
+After installation, your project's `.claude/` directory contains:
 
 ```
-.claude/
-├── CLAUDE.md           # Your project instructions + @rules/claudenv.md import
-├── settings.json       # Permissions & hooks configuration
-├── version.json        # Framework version
-├── rules/
-│   ├── claudenv.md     # Framework instructions (imported by CLAUDE.md)
-│   ├── autonomy.md     # Autonomy level definitions
-│   ├── permissions.md  # Command permission matrix
-│   └── ...
-├── commands/           # Slash commands (28 included)
-├── skills/             # Auto-invoked skills (8 included)
-│   ├── tech-detection/
-│   ├── project-interview/
-│   ├── pattern-observer/
-│   ├── meta-skill/
-│   ├── skill-creator/
-│   ├── frontend-design/
-│   ├── autonomous-loop/
-│   └── lsp-setup/
-├── scripts/            # Shell scripts for hooks
-├── templates/          # Templates for generation
-├── learning/           # Pattern observations
-├── loop/               # Autonomous loop state & history
-├── logs/               # Execution logs (gitignored)
-└── backups/            # Infrastructure backups (gitignored)
+your-project/
+└── .claude/
+    ├── CLAUDE.md           # Your instructions + @rules/claudenv.md import
+    ├── settings.json       # Permissions & hooks
+    ├── version.json        # Framework version
+    ├── rules/
+    │   ├── claudenv.md     # Framework instructions (imported)
+    │   ├── autonomy.md     # Autonomy definitions
+    │   ├── permissions.md  # Permission matrix
+    │   └── ...
+    ├── commands/           # 28 slash commands
+    ├── skills/             # 8 auto-invoked skills
+    ├── scripts/            # Automation scripts
+    ├── templates/          # Generation templates
+    ├── learning/           # Pattern observations
+    ├── loop/               # Loop state & history
+    ├── logs/               # Execution logs
+    └── backups/            # Auto-backups
 ```
 
-**Key point:** Your project-specific instructions stay in `CLAUDE.md`. The framework instructions are imported via `@rules/claudenv.md`, so updates never overwrite your content.
+**Key point:** Your project instructions stay in `CLAUDE.md`. Framework instructions are imported via `@rules/claudenv.md`, so updates never overwrite your content.
 
 ## Autonomy Levels
 
@@ -376,12 +392,12 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 - **Changed:** Moved all distributable content to `dist/` directory
 - **Added:** Symlinks in `.claude/` for self-dogfooding (claudenv uses its own framework)
 - **Fixed:** `find` commands now use `-L` to follow symlinks
+- **Changed:** `CLAUDE.md` at repo root is now dev-only instructions (not distributed)
 
 ### v2.0.0
-- **Breaking:** Restructured repo - root IS the `.claude/` content
 - **Changed:** Framework instructions moved to `rules/claudenv.md`
-- **Changed:** User's CLAUDE.md now imports framework (never overwritten)
-- **Improved:** `install.sh` preserves existing CLAUDE.md content
+- **Changed:** User's CLAUDE.md now imports framework via `@rules/claudenv.md`
+- **Improved:** `install.sh` preserves existing CLAUDE.md content (never overwrites)
 
 ### v1.0.6
 - **Added:** `skill-creator` skill from Anthropic's official skills repo
@@ -427,9 +443,10 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 Contributions welcome! Please:
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Test with `/health:check`
-5. Submit a pull request
+3. Make changes in `dist/` (distributable content)
+4. Test locally using symlinks in `.claude/`
+5. Run `/health:check` to validate
+6. Submit a pull request
 
 ## License
 
