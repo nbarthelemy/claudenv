@@ -24,21 +24,27 @@ echo "Latest: $LATEST"
 
 ### Step 2: Compare and Report
 
-**If already up to date:**
+**If already up to date (versions match): STOP HERE**
+
+Output this message and do nothing else:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ Claudenv Up to Date
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Current version: 2.2.0
-Latest version: 2.2.0
+Current version: X.X.X
+Latest version: X.X.X
 
 No updates available.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**If update available, show changelog and confirm:**
+**IMPORTANT:** Do NOT fetch additional files, do NOT compare file contents, do NOT do anything else. Just output the message above and stop.
+
+---
+
+**If update available (versions differ), show changelog and confirm:**
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
