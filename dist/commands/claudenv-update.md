@@ -82,28 +82,73 @@ Proceed? (Requires confirmation)
 BACKUP_DIR=".claude/backups/pre-update-$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 cp -r .claude/settings.json .claude/version.json "$BACKUP_DIR/"
-cp -r .claude/commands .claude/skills .claude/scripts "$BACKUP_DIR/"
+cp -r .claude/commands .claude/skills .claude/scripts .claude/rules "$BACKUP_DIR/"
+[ -d .claude/agents ] && cp -r .claude/agents "$BACKUP_DIR/"
+[ -d .claude/orchestration ] && cp -r .claude/orchestration "$BACKUP_DIR/"
 [ -f .claude/CLAUDE.md ] && cp .claude/CLAUDE.md "$BACKUP_DIR/"
 ```
 
-### Step 4: Fetch and Apply Updates
+### Step 4: Fetch and Apply Updates (Manifest-Based)
+
+**IMPORTANT**: Use manifest-based sync to preserve user-created skills/agents while removing deleted framework files.
 
 ```bash
 # Download latest
 curl -sL https://github.com/nbarthelemy/claudenv/archive/refs/heads/main.tar.gz | tar -xz -C /tmp
+```
 
-# Update directories
-for dir in commands skills rules scripts templates learning; do
-    rm -rf ".claude/$dir"
-    cp -r "/tmp/claudenv-main/dist/$dir" ".claude/$dir"
+#### Step 4a: Remove Deprecated and Deleted Framework Files
+
+Read the NEW manifest from downloaded archive and remove:
+1. All files listed in `deprecated` array
+2. Files that exist locally but are no longer in the new manifest
+
+```bash
+# The manifest is at: /tmp/claudenv-main/dist/manifest.json
+# It contains:
+#   - "files": array of all framework-managed files
+#   - "deprecated": array of files to explicitly delete
+
+# Remove deprecated files first
+cat /tmp/claudenv-main/dist/manifest.json | jq -r '.deprecated[]' | while read file; do
+    rm -f ".claude/$file"
+done
+```
+
+**CRITICAL**: You must read the manifest and delete ONLY files listed in `deprecated`. Do NOT delete entire directories as that would remove user-created content.
+
+#### Step 4b: Copy Framework Files
+
+Copy each file listed in the manifest's `files` array, creating directories as needed:
+
+```bash
+cat /tmp/claudenv-main/dist/manifest.json | jq -r '.files[]' | while read file; do
+    mkdir -p ".claude/$(dirname "$file")"
+    cp "/tmp/claudenv-main/dist/$file" ".claude/$file"
 done
 
-# Update version
-cp "/tmp/claudenv-main/dist/version.json" ".claude/version.json"
+# Also copy these top-level files
+cp /tmp/claudenv-main/dist/version.json .claude/version.json
+cp /tmp/claudenv-main/dist/manifest.json .claude/manifest.json
 
-# Cleanup
+# Copy settings.local.json.template if user doesn't have local settings
+[ ! -f .claude/settings.local.json ] && [ -f /tmp/claudenv-main/dist/settings.local.json.template ] && \
+    cp /tmp/claudenv-main/dist/settings.local.json.template .claude/settings.local.json.template
+
+# Cleanup temp files
 rm -rf /tmp/claudenv-main
 ```
+
+**What This Preserves:**
+- User-created skills in `.claude/skills/`
+- User-created agents in `.claude/agents/`
+- User-created commands in `.claude/commands/`
+- All files in `.claude/backups/`, `.claude/logs/`, `.claude/loop/`
+- User's `observations.json` and other learning data
+
+**What Gets Updated:**
+- All framework files listed in `manifest.json`
+- Deprecated files get removed
 
 ### Step 5: Merge Settings
 
@@ -165,6 +210,8 @@ Updated:
   ✅ [N] commands
   ✅ [N] skills
   ✅ [N] scripts
+  ✅ [N] agents
+  ✅ Rules & templates
 
 Preserved:
   ✅ Hooks
