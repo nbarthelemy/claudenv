@@ -1,11 +1,11 @@
 ---
-description: List all available skills with their trigger keywords and phrases.
+description: List all available agents with their trigger keywords and phrases.
 allowed-tools: Read, Glob, Bash(*)
 ---
 
-# /skills:triggers - Skill Discovery
+# /agents:triggers - Agent Discovery
 
-Show all skills and what triggers them.
+Show all agents and what triggers them.
 
 ## Process
 
@@ -18,7 +18,7 @@ Show all skills and what triggers them.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 Available Skills
+🤖 Available Agents
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 tech-detection
@@ -43,14 +43,14 @@ frontend-design
   → UI, UX, CSS, Tailwind, styling, "make it look better"
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-7 skills available
+7 agents available
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ## Extraction Commands
 
 ```bash
-# Find all skills
+# Find all agents
 find .claude/skills -name "SKILL.md" -type f
 
 # Extract name from frontmatter
@@ -62,10 +62,10 @@ grep -A1 "TRIGGERS - Keywords:" .claude/skills/*/SKILL.md
 
 ## Instructions
 
-For each skill found:
+For each agent found:
 1. Read the SKILL.md file
 2. Extract the `name` field from frontmatter
 3. Find lines containing "TRIGGERS - Keywords:" and extract the first few keywords
 4. Format as: `name` followed by arrow and top 4-6 trigger words
 
-Keep output concise - show just enough triggers to understand what invokes each skill.
+Keep output concise - show just enough triggers to understand what invokes each agent.

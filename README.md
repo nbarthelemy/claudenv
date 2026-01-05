@@ -61,7 +61,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `/claudenv:import` | Import from export |
 | `/claudenv:mcp` | Detect and install MCP servers |
 | `/claudenv:audit` | Audit permissions vs detected tech |
-| `/skills:triggers` | List skills with trigger keywords |
+| `/agents:triggers` | List agents with trigger keywords |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/learn:implement` | Implement a learning proposal |
@@ -355,7 +355,7 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 ## Changelog
 
 ### v1.0.3
-- **Added:** `/skills:triggers` command for skill discoverability
+- **Added:** `/agents:triggers` command for agent discoverability
 - **Added:** `/claudenv:audit` command to audit permissions vs detected tech
 - **Added:** Pre-commit hook to remind about README updates
 

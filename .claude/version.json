@@ -6,7 +6,7 @@
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
-    "1.0.3": "Add /skills:triggers and /claudenv:audit commands",
+    "1.0.3": "Add /agents:triggers and /claudenv:audit commands",
     "1.0.2": "Add /claudenv:mcp command for MCP server management",
     "1.0.1": "Fix permissions format to use Bash(command:*) syntax"
   }
