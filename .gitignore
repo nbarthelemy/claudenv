@@ -22,6 +22,9 @@ lsp-config.json
 .autonomy-paused
 dist/.autonomy-paused
 
+# Proposal tracking state (prevents duplicate proposals)
+.claude/learning/.*_proposed
+
 # OS files
 .DS_Store
 Thumbs.db
