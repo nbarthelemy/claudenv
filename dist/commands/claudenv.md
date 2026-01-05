@@ -146,6 +146,32 @@ This will:
 **Note**: Extension-based MCPs (ide, claude-in-chrome) cannot be auto-installed.
 Inform user if they need to install VS Code extension or Chrome extension.
 
+### Step 9: Create Specialist Agents
+
+Based on detected tech stack, create specialist subagents for orchestration:
+
+1. Check which technologies were detected in Step 2
+2. For each technology that benefits from specialized expertise:
+   - Check if agent already exists in `.claude/agents/`
+   - If not exists, invoke `agent-creator` skill to create it
+3. Report created agents
+
+**Tech-to-Agent Mapping:**
+| Detected | Agent Created |
+|----------|--------------|
+| React | `react-specialist` |
+| Vue | `vue-specialist` |
+| Next.js | `nextjs-specialist` |
+| Django | `django-specialist` |
+| AWS | `aws-architect` |
+| GCP | `gcp-architect` |
+| Prisma | `prisma-specialist` |
+
+See `.claude/skills/agent-creator/references/tech-agent-mappings.md` for full mapping.
+
+**Note**: Only create agents for technologies that need deep specialist knowledge.
+Generic agents (code-reviewer, security-auditor, etc.) are already included.
+
 ### Step 10: Final Validation
 
 Run comprehensive validation to ensure everything was created:
@@ -165,6 +191,8 @@ bash .claude/scripts/validate.sh
 **Required directories:**
 - ✅ `.claude/commands/`
 - ✅ `.claude/skills/`
+- ✅ `.claude/agents/`
+- ✅ `.claude/orchestration/`
 - ✅ `.claude/scripts/`
 - ✅ `.claude/learning/`
 - ✅ `.claude/logs/`
@@ -173,6 +201,7 @@ bash .claude/scripts/validate.sh
 **Learning files:**
 - ✅ `.claude/learning/observations.md`
 - ✅ `.claude/learning/pending-skills.md`
+- ✅ `.claude/learning/pending-agents.md`
 - ✅ `.claude/learning/pending-commands.md`
 - ✅ `.claude/learning/pending-hooks.md`
 
@@ -204,6 +233,10 @@ Output a summary:
    ✅ CLAUDE.md [migrated/preserved/created]
    ✅ Learning system initialized
    ✅ LSP servers: [count] installed
+   ✅ Agents: [count] created for detected tech
+
+🤖 Available Agents:
+   [List of agents in .claude/agents/]
 
 ✅ Validation: [X] passed, [Y] warnings, [Z] errors
 

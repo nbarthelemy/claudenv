@@ -239,6 +239,14 @@ Detect when Claude repeatedly:
 - Searches for documentation
 - Makes similar mistakes
 
+### Agent Patterns
+
+Detect when tasks would benefit from specialist subagents:
+- Same domain expertise needed repeatedly (2+ times)
+- Complex multi-file tasks in specific domain
+- Hedging language about unfamiliar technology
+- Multiple web searches for same topic
+
 ## Auto-Creation Rules
 
 ### When to Auto-Create (Silent)
@@ -274,12 +282,14 @@ Detect when Claude repeatedly:
 ### Output (Write)
 - `.claude/learning/observations.md` - New patterns
 - `.claude/learning/pending-skills.md` - Skill proposals (includes technology skills)
+- `.claude/learning/pending-agents.md` - Agent proposals for orchestration
 - `.claude/learning/pending-commands.md` - Command proposals
 - `.claude/learning/pending-hooks.md` - Hook proposals
 - `.claude/CLAUDE.md` - Project facts from corrections (## Project Facts section)
 
 ### Auto-Created
 - `.claude/skills/[name]/SKILL.md` - New skills
+- `.claude/agents/[name].md` - New specialist agents
 - `.claude/commands/[name].md` - New commands
 - Hook configurations in `settings.json`
 
@@ -356,9 +366,14 @@ Hand off to other skills when:
 
 | Condition | Delegate To |
 |-----------|-------------|
-| Pattern suggests new skill needed | `meta-agent` - to create the skill |
+| Pattern suggests new skill needed | `meta-skill` - to create the skill |
+| Pattern suggests specialist agent needed | `agent-creator` - to create the agent |
 | Pattern involves UI/styling | `frontend-design` - for design expertise |
 | Pattern requires tech stack analysis | `tech-detection` - to understand stack |
 | Pattern unclear, needs user input | `interview-agent` - to clarify requirements |
+| Complex task needs orchestration | `orchestrator` - to spawn subagents |
 
-**Auto-delegation**: When a pattern reaches threshold (3 occurrences) and type is "skill", automatically invoke meta-agent to create it.
+**Auto-delegation**:
+- When a pattern reaches threshold (3 occurrences) and type is "skill", invoke meta-skill to create it.
+- When agent pattern reaches threshold (2 occurrences), invoke agent-creator to create it.
+- When complex task detected, invoke orchestrator to spawn subagents.

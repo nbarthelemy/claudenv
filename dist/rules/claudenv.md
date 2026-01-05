@@ -91,6 +91,8 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `frontend-design` | UI, UX, CSS, styling, Tailwind, layout, animation, visual design |
 | `autonomous-loop` | Autonomous iterative loops, persistent development |
 | `lsp-setup` | Auto-detects and installs language servers |
+| `orchestrator` | Complex tasks, parallel execution, "comprehensive", "full review" |
+| `agent-creator` | Creates specialist subagents for detected technologies |
 
 ### Directory Structure
 
@@ -102,6 +104,8 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 ├── project-context.json # Detected tech stack
 ├── commands/           # Slash commands
 ├── skills/             # Auto-invoked capabilities
+├── agents/             # Specialist subagents for orchestration
+├── orchestration/      # Orchestration config (triggers, limits)
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
@@ -111,6 +115,42 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 ├── logs/               # Execution logs
 └── backups/            # Auto-backups
 ```
+
+---
+
+## Subagent Orchestration
+
+Claude automatically spawns specialist subagents for complex parallel tasks.
+
+### Built-in Agents
+
+| Category | Agents |
+|----------|--------|
+| **Code** | `frontend-developer`, `backend-architect`, `api-designer`, `devops-engineer` |
+| **Analysis** | `code-reviewer`, `security-auditor`, `performance-analyst`, `accessibility-checker` |
+| **Process** | `test-engineer`, `documentation-writer`, `release-manager`, `migration-specialist` |
+
+### Trigger Conditions
+
+The orchestrator spawns agents when:
+- **Keywords detected:** "comprehensive", "full review", "across codebase", "refactor all"
+- **Complexity threshold:** 5+ files, 2+ domains, 4+ steps
+- **Explicit request:** User asks for parallel execution
+
+### Tech-Specific Agents
+
+During `/claudenv`, specialist agents are created for detected technologies:
+- React → `react-specialist`
+- Django → `django-specialist`
+- AWS → `aws-architect`
+- Shopify → `shopify-specialist`
+- And 50+ more mappings
+
+### Key Constraint
+
+**Subagents cannot spawn other subagents** (flat hierarchy).
+
+The orchestrator is a SKILL (runs in main context) so it CAN spawn subagents via the Task tool.
 
 ---
 

@@ -11,6 +11,7 @@ Display all pending observations and proposals from the learning agent.
 
 1. Read and display pending items from:
    - `.claude/learning/pending-skills.md` (includes technology skills)
+   - `.claude/learning/pending-agents.md` (specialist subagents)
    - `.claude/learning/pending-commands.md`
    - `.claude/learning/pending-hooks.md`
 
@@ -26,6 +27,9 @@ Display all pending observations and proposals from the learning agent.
 
 ## Pending Skills ([N])
 [List with implement commands - technology skills require approval]
+
+## Pending Agents ([N])
+[List with implement commands - specialist subagents for orchestration]
 
 ## Pending Commands ([N])
 [List with implement commands]
@@ -73,6 +77,18 @@ For each pending item, show:
    Payment integration, webhooks
    → /learn:implement skill stripe-expert
 
+## Pending Agents (2)
+
+### From Usage Patterns
+1. **graphql-architect** (2 occurrences)
+   Schema design, resolvers, DataLoader
+   → /learn:implement agent graphql-architect
+
+### From Tech Detection
+2. **nextjs-specialist** (detected)
+   Server components, App Router, ISR
+   → /learn:implement agent nextjs-specialist
+
 ## Pending Commands (1)
 
 1. **deploy-staging** (4 occurrences)
@@ -88,6 +104,7 @@ No pending hooks.
 - TypeScript formatting pattern (5x) → auto-created hook
 - Test file creation pattern (2x) → monitoring
 - Import organization (3x) → pending skill
+- GraphQL resolver pattern (2x) → pending agent
 - ...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -12,6 +12,7 @@ Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infr
 - **Frontend design expertise** with anti-AI-slop design principles
 - **Auto-LSP setup** with official Anthropic plugins + 25+ language servers
 - **Self-extending** via meta-agent that creates new skills for unfamiliar tech
+- **Subagent orchestration** for automatic parallel task execution with specialist agents
 
 ## Quick Start
 
@@ -116,6 +117,18 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | `frontend-design` | Creates distinctive, production-grade UI |
 | `autonomous-loop` | Manages iterative development loops |
 | `lsp-setup` | Auto-detects and installs language servers |
+| `orchestrator` | Orchestrates complex tasks with parallel subagent execution |
+| `agent-creator` | Creates specialist subagents for detected technologies |
+
+### Starter Agents
+
+12 built-in specialist agents for parallel task execution:
+
+| Category | Agents |
+|----------|--------|
+| **Code** | `frontend-developer`, `backend-architect`, `api-designer`, `devops-engineer` |
+| **Analysis** | `code-reviewer`, `security-auditor`, `performance-analyst`, `accessibility-checker` |
+| **Process** | `test-engineer`, `documentation-writer`, `release-manager`, `migration-specialist` |
 
 ### Detected Technologies
 
@@ -143,7 +156,9 @@ your-project/
     │   ├── permissions.md  # Permission matrix
     │   └── ...
     ├── commands/           # 28 slash commands
-    ├── skills/             # 8 auto-invoked skills
+    ├── skills/             # 10 auto-invoked skills
+    ├── agents/             # 12+ specialist subagents
+    ├── orchestration/      # Orchestration config
     ├── scripts/            # Automation scripts
     ├── templates/          # Generation templates
     ├── learning/           # Pattern observations
@@ -347,7 +362,37 @@ Claudenv can detect and install MCP (Model Context Protocol) servers referenced 
 - `/claudenv:mcp list` - List installed and referenced MCPs
 - `/claudenv:mcp install <name>` - Install a specific MCP server
 
-### 7. Self-Extension
+### 7. Subagent Orchestration
+
+Claude automatically spawns specialist subagents for complex parallel tasks:
+
+**How it works:**
+1. **Task analysis** - Orchestrator analyzes incoming tasks
+2. **Agent matching** - Uses hybrid triggers (keywords + complexity scoring)
+3. **Parallel execution** - Spawns multiple specialists simultaneously
+4. **Result synthesis** - Collects and combines outputs
+
+**Built-in Agents:**
+- **Code:** frontend-developer, backend-architect, api-designer, devops-engineer
+- **Analysis:** code-reviewer, security-auditor, performance-analyst, accessibility-checker
+- **Process:** test-engineer, documentation-writer, release-manager, migration-specialist
+
+**Tech-Specific Agents:**
+During `/claudenv`, the framework automatically creates specialist agents for your detected stack:
+- React → `react-specialist`
+- Django → `django-specialist`
+- AWS → `aws-architect`
+- Prisma → `prisma-specialist`
+- And 50+ more technology mappings
+
+**Trigger conditions:**
+- Keywords: "comprehensive", "full review", "across codebase", "refactor all"
+- Complexity: 5+ files, 2+ domains, 4+ estimated steps
+- Explicit: User requests parallel execution
+
+**Key constraint:** Subagents cannot spawn other subagents (flat hierarchy). The orchestrator is a SKILL running in main context, enabling it to spawn agents.
+
+### 8. Self-Extension
 
 When encountering unfamiliar technology:
 1. Meta-agent researches documentation
@@ -415,6 +460,18 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.3.0
+- **Added:** Subagent orchestration system for automatic parallel task execution
+- **Added:** 12 built-in specialist agents (code, analysis, process categories)
+- **Added:** `orchestrator` skill - spawns subagents based on hybrid triggers
+- **Added:** `agent-creator` skill - creates tech-specific agents on demand
+- **Added:** Tech-to-agent mappings for 50+ technologies (React, Django, AWS, Shopify, etc.)
+- **Added:** `/claudenv` now creates specialist agents during bootstrap
+- **Added:** `agents/` directory for subagent definitions
+- **Added:** `orchestration/` config for trigger rules and settings
+- **Changed:** `/learn:review` and `/learn:implement` now support agents
+- **Changed:** Pattern observer detects agent opportunities at 2 occurrences
 
 ### v2.2.0
 - **Added:** `/reflect` command for session reflection and learning consolidation
