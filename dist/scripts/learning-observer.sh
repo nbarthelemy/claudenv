@@ -22,7 +22,7 @@ init_patterns_file() {
   "extension_patterns": {},
   "thresholds": {
     "skill_creation": 3,
-    "agent_proposal": 2
+    "agent_creation": 5
   }
 }
 EOF

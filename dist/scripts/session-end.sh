@@ -19,25 +19,33 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
     fi
 fi
 
-# Check for patterns that reached threshold and auto-create skills
+# Check for patterns that reached threshold and propose skills
 if [ -f ".claude/learning/.thresholds_reached" ] && [ -s ".claude/learning/.thresholds_reached" ]; then
-    # Run auto-create script if it exists
-    if [ -x ".claude/scripts/auto-create-skill.sh" ]; then
-        bash .claude/scripts/auto-create-skill.sh
+    if [ -x ".claude/scripts/propose-skill.sh" ]; then
+        bash .claude/scripts/propose-skill.sh
     fi
 fi
 
-# Check for new pending learnings
+# Check for extension patterns and propose agents
+if [ -f ".claude/learning/patterns.json" ]; then
+    if [ -x ".claude/scripts/propose-agent.sh" ]; then
+        bash .claude/scripts/propose-agent.sh
+    fi
+fi
+
+# Check for pending proposals
 PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null) || PENDING_SKILLS=0
+PENDING_AGENTS=$(grep -c "^### " .claude/learning/pending-agents.md 2>/dev/null) || PENDING_AGENTS=0
 PENDING_COMMANDS=$(grep -c "^### " .claude/learning/pending-commands.md 2>/dev/null) || PENDING_COMMANDS=0
 PENDING_HOOKS=$(grep -c "^### " .claude/learning/pending-hooks.md 2>/dev/null) || PENDING_HOOKS=0
 
-TOTAL_PENDING=$((PENDING_SKILLS + PENDING_COMMANDS + PENDING_HOOKS))
+TOTAL_PENDING=$((PENDING_SKILLS + PENDING_AGENTS + PENDING_COMMANDS + PENDING_HOOKS))
 
 if [ "$TOTAL_PENDING" -gt 0 ]; then
     echo ""
-    echo "💡 Learning suggestions pending:"
+    echo "💡 Proposals pending review:"
     [ "$PENDING_SKILLS" -gt 0 ] && echo "   - $PENDING_SKILLS skills"
+    [ "$PENDING_AGENTS" -gt 0 ] && echo "   - $PENDING_AGENTS agents"
     [ "$PENDING_COMMANDS" -gt 0 ] && echo "   - $PENDING_COMMANDS commands"
     [ "$PENDING_HOOKS" -gt 0 ] && echo "   - $PENDING_HOOKS hooks"
     echo "   Run /learn:review to see details"
