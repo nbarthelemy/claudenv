@@ -14,9 +14,17 @@ README_STAGED=$(echo "$STAGED" | grep -E "^README\.md$" || true)
 # If .claude/ files changed but README wasn't updated, remind
 if [ -n "$CLAUDE_FILES" ] && [ -z "$README_STAGED" ]; then
     # Check what type of files changed
-    COMMANDS_CHANGED=$(echo "$CLAUDE_FILES" | grep -c "commands/" || echo "0")
-    SKILLS_CHANGED=$(echo "$CLAUDE_FILES" | grep -c "skills/" || echo "0")
-    VERSION_CHANGED=$(echo "$CLAUDE_FILES" | grep -c "version.json" || echo "0")
+    COMMANDS_CHANGED=$(echo "$CLAUDE_FILES" | grep -c "commands/" 2>/dev/null || echo "0")
+    SKILLS_CHANGED=$(echo "$CLAUDE_FILES" | grep -c "skills/" 2>/dev/null || echo "0")
+    VERSION_CHANGED=$(echo "$CLAUDE_FILES" | grep -c "version.json" 2>/dev/null || echo "0")
+
+    # Ensure we have integers
+    COMMANDS_CHANGED=${COMMANDS_CHANGED//[^0-9]/}
+    SKILLS_CHANGED=${SKILLS_CHANGED//[^0-9]/}
+    VERSION_CHANGED=${VERSION_CHANGED//[^0-9]/}
+    : ${COMMANDS_CHANGED:=0}
+    : ${SKILLS_CHANGED:=0}
+    : ${VERSION_CHANGED:=0}
 
     if [ "$COMMANDS_CHANGED" -gt 0 ] || [ "$SKILLS_CHANGED" -gt 0 ] || [ "$VERSION_CHANGED" -gt 0 ]; then
         echo ""
