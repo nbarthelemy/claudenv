@@ -14,7 +14,9 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 
 # Check for existing .claude directory
 EXISTING_CLAUDE_MD=""
+IS_UPDATE=false
 if [ -d "$TARGET" ]; then
+    IS_UPDATE=true
     echo ""
     echo "Found existing .claude directory"
 
@@ -29,6 +31,9 @@ if [ -d "$TARGET" ]; then
         cp "$TARGET/settings.local.json" /tmp/claudenv-settings-local.json.bak
         echo "  - Will preserve settings.local.json"
     fi
+
+    # Note about custom content
+    echo "  - Will preserve custom skills, commands, and agents"
 
     echo ""
     read -p "Update claudenv infrastructure? (y/N): " CONFIRM
@@ -56,26 +61,55 @@ else
 fi
 
 EXTRACTED="$TEMP_DIR/claudenv-${BRANCH}"
+DIST="$EXTRACTED/dist"
+
+# Verify manifest exists
+if [ ! -f "$DIST/manifest.json" ]; then
+    echo "Error: Downloaded archive missing manifest.json"
+    exit 1
+fi
 
 # Create .claude directory if it doesn't exist
 mkdir -p "$TARGET"
 
-# Copy distributable files from dist/ directory
 echo "Installing claudenv framework..."
 
-DIST="$EXTRACTED/dist"
-
-# Copy directories
-for dir in commands skills rules scripts templates learning; do
-    if [ -d "$DIST/$dir" ]; then
-        rm -rf "$TARGET/$dir"
-        cp -r "$DIST/$dir" "$TARGET/$dir"
+# If updating, remove deprecated files first
+if [ "$IS_UPDATE" = true ] && [ -f "$TARGET/manifest.json" ]; then
+    # Remove files that are in OLD manifest but not in NEW manifest (deprecated)
+    if command -v jq &> /dev/null; then
+        while IFS= read -r file; do
+            if [ -f "$TARGET/$file" ]; then
+                rm -f "$TARGET/$file"
+            fi
+        done < <(jq -r '.deprecated[]' "$DIST/manifest.json" 2>/dev/null)
     fi
-done
+fi
 
-# Copy config files
+# Copy framework files using manifest (preserves custom content)
+if command -v jq &> /dev/null; then
+    # Use manifest-based copy (preferred)
+    while IFS= read -r file; do
+        if [ -f "$DIST/$file" ]; then
+            mkdir -p "$TARGET/$(dirname "$file")"
+            cp "$DIST/$file" "$TARGET/$file"
+        fi
+    done < <(jq -r '.files[]' "$DIST/manifest.json" 2>/dev/null)
+else
+    # Fallback: copy all files but merge directories (don't delete)
+    echo "  Note: Install jq for better custom content preservation"
+    for dir in commands skills rules scripts templates learning agents orchestration; do
+        if [ -d "$DIST/$dir" ]; then
+            mkdir -p "$TARGET/$dir"
+            cp -r "$DIST/$dir"/* "$TARGET/$dir"/ 2>/dev/null || true
+        fi
+    done
+fi
+
+# Copy config files (always overwrite framework configs)
 cp "$DIST/settings.json" "$TARGET/settings.json"
 cp "$DIST/version.json" "$TARGET/version.json"
+cp "$DIST/manifest.json" "$TARGET/manifest.json"
 [ -f "$DIST/settings.local.json.template" ] && cp "$DIST/settings.local.json.template" "$TARGET/settings.local.json.template"
 
 # Restore settings.local.json if it was backed up
@@ -125,6 +159,7 @@ fi
 # Count what was installed
 SKILLS=$(find "$TARGET/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
 COMMANDS=$(find "$TARGET/commands" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+AGENTS=$(find "$TARGET/agents" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -133,6 +168,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 echo "  $SKILLS skills"
 echo "  $COMMANDS commands"
+echo "  $AGENTS agents"
 echo ""
 echo "Next steps:"
 echo "  1. Start Claude Code: claude"
