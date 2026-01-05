@@ -60,6 +60,8 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `/claudenv:export` | Export for sharing |
 | `/claudenv:import` | Import from export |
 | `/claudenv:mcp` | Detect and install MCP servers |
+| `/claudenv:audit` | Audit permissions vs detected tech |
+| `/skills:triggers` | List skills with trigger keywords |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/learn:implement` | Implement a learning proposal |
@@ -100,7 +102,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 ├── CLAUDE.md           # Framework instructions & autonomy rules
 ├── settings.json       # Permissions & hooks configuration
 ├── version.json        # Framework version
-├── commands/           # Slash commands (26 included)
+├── commands/           # Slash commands (28 included)
 ├── skills/             # Auto-invoked skills (7 included)
 │   ├── tech-detection/
 │   ├── interview-agent/
@@ -351,6 +353,11 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v1.0.3
+- **Added:** `/skills:triggers` command for skill discoverability
+- **Added:** `/claudenv:audit` command to audit permissions vs detected tech
+- **Added:** Pre-commit hook to remind about README updates
 
 ### v1.0.2
 - **Added:** `/claudenv:mcp` command for MCP server management
