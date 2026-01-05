@@ -173,7 +173,6 @@ bash .claude/scripts/validate.sh
 **Learning files:**
 - ✅ `.claude/learning/observations.md`
 - ✅ `.claude/learning/pending-skills.md`
-- ✅ `.claude/learning/pending-agents.md`
 - ✅ `.claude/learning/pending-commands.md`
 - ✅ `.claude/learning/pending-hooks.md`
 

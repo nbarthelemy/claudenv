@@ -188,10 +188,6 @@ warn "pending-skills.md exists" \
     "[ -f '.claude/learning/pending-skills.md' ]" \
     "touch .claude/learning/pending-skills.md"
 
-warn "pending-agents.md exists" \
-    "[ -f '.claude/learning/pending-agents.md' ]" \
-    "touch .claude/learning/pending-agents.md"
-
 warn "pending-commands.md exists" \
     "[ -f '.claude/learning/pending-commands.md' ]" \
     "touch .claude/learning/pending-commands.md"

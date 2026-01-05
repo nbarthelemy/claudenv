@@ -96,6 +96,7 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/learn:implement` | Implement a learning proposal |
+| `/reflect` | Consolidate learnings, update project knowledge |
 | `/analyze-patterns` | Force pattern analysis |
 | `/backup:create` | Create infrastructure backup |
 | `/backup:restore` | Restore from backup |
@@ -110,7 +111,7 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 |-------|---------|
 | `tech-detection` | Detects project stack and configures permissions |
 | `project-interview` | Conducts specification interviews |
-| `pattern-observer` | Observes patterns and suggests automations |
+| `pattern-observer` | Observes patterns, consolidates learnings, suggests automations |
 | `meta-skill` | Creates new skills for unfamiliar technologies |
 | `skill-creator` | Scaffolds and validates skill directories |
 | `frontend-design` | Creates distinctive, production-grade UI |
@@ -204,13 +205,41 @@ For new projects or unclear requirements:
 5. Creates comprehensive `SPEC.md`
 6. Updates project context
 
-### 3. Learning
+### 3. Learning & Reflection
 
-The learning agent continuously:
-1. Observes development patterns
-2. Detects repeated manual steps
+The learning system continuously observes, captures corrections, and consolidates:
+
+**Pattern Observer:**
+1. Observes development patterns silently
+2. Uses MERGE/REPLACE operations (not just ADD) to avoid bloat
 3. Auto-creates skills/hooks at threshold (3 occurrences)
-4. Proposes agents for new technologies (2 occurrences)
+4. Proposes skills for new technologies (2 occurrences)
+
+**Automatic Correction Capture:**
+When you correct Claude about project details, facts are auto-captured:
+```
+User: "no, we use pnpm not npm"
+Claude: 📝 Noted: Uses pnpm, not npm
+```
+
+Facts are stored in `## Project Facts` section of CLAUDE.md, categorized by:
+- **Tooling** - Package managers, build tools, test runners
+- **Structure** - File locations, directory conventions
+- **Conventions** - Coding standards, naming conventions
+- **Architecture** - Design patterns, system structure
+
+**Session Reflection (`/reflect`):**
+```bash
+/reflect        # Quick reflection on current session
+/reflect deep   # Comprehensive review of all learnings
+/reflect prune  # Remove stale/obsolete entries
+/reflect facts  # Review and consolidate Project Facts
+```
+
+Core philosophy:
+- "Merge over add — consolidate, don't accumulate"
+- "Specific over vague — skip insights that aren't actionable"
+- "Accurate over comprehensive — wrong info is worse than missing"
 
 ### 4. Autonomous Loops (`/loop`)
 
@@ -387,6 +416,16 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.2.0
+- **Added:** `/reflect` command for session reflection and learning consolidation
+- **Added:** Automatic correction capture - detects when user corrects Claude and saves to Project Facts
+- **Added:** `## Project Facts` section in CLAUDE.md for authoritative project knowledge
+- **Added:** `/reflect facts` mode to review and consolidate captured corrections
+- **Added:** MERGE/REPLACE/DELETE operations to pattern-observer (prevents bloat)
+- **Changed:** Merged `pending-agents.md` into `pending-skills.md`
+- **Changed:** Updated observations.md format with staleness tracking
+- **Added:** Core philosophy: "Merge over add — consolidate, don't accumulate"
 
 ### v2.1.0
 - **Changed:** Moved all distributable content to `dist/` directory

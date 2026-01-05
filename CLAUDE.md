@@ -83,6 +83,30 @@ mkdir /tmp/test-project && cd /tmp/test-project
 - Major architectural changes
 - Breaking changes to user-facing APIs
 
+## Project Facts
+
+> Auto-captured from user corrections. Authoritative project knowledge.
+> Review with `/reflect`. This section is created automatically when corrections are detected.
+
+### Tooling
+
+- Uses bash scripts for automation, not Python (corrected 2026-01-05)
+- Skills use SKILL.md not skill.md (case-sensitive) (corrected 2026-01-05)
+
+### Structure
+
+<!-- File locations, directory conventions, organization patterns -->
+
+### Conventions
+
+<!-- Coding standards, naming conventions, style preferences -->
+
+### Architecture
+
+- Distributable content lives in dist/, symlinks in .claude/ for self-dogfooding (corrected 2026-01-05)
+
+---
+
 ## Claudenv Framework
 
 @rules/claudenv.md

@@ -76,6 +76,7 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `/claudenv:status` | Show system overview |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
+| `/reflect` | Consolidate learnings, update project knowledge |
 | `/analyze-patterns` | Force pattern analysis |
 
 ### Skills (Auto-Invoked)
@@ -84,7 +85,7 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 |-------|-------------|
 | `tech-detection` | Project analysis, stack detection |
 | `project-interview` | Specification interviews, requirements gathering |
-| `pattern-observer` | Pattern observation, automation suggestions |
+| `pattern-observer` | Pattern observation, learning consolidation, automation suggestions |
 | `meta-skill` | Creating new skills for unfamiliar tech |
 | `skill-creator` | Scaffolding and validating skill directories |
 | `frontend-design` | UI, UX, CSS, styling, Tailwind, layout, animation, visual design |
@@ -110,6 +111,54 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 ├── logs/               # Execution logs
 └── backups/            # Auto-backups
 ```
+
+---
+
+## Automatic Correction Capture
+
+When users correct Claude about project details, facts are automatically captured and stored.
+
+### Detection
+
+Claude watches for correction patterns:
+- "no, we use X not Y"
+- "actually it's X"
+- "remember that..."
+- "don't forget..."
+- "in this project, we..."
+
+### Storage
+
+Corrections are saved to `## Project Facts` section in CLAUDE.md:
+
+```markdown
+## Project Facts
+
+### Tooling
+- Uses pnpm, not npm (corrected 2026-01-05)
+
+### Structure
+- Tests are in __tests__/ folders (corrected 2026-01-05)
+
+### Conventions
+- Always use const, never let (corrected 2026-01-05)
+```
+
+### Behavior
+
+- **Auto-capture**: No threshold - corrections are immediately saved
+- **Notify**: Brief message "📝 Noted: [fact]"
+- **Categorize**: Facts sorted into Tooling/Structure/Conventions/Architecture
+- **Consolidate**: Use `/reflect facts` to merge duplicates
+
+### Categories
+
+| Category | Examples |
+|----------|----------|
+| Tooling | Package managers, build tools, test runners |
+| Structure | File locations, directory conventions |
+| Conventions | Coding standards, naming patterns |
+| Architecture | Design patterns, system decisions |
 
 ---
 

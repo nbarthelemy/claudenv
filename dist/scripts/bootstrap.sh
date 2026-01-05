@@ -37,7 +37,7 @@ if [ ! -f ".claude/learning/observations.md" ]; then
 EOF
 fi
 
-for file in pending-skills pending-agents pending-commands pending-hooks; do
+for file in pending-skills pending-commands pending-hooks; do
     if [ ! -f ".claude/learning/${file}.md" ]; then
         touch ".claude/learning/${file}.md"
     fi

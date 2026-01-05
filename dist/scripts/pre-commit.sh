@@ -105,10 +105,10 @@ if [ "$DEBUG_FOUND" -eq 0 ]; then
 fi
 
 # Show pending learnings
-PENDING=$(grep -c "^## " .claude/learning/pending-agents.md 2>/dev/null || echo "0")
+PENDING=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null || echo "0")
 if [ "$PENDING" -gt 0 ]; then
     echo ""
-    echo "💡 $PENDING infrastructure proposals pending (/learn:review)"
+    echo "💡 $PENDING skill proposals pending (/learn:review)"
 fi
 
 echo ""

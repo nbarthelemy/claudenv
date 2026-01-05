@@ -14,8 +14,7 @@ Implement a pending proposal from the learning system.
 ```
 
 **Types:**
-- `skill` - Create a new skill
-- `agent` - Create a new agent/skill (invokes meta-agent)
+- `skill` - Create a new skill (technology skills invoke meta-agent)
 - `command` - Create a new command
 - `hook` - Create/update hook configuration
 
@@ -24,21 +23,16 @@ Implement a pending proposal from the learning system.
 ### For Skills
 
 1. Read proposal from `.claude/learning/pending-skills.md`
-2. Create skill directory: `.claude/skills/[name]/`
-3. Create `SKILL.md` with:
+2. Check skill type:
+   - **Automation skills** (type: automation): Auto-create
+   - **Technology skills** (type: technology): Requires user confirmation, invoke meta-agent
+3. Create skill directory: `.claude/skills/[name]/`
+4. Create `SKILL.md` with:
    - Appropriate triggers from observed patterns
    - Tools based on what was used
    - Instructions based on observed behavior
-4. Update status in pending file
-5. Notify: "✅ Created skill: [name]"
-
-### For Agents
-
-1. Read proposal from `.claude/learning/pending-agents.md`
-2. **Requires user confirmation** - agents are more significant
-3. Invoke meta-agent skill to create the agent
-4. Update status in pending file
-5. Notify: "✅ Created agent: [name]"
+5. Update status in pending file
+6. Notify: "✅ Created skill: [name]"
 
 ### For Commands
 

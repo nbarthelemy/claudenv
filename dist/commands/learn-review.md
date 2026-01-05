@@ -10,8 +10,7 @@ Display all pending observations and proposals from the learning agent.
 ## Process
 
 1. Read and display pending items from:
-   - `.claude/learning/pending-skills.md`
-   - `.claude/learning/pending-agents.md`
+   - `.claude/learning/pending-skills.md` (includes technology skills)
    - `.claude/learning/pending-commands.md`
    - `.claude/learning/pending-hooks.md`
 
@@ -26,10 +25,7 @@ Display all pending observations and proposals from the learning agent.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## Pending Skills ([N])
-[List with implement commands]
-
-## Pending Agents ([N])
-[List with implement commands - requires approval]
+[List with implement commands - technology skills require approval]
 
 ## Pending Commands ([N])
 [List with implement commands]
@@ -61,8 +57,9 @@ For each pending item, show:
 📊 Learning Review
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Pending Skills (2)
+## Pending Skills (3)
 
+### Automation Skills
 1. **prisma-operations** (3 occurrences)
    Schema changes, migrations, db operations
    → /learn:implement skill prisma-operations
@@ -71,11 +68,10 @@ For each pending item, show:
    Consistent error responses, logging
    → /learn:implement skill api-error-handling
 
-## Pending Agents (1)
-
-1. **stripe-expert** (2 occurrences) ⚠️ Requires approval
+### Technology Skills
+3. **stripe-expert** (2 occurrences) ⚠️ Requires approval
    Payment integration, webhooks
-   → /learn:implement agent stripe-expert
+   → /learn:implement skill stripe-expert
 
 ## Pending Commands (1)
 

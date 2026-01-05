@@ -1,29 +1,73 @@
 # Pending Skill Proposals
 
-> Skills are auto-created at threshold (3 occurrences).
-> This log tracks what was created and what's pending.
+> Skills for repetitive tasks are auto-created at threshold (3 occurrences).
+> Skills for new technologies are proposed at threshold (2 occurrences) and require approval.
+> Run `/reflect` to consolidate. Run `/learn:implement [name]` to create.
 
-Review with: `/learn:review`
-Implement with: `/learn:implement skill [name]`
+**Last Reviewed:** Never
+**Pending Count:** 0
 
 ---
 
-<!-- Proposals added automatically when threshold reached -->
+## Automation Skills
 
-<!-- Example entry:
-## prisma-operations
+<!-- Auto-created when threshold reached -->
 
-**Status:** pending
-**Occurrences:** 3
-**First Seen:** 2026-01-03
+<!--
+Entry format:
+
+### [skill-name]
+
+**Status:** pending | approved | implemented | stale
+**Type:** automation
+**Occurrences:** N
+**First Seen:** YYYY-MM-DD
+**Last Activity:** YYYY-MM-DD
 **Evidence:**
-- Modified prisma/schema.prisma (3x)
-- Ran prisma generate (3x)
-- Ran prisma db push (2x)
+- Specific example 1
+- Specific example 2
 
 **Suggested Skill:**
-- Name: prisma-operations
-- Triggers: prisma, schema, database migration
-- Tools: Bash(prisma:*), Read, Write, Edit
-- Purpose: Handle Prisma schema changes and migrations
+- Triggers: keyword1, keyword2
+- Tools: Bash(*), Read, Write
+- Purpose: [description]
+
+**Implement:** `/learn:implement skill [name]`
+
+---
+
+Staleness rules:
+- Mark as "stale" if no activity for 30 days
+- Remove stale entries with `/reflect prune`
+-->
+
+---
+
+## Technology Skills
+
+<!-- Proposed when unfamiliar tech pattern detected - requires approval -->
+
+<!--
+Entry format:
+
+### [skill-name]
+
+**Status:** proposed | approved | implemented | stale
+**Type:** technology
+**Occurrences:** N
+**First Seen:** YYYY-MM-DD
+**Last Activity:** YYYY-MM-DD
+**Evidence:**
+- Searched for documentation
+- Encountered unfamiliar patterns
+
+**Suggested Skill:**
+- Triggers: keyword1, keyword2
+- Tools: WebFetch, WebSearch, Read, Write, Edit, Bash
+- Documentation: [URL]
+- Purpose: [description]
+
+**Approval Required:** Yes - invokes meta-agent to create
+
+**Implement:** `/learn:implement skill [name]`
 -->

@@ -38,7 +38,6 @@ For each command in `.claude/commands/`:
 
 - [ ] `.claude/learning/observations.md` exists
 - [ ] `.claude/learning/pending-skills.md` exists
-- [ ] `.claude/learning/pending-agents.md` exists
 - [ ] `.claude/learning/pending-commands.md` exists
 - [ ] `.claude/learning/pending-hooks.md` exists
 

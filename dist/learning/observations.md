@@ -1,20 +1,44 @@
 # Development Pattern Observations
 
-> Maintained by learning-agent skill. Auto-updated after tasks.
+> Maintained by pattern-observer skill. Consolidates rather than accumulates.
+> Run `/reflect` to review and consolidate. Run `/reflect prune` to clean up.
+
+**Last Reviewed:** Never
+**Entry Count:** 0
+**Status:** Clean
 
 ---
 
-## Session Log
+## Patterns
 
-<!-- Entries appended automatically by learning-agent -->
+<!--
+Entry format:
 
-<!-- Example entry:
-## 2026-01-03 - 14:30
+### [Pattern Name]
 
-**Pattern:** [Name]
-**Type:** skill|agent|command|hook
-**Occurrences:** [N]
-**Evidence:** [files, tasks, context]
-**Recommendation:** [suggested action]
-**Status:** monitoring|pending|implemented
+**Type:** pattern | preference | issue | architecture
+**Category:** skill | command | hook | knowledge
+**Status:** monitoring | pending | implemented | obsolete
+**Occurrences:** N
+**First Seen:** YYYY-MM-DD
+**Last Seen:** YYYY-MM-DD
+**Evidence:**
+- Specific example 1
+- Specific example 2
+
+**Insight:** [Actionable description]
+
+---
+
+Operations:
+- MERGE: When adding evidence to existing pattern, add "[MERGED]" prefix to new evidence
+- REPLACE: When updating insight, add "[UPDATED YYYY-MM-DD]" note
+- DELETE: Move to Archive section below instead of deleting
+- SKIP: Don't add if already captured or not actionable
 -->
+
+---
+
+## Archive
+
+<!-- Obsolete or implemented patterns moved here for reference -->

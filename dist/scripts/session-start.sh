@@ -56,12 +56,10 @@ COMMANDS=$(find .claude/commands -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 echo "🤖 Skills: $SKILLS | 📝 Commands: $COMMANDS"
 
 # Check for pending learnings
-PENDING_SKILLS=$(grep -c "^## " .claude/learning/pending-skills.md 2>/dev/null || echo "0")
-PENDING_AGENTS=$(grep -c "^## " .claude/learning/pending-agents.md 2>/dev/null || echo "0")
-TOTAL_PENDING=$((PENDING_SKILLS + PENDING_AGENTS))
+PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null || echo "0")
 
-if [ "$TOTAL_PENDING" -gt 0 ]; then
-    echo "💡 $TOTAL_PENDING pending proposals (/learn:review)"
+if [ "$PENDING_SKILLS" -gt 0 ]; then
+    echo "💡 $PENDING_SKILLS pending proposals (/learn:review)"
 fi
 
 # Check for paused autonomy
