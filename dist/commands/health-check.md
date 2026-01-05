@@ -5,12 +5,27 @@ allowed-tools: Bash
 
 # /health:check - Verify Infrastructure Integrity
 
-Run the health check script to validate all infrastructure components:
+1. Run `bash .claude/scripts/health-check.sh` to collect health data as JSON
+2. Format as a compact health report, counting passes/warnings/errors:
 
-```bash
-bash .claude/scripts/health-check.sh
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏥 Health Check
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Settings:    {✅ valid / ❌ invalid/missing}
+Permissions: {✅ configured / ⚠️ not configured}
+Hooks:       {✅ configured / ⚠️ not configured}
+Skills:      {✅ N valid / ⚠️ N missing SKILL.md}
+Commands:    {✅ N valid / ⚠️ N empty}
+Scripts:     {✅ all executable / ⚠️ N not executable}
+Learning:    {✅ all present / ⚠️ N missing}
+Context:     {✅ valid / ⚠️ missing}
+Version:     {✅ vX.X.X / ⚠️ missing}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Result: {N} ✅ | {N} ⚠️ | {N} ❌
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-Validates: settings.json, skills, commands, scripts, learning files, project context, and version.
-
-Returns exit code 1 if errors are found, 0 otherwise.
+Use ✅ for pass, ⚠️ for warning, ❌ for error. Keep compact.

@@ -5,10 +5,26 @@ allowed-tools: Bash
 
 # /claudenv:status - System Overview
 
-Run the status script to display comprehensive infrastructure status:
+1. Run `bash .claude/scripts/claudenv-status.sh` to collect status data as JSON
+2. Format the JSON output as a nicely formatted status display:
 
-```bash
-bash .claude/scripts/claudenv-status.sh
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏗️  Claudenv Status (v{version})
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 Stack: {languages, frameworks} or "Not detected"
+📋 Spec: {exists or "Missing"}
+
+🤖 Skills: {count} | 🕵️ Agents: {count} | 📝 Commands: {count}
+
+🪝 Hooks: SessionStart {✅/❌} | PostToolUse {✅/❌} | Stop {✅/❌}
+
+📚 Learning: {observations} observations, {total pending} pending
+
+✅ Health: Settings {✅/❌} | Scripts {✅/❌}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-Shows: detected stack, skills, agents, commands, hooks, learning status, permissions, and health summary.
+Keep the output compact (under 15 lines) so it displays inline without collapsing.

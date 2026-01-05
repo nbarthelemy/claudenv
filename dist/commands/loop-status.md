@@ -6,16 +6,29 @@ allowed-tools: Bash
 
 # /loop:status - Loop Status
 
-Run the loop status script to display current loop state:
+1. Run `bash .claude/scripts/loop-status.sh` to collect loop state as JSON
+2. Format based on whether a loop is active:
 
-```bash
-bash .claude/scripts/loop-status.sh
+**If no active loop** (`active: false`):
+```
+🔄 No active loop. Start with: /loop "<task>" --until "<condition>"
 ```
 
-Shows: task, status, progress, completion condition, safety limits, and recent activity.
+**If loop is active** (`active: true`):
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔄 Loop: {status emoji} {status}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Related commands:
-- `/loop:pause` - Pause active loop
-- `/loop:resume` - Resume paused loop
-- `/loop:cancel` - Stop and cancel loop
-- `/loop:history` - View past loops
+📋 {prompt (truncated if long)}
+
+Progress: [{bar}] {current}/{max} ({percentage}%)
+Elapsed: {minutes}m | Limit: {maxTime}
+Condition: {type} "{target}" - {met ? "✅ Met" : "pending"}
+Files: {filesModified} modified
+
+Commands: /loop:pause | /loop:resume | /loop:cancel
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Status emojis: running=🟢, paused=⏸️, complete=✅, failed=❌

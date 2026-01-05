@@ -5,12 +5,29 @@ allowed-tools: Bash
 
 # /learn:review - Review Pending Learnings
 
-Run the learn-review script to display all pending proposals:
+1. Run `bash .claude/scripts/learn-review.sh` to collect learning data as JSON
+2. Format based on whether there are pending items:
 
-```bash
-bash .claude/scripts/learn-review.sh
+**If no pending items** (`total: 0`):
+```
+📊 No pending proposals. Tracking {directories} directories, {extensions} extensions.
 ```
 
-This displays pending skills, agents, commands, hooks, and recent observations in a single consolidated output.
+**If there are pending items**:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Learning Review ({total} pending)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-To implement a proposal: `/learn:implement <name>`
+🤖 Skills ({count}): {names joined by ", "}
+🕵️ Agents ({count}): {names joined by ", "}
+📝 Commands ({count}): {names joined by ", "}
+🪝 Hooks ({count}): {names joined by ", "}
+
+Patterns: {directories} dirs, {extensions} extensions tracked
+
+To implement: /learn:implement <name>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Only show categories that have items (count > 0).
