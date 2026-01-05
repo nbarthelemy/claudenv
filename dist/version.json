@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "2.3.0",
+  "infrastructureVersion": "2.3.1",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-05T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "2.3.1": "Add session hooks (start/stop/post-tool), automatic update check, agents inherit model",
     "2.3.0": "Add subagent orchestration, 12 built-in agents, agent-creator skill, 50+ tech mappings",
     "2.2.0": "Add /reflect command, automatic correction capture, Project Facts in CLAUDE.md",
     "2.1.0": "Move distributable content to dist/, add symlinks for self-dogfooding",

@@ -461,6 +461,13 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v2.3.1
+- **Added:** Automatic update check on session start (via GitHub API, no cache)
+- **Added:** SessionStart, Stop, and PostToolUse hooks configured by default
+- **Added:** Session summary on conversation end
+- **Added:** Pattern observation on file writes for learning system
+- **Changed:** Agents and skills now inherit model from parent (no hardcoded sonnet)
+
 ### v2.3.0
 - **Added:** Subagent orchestration system for automatic parallel task execution
 - **Added:** 12 built-in specialist agents (code, analysis, process categories)
