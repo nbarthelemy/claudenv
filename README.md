@@ -86,8 +86,7 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | `/lsp` | Auto-detect and install LSP servers |
 | `/lsp:status` | Check LSP server status |
 | `/claudenv:status` | Show system overview |
-| `/claudenv:update` | Quick update to latest version |
-| `/claudenv:upgrade` | Full upgrade with changelog |
+| `/claudenv:update` | Update to latest version with changelog |
 | `/claudenv:export` | Export for sharing |
 | `/claudenv:import` | Import from export |
 | `/claudenv:mcp` | Detect and install MCP servers |
