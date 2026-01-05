@@ -10,10 +10,10 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 if [ -f ".claude/version.json" ]; then
     LOCAL_VERSION=$(cat .claude/version.json | jq -r '.infrastructureVersion' 2>/dev/null)
 
-    # Fetch remote version with timeout (don't block if offline)
+    # Fetch remote version via GitHub API (no CDN cache), with timeout
     REMOTE_VERSION=$(curl -sL --max-time 2 \
-        "https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json" 2>/dev/null \
-        | jq -r '.infrastructureVersion' 2>/dev/null)
+        "https://api.github.com/repos/nbarthelemy/claudenv/contents/dist/version.json" 2>/dev/null \
+        | jq -r '.content' 2>/dev/null | base64 -d 2>/dev/null | jq -r '.infrastructureVersion' 2>/dev/null)
 
     if [ -n "$REMOTE_VERSION" ] && [ "$REMOTE_VERSION" != "null" ] && [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
         # Simple version comparison (works for semver like 2.3.0)
