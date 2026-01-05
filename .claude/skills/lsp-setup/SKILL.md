@@ -1,5 +1,5 @@
 ---
-name: lsp-agent
+name: lsp-setup
 description: Detects, installs, and configures LSP language servers for code intelligence. Use when setting up LSP, needing go-to-definition, find references, hover docs, symbols, diagnostics, or code navigation. Handles language server installation and troubleshooting.
 allowed-tools: Bash(*), Read, Write, Edit, Glob, Grep, LSP
 ---

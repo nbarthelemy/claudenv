@@ -1,5 +1,5 @@
 ---
-name: meta-agent
+name: meta-skill
 description: Creates new skills and agents for unfamiliar technologies. Use when needing to create a skill, make an agent, add support for unknown frameworks, or extend capabilities for new tech. Researches documentation and generates specialized agents.
 allowed-tools: Write, Read, Glob, Grep, WebFetch, WebSearch, Edit, Bash(*)
 ---

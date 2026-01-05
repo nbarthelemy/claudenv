@@ -1,5 +1,5 @@
 ---
-name: learning-agent
+name: pattern-observer
 description: Observes development patterns and suggests automations. Use when reviewing learnings, analyzing patterns, creating automations, or when asked about repeated tasks, workflow optimization, pending suggestions, or what has been learned. Auto-creates skills and hooks after 3 occurrences of a pattern.
 allowed-tools: Read, Write, Glob, Grep, Bash(*), Edit, WebSearch, WebFetch
 ---

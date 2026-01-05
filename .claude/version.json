@@ -1,12 +1,13 @@
 {
-  "infrastructureVersion": "1.0.3",
+  "infrastructureVersion": "1.0.4",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-04T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
-    "1.0.3": "Add /agents:triggers and /claudenv:audit commands",
+    "1.0.4": "Rename skills, fix descriptions for auto-invoke",
+    "1.0.3": "Add /skills:triggers and /claudenv:audit commands",
     "1.0.2": "Add /claudenv:mcp command for MCP server management",
     "1.0.1": "Fix permissions format to use Bash(command:*) syntax"
   }

@@ -61,7 +61,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | `/claudenv:import` | Import from export |
 | `/claudenv:mcp` | Detect and install MCP servers |
 | `/claudenv:audit` | Audit permissions vs detected tech |
-| `/agents:triggers` | List agents with trigger keywords |
+| `/skills:triggers` | List skills with trigger keywords |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/learn:implement` | Implement a learning proposal |
@@ -78,12 +78,12 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 | Skill | Purpose |
 |-------|---------|
 | `tech-detection` | Detects project stack and configures permissions |
-| `interview-agent` | Conducts comprehensive specification interviews |
-| `learning-agent` | Observes patterns and suggests automations |
-| `meta-agent` | Creates new skills for unfamiliar technologies |
-| `frontend-design` | Creates distinctive, production-grade UI with anti-AI-slop aesthetics |
-| `loop-agent` | Manages autonomous iterative development loops |
-| `lsp-agent` | Auto-detects and installs language servers for code intelligence |
+| `project-interview` | Conducts specification interviews |
+| `pattern-observer` | Observes patterns and suggests automations |
+| `meta-skill` | Creates new skills for unfamiliar technologies |
+| `frontend-design` | Creates distinctive, production-grade UI |
+| `autonomous-loop` | Manages iterative development loops |
+| `lsp-setup` | Auto-detects and installs language servers |
 
 ### Detected Technologies
 
@@ -105,12 +105,12 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 ├── commands/           # Slash commands (28 included)
 ├── skills/             # Auto-invoked skills (7 included)
 │   ├── tech-detection/
-│   ├── interview-agent/
-│   ├── learning-agent/
-│   ├── meta-agent/
+│   ├── project-interview/
+│   ├── pattern-observer/
+│   ├── meta-skill/
 │   ├── frontend-design/
-│   ├── loop-agent/
-│   └── lsp-agent/
+│   ├── autonomous-loop/
+│   └── lsp-setup/
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
@@ -354,8 +354,13 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v1.0.4
+- **Changed:** Renamed skills to clearer names (removed "-agent" suffix)
+- **Changed:** `/agents:triggers` → `/skills:triggers`
+- **Fixed:** Skill descriptions for proper auto-invoke (<1024 chars)
+
 ### v1.0.3
-- **Added:** `/agents:triggers` command for agent discoverability
+- **Added:** `/skills:triggers` command for skill discoverability
 - **Added:** `/claudenv:audit` command to audit permissions vs detected tech
 - **Added:** Pre-commit hook to remind about README updates
 
