@@ -1,19 +1,19 @@
-# Claude Code local settings (user-specific)
-.claude/settings.local.json
-.claude/CLAUDE.local.md
+# User-specific (generated per-project, not part of claudenv repo)
+settings.local.json
+project-context.json
+SPEC.md
+lsp-config.json
 
-# Logs and backups
-.claude/logs/*
-!.claude/logs/.gitkeep
-.claude/backups/*
-!.claude/backups/.gitkeep
+# Logs and backups (created per-project)
+logs/*
+!logs/.gitkeep
+backups/*
+!backups/.gitkeep
+loop/*
+!loop/.gitkeep
 
-# Autonomy pause file
-.claude/.autonomy-paused
-
-# Generated project files (project-specific, not part of framework)
-.claude/project-context.json
-.claude/SPEC.md
+# Autonomy state
+.autonomy-paused
 
 # OS files
 .DS_Store

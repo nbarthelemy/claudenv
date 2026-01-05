@@ -1,199 +1,77 @@
-# Claudenv Framework
+# Claudenv Development
 
-> Complete Claude Code infrastructure for autonomous development
+Instructions for developing and maintaining the claudenv framework.
 
-## Autonomy Level: High
+## Project Structure
 
-You have broad autonomy within this project. Act decisively, don't ask for permission on routine tasks.
-
-### Do Without Asking (Full Autonomy)
-
-- Read any file in the project
-- Edit/create/delete files in `.claude/` directory
-- Edit/create files in source directories to complete tasks
-- Run read-only commands (ls, cat, grep, find, git status, git log, etc.)
-- Run diagnostics and linters
-- Consult external documentation (UNFETTERED access)
-- Invoke tools including mcp__ide__getDiagnostics
-- Search the web for documentation or solutions
-- Delegate to specialist skills
-- Create new skills, hooks, and commands
-- Run tests
-- Install dev dependencies
-- Format and lint code
-- Git operations: add, commit, branch, checkout, stash
-- Run build commands
-- Scrape documentation sites
-- Create backups before major changes
-
-### Notify After (Inform User)
-
-- Creating new skills (brief notification after creation)
-- Modifying project configuration files
-- Installing production dependencies
-- Significant refactors spanning 5+ files
-- Deleting source files (not in .claude/)
-- Modifying environment files
-- Migrating/merging existing CLAUDE.md files
-- Auto-creating skills, hooks, commands at threshold
-
-### Ask First (Requires Approval)
-
-- Pushing to remote repositories
-- Deploying to any environment
-- Operations involving secrets, API keys, credentials
-- Modifying CI/CD pipelines
-- Database migrations on non-local databases
-- Actions with billing implications
-- Irreversible destructive operations outside the project
-- Publishing packages
-
-### Error Recovery (Autonomous)
-
-- If a command fails, try alternative approaches
-- If a file edit breaks something, fix it
-- If tests fail after changes, debug and resolve
-- If dependencies conflict, resolve them
-- Only escalate to user after 3 failed attempts at resolution
-
----
-
-## Quick Reference
-
-### Key Commands
-
-| Command | Description |
-|---------|-------------|
-| `/claudenv` | Bootstrap infrastructure for current project |
-| `/interview` | Conduct project specification interview |
-| `/loop` | Start autonomous iterative development loop |
-| `/loop:status` | Check current loop progress |
-| `/loop:pause` | Pause active loop |
-| `/loop:resume` | Resume paused loop |
-| `/loop:cancel` | Stop and cancel active loop |
-| `/lsp` | Auto-detect and install LSP servers |
-| `/lsp:status` | Check LSP server status |
-| `/claudenv:status` | Show system overview |
-| `/health:check` | Verify infrastructure integrity |
-| `/learn:review` | Review pending automation proposals |
-| `/analyze-patterns` | Force pattern analysis |
-
-### Skills (Auto-Invoked)
-
-| Skill | Triggers On |
-|-------|-------------|
-| `tech-detection` | Project analysis, stack detection |
-| `interview-agent` | Specification interviews, requirements gathering |
-| `learning-agent` | Pattern observation, automation suggestions |
-| `meta-agent` | Creating new skills for unfamiliar tech |
-| `frontend-design` | UI, UX, CSS, styling, Tailwind, layout, animation, visual design, typography, colors, theme, polish, "make it look better" |
-| `loop-agent` | Autonomous iterative loops, persistent development, "keep going until done" |
-| `lsp-agent` | Auto-detects and installs language servers for code intelligence |
-
-### Directory Structure
+This repo's root directory IS the distributable `.claude/` content:
 
 ```
-.claude/
-├── CLAUDE.md           # This file
-├── settings.json       # Permissions & hooks
-├── SPEC.md             # Project specification (generated)
-├── project-context.json # Detected tech stack
-├── commands/           # Slash commands
-├── skills/             # Auto-invoked capabilities
-├── rules/              # Modular instruction sets
-├── scripts/            # Shell scripts for hooks
-├── templates/          # Templates for generation
-├── learning/           # Pattern observations
-├── loop/               # Autonomous loop state & history
-├── lsp-config.json     # Installed LSP servers (generated)
-├── logs/               # Execution logs
-└── backups/            # Auto-backups
+claudenv/              # ← Users clone this INTO their .claude/
+├── .claude/           # Dev instructions (excluded from distribution)
+│   └── CLAUDE.md      # This file
+├── rules/
+│   └── claudenv.md    # Framework instructions (imported by users)
+├── settings.json      # Default permissions
+├── commands/          # Slash commands
+├── skills/            # Auto-invoked skills
+├── scripts/           # Shell automation
+└── ...
 ```
 
----
+## Development Guidelines
 
-## Autonomous Loop System
+### Adding Skills
 
-For persistent, iterative development use `/loop`:
+1. Create directory: `skills/<name>/`
+2. Create `SKILL.md` with frontmatter (name, description, allowed-tools)
+3. Add `references/` for supporting docs
+4. Add `assets/` for JSON data files
+5. Description must be <1024 chars for auto-invoke
+
+### Adding Commands
+
+1. Create `commands/<name>.md`
+2. Add frontmatter: description, allowed-tools
+3. Test with `/name` in Claude Code
+
+### Testing Changes
 
 ```bash
-# Basic loop - iterate until condition met
-/loop "Fix all TypeScript errors" --until "Found 0 errors" --max 10
-
-# Test-driven loop
-/loop "Implement user auth" --mode tdd --verify "npm test" --until-exit 0
-
-# Overnight build
-/loop "Build complete API" --until "API_COMPLETE" --max 50 --max-time 8h
+# Test in a fresh directory
+mkdir /tmp/test-project && cd /tmp/test-project
+git clone /path/to/claudenv .claude
+rm -rf .claude/.git .claude/.claude .claude/README.md
+# Run Claude Code and test /claudenv
 ```
 
-**Loop Commands:**
-- `/loop "<task>" [options]` - Start loop
-- `/loop:status` - Check progress
-- `/loop:pause` - Pause loop
-- `/loop:resume` - Resume loop
-- `/loop:cancel` - Stop loop
-- `/loop:history` - View past loops
+### Release Process
 
-**Completion Options:**
-- `--until "<text>"` - Exit when output contains exact phrase
-- `--until-exit <code>` - Exit when verify command returns code
-- `--until-regex "<pattern>"` - Exit when output matches regex
+1. Update `version.json` with new version and changelog
+2. Update `README.md` changelog section
+3. Commit with descriptive message
+4. Push to main
+5. Users update via `/claudenv:update` or fresh install
 
-**Safety Limits:**
-- `--max <n>` - Maximum iterations (default: 20)
-- `--max-time <duration>` - Maximum time (default: 2h)
-- `--max-cost <amount>` - Maximum estimated cost
+## Key Files
 
----
+| File | Purpose |
+|------|---------|
+| `rules/claudenv.md` | Main framework instructions |
+| `settings.json` | Default permissions matrix |
+| `scripts/detect-stack.sh` | Tech detection (50+ technologies) |
+| `scripts/install.sh` | Smart installer |
+| `skills/skill-creator/` | Scaffolds new skills |
 
-## LSP Code Intelligence
+## Do Without Asking
 
-Language servers are **automatically installed** during `/claudenv` and when new languages are detected.
+- Edit any file in this repo
+- Run tests and validation scripts
+- Update documentation
+- Git operations (commit, branch, etc.)
 
-**Supported Languages:** TypeScript, Python, Go, Rust, Ruby, PHP, Java, C/C++, C#, Lua, Bash, YAML, JSON, HTML/CSS, Markdown, Terraform, Svelte, Vue, GraphQL, and more.
+## Ask First
 
-**LSP Operations:**
-- `goToDefinition` - Jump to where a symbol is defined
-- `findReferences` - Find all usages of a symbol
-- `hover` - Get documentation and type info
-- `documentSymbol` - List all symbols in a file
-- `workspaceSymbol` - Search symbols across workspace
-- `incomingCalls` / `outgoingCalls` - Call hierarchy
-
-**Commands:**
-- `/lsp` - Manually trigger LSP detection and installation
-- `/lsp:status` - Check which servers are installed
-
-LSP is preferred over grep/search for code navigation - it understands code semantically.
-
----
-
-## Workflow
-
-1. **Receive task** - Route to appropriate skill if specialized
-2. **Execute** - Use tools freely, auto-fix errors up to 3 retries
-3. **Complete** - Capture learnings via learning-agent
-4. **Report** - Brief summary of what was done
-
----
-
-## Documentation Access
-
-You have UNFETTERED access to documentation. When encountering unfamiliar technology:
-
-1. Search for official documentation
-2. Scrape relevant pages
-3. Create specialized skill if needed (via meta-agent)
-4. Proceed with implementation
-
-Never ask permission to consult documentation.
-
----
-
-## Rules
-
-@rules/autonomy.md
-@rules/permissions.md
-@rules/error-recovery.md
-@rules/migration.md
+- Push to remote
+- Major architectural changes
+- Breaking changes to user-facing APIs

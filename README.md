@@ -15,27 +15,33 @@ Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infr
 
 ## Quick Start
 
-### Option 1: Git Clone
+### Option 1: Installer (Recommended)
 
 ```bash
-# Clone the framework
-git clone https://github.com/nbarthelemy/claudenv.git
+# Run from your project directory
+curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh | bash
 
-# Copy to your project
-cp -r claudenv/.claude /path/to/your/project/
-
-# Navigate to your project
-cd /path/to/your/project
-
-# Start Claude and run bootstrap
+# Start Claude and bootstrap
 claude
 > /claudenv
 ```
 
-### Option 2: Curl One-Liner
+The installer:
+- Creates `.claude/` with all framework files
+- **Preserves your existing CLAUDE.md** (adds import, never overwrites)
+- Preserves `settings.local.json` if present
+
+### Option 2: Git Clone
 
 ```bash
-curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh | bash
+# Clone directly into .claude
+git clone --depth 1 https://github.com/nbarthelemy/claudenv.git .claude
+
+# Remove repo files (keep only framework)
+cd .claude && rm -rf .git .github .claude README.md install.sh LICENSE
+
+# Add framework import to your CLAUDE.md
+echo -e "\n@rules/claudenv.md" >> CLAUDE.md
 ```
 
 ## What You Get
@@ -100,19 +106,24 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 
 ```
 .claude/
-├── CLAUDE.md           # Framework instructions & autonomy rules
+├── CLAUDE.md           # Your project instructions + @rules/claudenv.md import
 ├── settings.json       # Permissions & hooks configuration
 ├── version.json        # Framework version
+├── rules/
+│   ├── claudenv.md     # Framework instructions (imported by CLAUDE.md)
+│   ├── autonomy.md     # Autonomy level definitions
+│   ├── permissions.md  # Command permission matrix
+│   └── ...
 ├── commands/           # Slash commands (28 included)
-├── skills/             # Auto-invoked skills (7 included)
+├── skills/             # Auto-invoked skills (8 included)
 │   ├── tech-detection/
 │   ├── project-interview/
 │   ├── pattern-observer/
 │   ├── meta-skill/
+│   ├── skill-creator/
 │   ├── frontend-design/
 │   ├── autonomous-loop/
 │   └── lsp-setup/
-├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
 ├── learning/           # Pattern observations
@@ -120,6 +131,8 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh 
 ├── logs/               # Execution logs (gitignored)
 └── backups/            # Infrastructure backups (gitignored)
 ```
+
+**Key point:** Your project-specific instructions stay in `CLAUDE.md`. The framework instructions are imported via `@rules/claudenv.md`, so updates never overwrite your content.
 
 ## Autonomy Levels
 
@@ -354,6 +367,12 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.0.0
+- **Breaking:** Restructured repo - root IS the `.claude/` content
+- **Changed:** Framework instructions moved to `rules/claudenv.md`
+- **Changed:** User's CLAUDE.md now imports framework (never overwritten)
+- **Improved:** `install.sh` preserves existing CLAUDE.md content
 
 ### v1.0.6
 - **Added:** `skill-creator` skill from Anthropic's official skills repo
