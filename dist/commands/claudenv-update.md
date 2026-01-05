@@ -21,15 +21,15 @@ Fetch these files from the source repo and update locally:
 
 **Critical files to update:**
 1. `.claude/settings.json` - Merge permissions (keep user additions, update format)
-2. `.claude/skills/tech-detection/command-mappings.json` - Replace entirely
+2. `.claude/skills/tech-detection/assets/command-mappings.json` - Replace entirely
 3. `.claude/rules/permissions.md` - Replace entirely
 4. `.claude/commands/claudenv.md` - Replace entirely
 
 **Fetch from GitHub:**
 ```
-https://raw.githubusercontent.com/nbarthelemy/claudenv/main/.claude/settings.json
-https://raw.githubusercontent.com/nbarthelemy/claudenv/main/.claude/skills/tech-detection/command-mappings.json
-https://raw.githubusercontent.com/nbarthelemy/claudenv/main/.claude/rules/permissions.md
+https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/settings.json
+https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/skills/tech-detection/assets/command-mappings.json
+https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/rules/permissions.md
 ```
 
 ### Step 3: Merge Settings Intelligently

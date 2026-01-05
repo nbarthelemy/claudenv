@@ -26,7 +26,7 @@ Check for updates to the Claudenv framework and apply them.
 CURRENT=$(cat .claude/version.json | jq -r '.infrastructureVersion')
 
 # Latest version (from GitHub)
-LATEST=$(curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/.claude/version.json | jq -r '.infrastructureVersion')
+LATEST=$(curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json | jq -r '.infrastructureVersion')
 
 echo "Current: $CURRENT"
 echo "Latest: $LATEST"
