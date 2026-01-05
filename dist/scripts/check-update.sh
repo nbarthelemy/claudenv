@@ -9,8 +9,9 @@ check_update() {
         CURRENT=$(jq -r '.infrastructureVersion // "unknown"' .claude/version.json 2>/dev/null)
     fi
 
-    # Get latest version from GitHub (with cache buster)
-    REMOTE_JSON=$(curl -sL "https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json?cb=$(date +%s)" 2>/dev/null)
+    # Get latest version from GitHub
+    # Note: raw.githubusercontent.com doesn't support query params, so no cache buster
+    REMOTE_JSON=$(curl -sL "https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json" 2>/dev/null)
 
     if [ -z "$REMOTE_JSON" ]; then
         cat << JSONEOF
