@@ -114,6 +114,10 @@
   ],
   "deprecated": [
     "commands/claude-upgrade.md",
-    "commands/claudenv-upgrade.md"
+    "commands/claudenv-upgrade.md",
+    "commands/infrastructure-export.md",
+    "commands/infrastructure-import.md",
+    "commands/infrastructure-status.md",
+    "commands/infrastructure-upgrade.md"
   ]
 }
