@@ -1,11 +1,13 @@
 {
-  "infrastructureVersion": "2.3.5",
+  "infrastructureVersion": "2.3.6",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-05T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "2.3.6": "Convert commands to JSON-output pattern for inline formatting, add audit/debug/backup scripts",
+    "2.3.5": "Add check-update.sh and apply-update.sh for update command",
     "2.3.4": "Add proposal-based skill/agent creation from patterns, fix grep exit code handling",
     "2.3.3": "Add manifest-based updates to remove deprecated files while preserving user content",
     "2.3.2": "Fix update command to stop when versions match, use cache buster for version check",
