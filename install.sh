@@ -60,21 +60,23 @@ EXTRACTED="$TEMP_DIR/claudenv-${BRANCH}"
 # Create .claude directory if it doesn't exist
 mkdir -p "$TARGET"
 
-# Copy distributable files (excluding dev/repo files)
+# Copy distributable files from dist/ directory
 echo "Installing claudenv framework..."
+
+DIST="$EXTRACTED/dist"
 
 # Copy directories
 for dir in commands skills rules scripts templates learning; do
-    if [ -d "$EXTRACTED/$dir" ]; then
+    if [ -d "$DIST/$dir" ]; then
         rm -rf "$TARGET/$dir"
-        cp -r "$EXTRACTED/$dir" "$TARGET/$dir"
+        cp -r "$DIST/$dir" "$TARGET/$dir"
     fi
 done
 
 # Copy config files
-cp "$EXTRACTED/settings.json" "$TARGET/settings.json"
-cp "$EXTRACTED/version.json" "$TARGET/version.json"
-cp "$EXTRACTED/settings.local.json.template" "$TARGET/settings.local.json.template"
+cp "$DIST/settings.json" "$TARGET/settings.json"
+cp "$DIST/version.json" "$TARGET/version.json"
+[ -f "$DIST/settings.local.json.template" ] && cp "$DIST/settings.local.json.template" "$TARGET/settings.local.json.template"
 
 # Restore settings.local.json if it was backed up
 if [ -f /tmp/claudenv-settings-local.json.bak ]; then

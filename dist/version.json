@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "2.0.0",
+  "infrastructureVersion": "2.1.0",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-04T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "2.1.0": "Move distributable content to dist/, add symlinks for self-dogfooding",
     "2.0.0": "Restructure repo - root IS .claude content, framework in rules/claudenv.md",
     "1.0.6": "Add skill-creator skill with init, validate, package scripts",
     "1.0.5": "Restructure skills to follow Agent Skills spec (references/, assets/)",

@@ -34,14 +34,18 @@ The installer:
 ### Option 2: Git Clone
 
 ```bash
-# Clone directly into .claude
-git clone --depth 1 https://github.com/nbarthelemy/claudenv.git .claude
+# Clone the repo
+git clone --depth 1 https://github.com/nbarthelemy/claudenv.git /tmp/claudenv
 
-# Remove repo files (keep only framework)
-cd .claude && rm -rf .git .github .claude README.md install.sh LICENSE
+# Copy dist/ contents to .claude/
+mkdir -p .claude
+cp -r /tmp/claudenv/dist/* .claude/
+
+# Clean up
+rm -rf /tmp/claudenv
 
 # Add framework import to your CLAUDE.md
-echo -e "\n@rules/claudenv.md" >> CLAUDE.md
+echo -e "\n@rules/claudenv.md" >> .claude/CLAUDE.md
 ```
 
 ## What You Get
@@ -367,6 +371,11 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.1.0
+- **Changed:** Moved all distributable content to `dist/` directory
+- **Added:** Symlinks in `.claude/` for self-dogfooding (claudenv uses its own framework)
+- **Fixed:** `find` commands now use `-L` to follow symlinks
 
 ### v2.0.0
 - **Breaking:** Restructured repo - root IS the `.claude/` content

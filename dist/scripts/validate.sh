@@ -121,7 +121,7 @@ check "backups/ exists" \
 echo ""
 echo "## Skills"
 
-SKILL_COUNT=$(find .claude/skills -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+SKILL_COUNT=$(find -L .claude/skills -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
 echo "   Found: $SKILL_COUNT skills"
 
 for skill_dir in .claude/skills/*/; do
@@ -146,7 +146,7 @@ done
 echo ""
 echo "## Commands"
 
-CMD_COUNT=$(find .claude/commands -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+CMD_COUNT=$(find -L .claude/commands -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 echo "   Found: $CMD_COUNT commands"
 check "Commands directory not empty" "[ $CMD_COUNT -gt 0 ]"
 

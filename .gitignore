@@ -1,19 +1,26 @@
-# User-specific (generated per-project, not part of claudenv repo)
-settings.local.json
+# Dev-generated content (in .claude/)
+.claude/logs/*
+.claude/backups/*
+.claude/loop/*
+.claude/learning/*.log
+!.claude/logs/.gitkeep
+!.claude/backups/.gitkeep
+!.claude/loop/.gitkeep
+
+# User-specific (generated per-project in dist/)
+dist/project-context.json
+dist/SPEC.md
+dist/lsp-config.json
+dist/settings.local.json
+
+# Generated at root (from testing)
 project-context.json
 SPEC.md
 lsp-config.json
 
-# Logs and backups (created per-project)
-logs/*
-!logs/.gitkeep
-backups/*
-!backups/.gitkeep
-loop/*
-!loop/.gitkeep
-
 # Autonomy state
 .autonomy-paused
+dist/.autonomy-paused
 
 # OS files
 .DS_Store
