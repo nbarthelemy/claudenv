@@ -1,6 +1,6 @@
 {
   "description": "Framework files managed by claudenv. Used during updates to remove deleted files without affecting user-created content.",
-  "version": "2.3.6",
+  "version": "2.3.7",
   "files": [
     "agents/accessibility-checker.md",
     "agents/api-designer.md",
