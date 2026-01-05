@@ -43,6 +43,84 @@ claudenv/
 2. Add frontmatter: description, allowed-tools
 3. Test with `/name` in Claude Code
 
+### Command Output Pattern (JSON-Output)
+
+**All commands that display status or collected data MUST use the JSON-output pattern.**
+
+This pattern prevents Claude Code UI from collapsing long bash outputs (which requires Ctrl+O to view).
+
+#### How It Works
+
+1. **Script collects data** → outputs JSON to stdout
+2. **Command file instructs Claude** → format the JSON inline
+
+#### Script Template (`dist/scripts/<name>.sh`)
+
+```bash
+#!/bin/bash
+# <Name> Script - JSON output for Claude to format
+
+collect_data() {
+    # Collect all needed data
+    VALUE1="..."
+    VALUE2="..."
+
+    # Output as JSON (use JSONEOF to avoid variable issues)
+    cat << JSONEOF
+{
+  "error": false,
+  "field1": "$VALUE1",
+  "field2": "$VALUE2"
+}
+JSONEOF
+}
+
+collect_data
+```
+
+#### Command Template (`dist/commands/<name>.md`)
+
+```markdown
+---
+description: Brief description
+allowed-tools: Bash
+---
+
+# /<name> - Title
+
+Run `bash .claude/scripts/<name>.sh` to collect data as JSON.
+
+**If error** (`error: true`): Show error message.
+
+**Format output as:**
+\`\`\`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Title
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Field 1: {field1}
+Field 2: {field2}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\`\`\`
+
+Keep output compact (under 15 lines preferred).
+```
+
+#### Benefits
+
+- Output displays inline without collapsing
+- Single bash call instead of multiple Read/Glob/Grep calls
+- Claude formats with context awareness
+- Consistent user experience
+
+#### Commands Using This Pattern
+
+Status: `claudenv-status`, `health-check`, `loop-status`, `lsp-status`
+Debug: `debug-hooks`, `debug-agent`, `skills-triggers`
+Data: `learn-review`, `audit`, `list-backups`
+Update: `check-update`, `apply-update`
+
 ### Testing Changes
 
 ```bash
