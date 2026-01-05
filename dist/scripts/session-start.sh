@@ -6,6 +6,26 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "🚀 Session Started"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
+# Check for claudenv updates (non-blocking, 2s timeout)
+if [ -f ".claude/version.json" ]; then
+    LOCAL_VERSION=$(cat .claude/version.json | jq -r '.infrastructureVersion' 2>/dev/null)
+
+    # Fetch remote version with timeout (don't block if offline)
+    REMOTE_VERSION=$(curl -sL --max-time 2 \
+        "https://raw.githubusercontent.com/nbarthelemy/claudenv/main/dist/version.json" 2>/dev/null \
+        | jq -r '.infrastructureVersion' 2>/dev/null)
+
+    if [ -n "$REMOTE_VERSION" ] && [ "$REMOTE_VERSION" != "null" ] && [ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]; then
+        # Simple version comparison (works for semver like 2.3.0)
+        if [ "$(printf '%s\n' "$REMOTE_VERSION" "$LOCAL_VERSION" | sort -V | tail -1)" = "$REMOTE_VERSION" ] && \
+           [ "$REMOTE_VERSION" != "$LOCAL_VERSION" ]; then
+            echo ""
+            echo "📦 Update available: v$LOCAL_VERSION → v$REMOTE_VERSION"
+            echo "   Run /claudenv:update to upgrade"
+        fi
+    fi
+fi
+
 # Load project context if available
 if [ -f ".claude/project-context.json" ]; then
     echo ""
@@ -56,7 +76,7 @@ COMMANDS=$(find .claude/commands -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 echo "🤖 Skills: $SKILLS | 📝 Commands: $COMMANDS"
 
 # Check for pending learnings
-PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null || echo "0")
+PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null | tr -d ' \n' || echo "0")
 
 if [ "$PENDING_SKILLS" -gt 0 ]; then
     echo "💡 $PENDING_SKILLS pending proposals (/learn:review)"

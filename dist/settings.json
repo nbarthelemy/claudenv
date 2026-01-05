@@ -119,7 +119,19 @@
       "Bash(dd:*)"
     ]
   },
-  "hooks": {},
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/scripts/session-start.sh"
+          }
+        ]
+      }
+    ]
+  },
   "env": {
     "CLAUDENV_VERSION": "1.0.0"
   }
