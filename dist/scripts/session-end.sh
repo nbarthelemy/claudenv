@@ -20,9 +20,9 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
 fi
 
 # Check for new pending learnings
-PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null || echo "0")
-PENDING_COMMANDS=$(grep -c "^### " .claude/learning/pending-commands.md 2>/dev/null || echo "0")
-PENDING_HOOKS=$(grep -c "^### " .claude/learning/pending-hooks.md 2>/dev/null || echo "0")
+PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null) || PENDING_SKILLS=0
+PENDING_COMMANDS=$(grep -c "^### " .claude/learning/pending-commands.md 2>/dev/null) || PENDING_COMMANDS=0
+PENDING_HOOKS=$(grep -c "^### " .claude/learning/pending-hooks.md 2>/dev/null) || PENDING_HOOKS=0
 
 TOTAL_PENDING=$((PENDING_SKILLS + PENDING_COMMANDS + PENDING_HOOKS))
 
