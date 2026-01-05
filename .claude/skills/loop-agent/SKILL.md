@@ -1,19 +1,7 @@
 ---
 name: loop-agent
-description: >
-  Autonomous iterative development loop system. Repeatedly executes prompts until
-  completion conditions are met. Supports multiple completion modes, checkpointing,
-  cost tracking, and safety guardrails.
-
-  TRIGGERS - Keywords: loop, autonomous, iterate, iteration, iterative, repeat,
-  until done, keep going, autonomous mode, /loop, continuous, persist, persistent,
-  overnight, unattended, batch processing.
-
-  TRIGGERS - Phrases: "keep working on this", "until it's done", "iterate until",
-  "run autonomously", "work on this overnight", "continuous improvement",
-  "keep refining", "don't stop until", "loop until complete".
+description: Manages autonomous iterative development loops that repeat until completion. Use when asked to loop, iterate, keep going until done, work autonomously, run overnight, or continue until a condition is met. Supports checkpointing, cost tracking, and safety limits.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(*), WebSearch, WebFetch, TodoWrite, TodoRead
-auto-invoke: true
 ---
 
 # Loop Agent Skill

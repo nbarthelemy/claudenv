@@ -1,31 +1,7 @@
 ---
 name: frontend-design
-description: >
-  Creates distinctive, production-grade frontend interfaces that avoid generic AI aesthetics.
-  Analyzes existing designs and adapts to project aesthetics.
-
-  TRIGGERS - Keywords: UI, UX, CSS, SCSS, Sass, Less, styling, styles, stylesheet, Tailwind,
-  styled-components, emotion, CSS-in-JS, Chakra, MUI, Material UI, Radix, shadcn, headless UI,
-  layout, flexbox, grid, responsive, mobile-first, breakpoints, media queries,
-  animation, transition, motion, keyframes, hover, focus, active states,
-  visual design, typography, fonts, typeface, font-family, text styling, headings,
-  color, colors, palette, color scheme, theme, theming, dark mode, light mode, branding,
-  spacing, padding, margin, gap, whitespace,
-  shadows, box-shadow, borders, border-radius, rounded corners, gradients,
-  buttons, cards, forms, inputs, modals, dialogs, navigation, navbar, sidebar, header, footer,
-  hero section, landing page, dashboard, component styling, design system, design tokens.
-
-  TRIGGERS - Phrases: "make it look better", "improve the look", "looks ugly", "looks bad",
-  "style this", "restyle", "redesign", "beautify", "modernize", "polish the UI",
-  "fix the styling", "CSS issues", "styling issues", "design review", "UI review",
-  "visual polish", "improve appearance", "update the design", "make it pretty",
-  "needs design work", "design help", "frontend help", "aesthetic", "look and feel".
-
-  TRIGGERS - Files: *.css, *.scss, *.sass, *.less, *.pcss, *.styled.ts, *.styled.js,
-  *.module.css, *.module.scss, tailwind.config.*, postcss.config.*, styles/*,
-  components/*.tsx, components/*.jsx, components/*.vue, components/*.svelte.
+description: Creates distinctive, production-grade UI with CSS, Tailwind, and modern styling. Use when working on frontend design, UI, UX, styling, CSS, layout, animation, typography, colors, themes, dark mode, or when asked to make something look better, improve the look, polish the UI, fix styling, or redesign components. Handles buttons, cards, forms, modals, navbars, hero sections, landing pages, and dashboards.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(npm:*), Bash(npx:*), WebSearch, WebFetch
-auto-invoke: true
 ---
 
 # Frontend Design Skill

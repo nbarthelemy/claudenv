@@ -1,22 +1,7 @@
 ---
 name: lsp-agent
-description: >
-  Automatically detects, installs, and configures Language Server Protocol (LSP) servers
-  for enhanced code intelligence. Provides go-to-definition, find-references, hover docs,
-  and symbol navigation.
-
-  TRIGGERS - Keywords: lsp, language server, code intelligence, go to definition,
-  find references, hover, symbols, diagnostics, autocomplete, intellisense,
-  code navigation, jump to definition, find usages, type info.
-
-  TRIGGERS - Phrases: "set up lsp", "install language server", "enable code intelligence",
-  "configure lsp", "go to definition not working", "find references", "show type",
-  "navigate to symbol", "code navigation".
-
-  TRIGGERS - Automatic: After tech-detection completes, when opening new file types,
-  when LSP operations fail.
+description: Detects, installs, and configures LSP language servers for code intelligence. Use when setting up LSP, needing go-to-definition, find references, hover docs, symbols, diagnostics, or code navigation. Handles language server installation and troubleshooting.
 allowed-tools: Bash(*), Read, Write, Edit, Glob, Grep, LSP
-auto-invoke: true
 ---
 
 # LSP Agent Skill

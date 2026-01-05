@@ -1,21 +1,7 @@
 ---
 name: meta-agent
-description: >
-  Expert agent architect that creates new skills and agents for unfamiliar technologies.
-  Has unfettered documentation access. Auto-creates skills at threshold (2+ uses).
-
-  TRIGGERS - Keywords: create skill, create agent, new skill, new agent, skill creation,
-  agent creation, unfamiliar technology, unknown framework, no specialist,
-  missing skill, need expert, technology specialist, extend capabilities.
-
-  TRIGGERS - Phrases: "create a skill for", "make an agent for", "need a specialist",
-  "don't have a skill for", "unfamiliar with this tech", "research and create",
-  "add support for", "extend to handle".
-
-  TRIGGERS - Automatic: New technology encountered 2+ times without existing skill,
-  learning agent proposes new agent, repeated documentation lookups for same technology.
+description: Creates new skills and agents for unfamiliar technologies. Use when needing to create a skill, make an agent, add support for unknown frameworks, or extend capabilities for new tech. Researches documentation and generates specialized agents.
 allowed-tools: Write, Read, Glob, Grep, WebFetch, WebSearch, Edit, Bash(*)
-auto-invoke: true
 ---
 
 # Meta-Agent Skill
