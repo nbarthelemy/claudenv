@@ -82,3 +82,7 @@ mkdir /tmp/test-project && cd /tmp/test-project
 - Push to remote
 - Major architectural changes
 - Breaking changes to user-facing APIs
+
+## Claudenv Framework
+
+@rules/claudenv.md
