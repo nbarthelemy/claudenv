@@ -461,8 +461,12 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v2.3.2
+- **Fixed:** `/claudenv:update` now stops immediately when versions match
+- **Changed:** Version check uses cache buster instead of GitHub API
+
 ### v2.3.1
-- **Added:** Automatic update check on session start (via GitHub API, no cache)
+- **Added:** Automatic update check on session start
 - **Added:** SessionStart, Stop, and PostToolUse hooks configured by default
 - **Added:** Session summary on conversation end
 - **Added:** Pattern observation on file writes for learning system
