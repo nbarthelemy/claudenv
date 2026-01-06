@@ -44,9 +44,9 @@ JSONEOF
         return
     fi
 
-    # Remove deprecated files
+    # Remove deprecated files (count before removal)
     DEPRECATED_COUNT=0
-    jq -r '.deprecated[]' "$SOURCE_DIR/manifest.json" 2>/dev/null | while IFS= read -r file; do
+    for file in $(jq -r '.deprecated[]' "$SOURCE_DIR/manifest.json" 2>/dev/null); do
         [ -z "$file" ] && continue
         if [ -f ".claude/$file" ]; then
             rm -f ".claude/$file"
@@ -56,7 +56,7 @@ JSONEOF
 
     # Copy framework files from manifest
     UPDATED_COUNT=0
-    jq -r '.files[]' "$SOURCE_DIR/manifest.json" 2>/dev/null | while IFS= read -r file; do
+    for file in $(jq -r '.files[]' "$SOURCE_DIR/manifest.json" 2>/dev/null); do
         [ -z "$file" ] && continue
         if [ -f "$SOURCE_DIR/$file" ]; then
             dir=$(dirname "$file")
