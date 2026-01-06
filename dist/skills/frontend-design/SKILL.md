@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Creates distinctive, production-grade UI with CSS, Tailwind, and modern styling. Use when working on frontend design, UI, UX, styling, CSS, layout, animation, typography, colors, themes, dark mode, or when asked to make something look better, improve the look, polish the UI, fix styling, or redesign components. Handles buttons, cards, forms, modals, navbars, hero sections, landing pages, and dashboards.
+description: Creates distinctive, production-grade UI with CSS, Tailwind, and modern styling. Use when working on frontend design, UI, UX, styling, CSS, layout, animation, typography, colors, themes, dark mode, or when asked to make something look better, improve the look, improve the design, polish the UI, fix styling, or redesign components. Handles buttons, cards, forms, modals, navbars, hero sections, landing pages, and dashboards.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(npm:*), Bash(npx:*), WebSearch, WebFetch
 ---
 
