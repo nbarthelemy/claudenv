@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "2.3.10",
+  "infrastructureVersion": "2.3.11",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-05T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "2.3.11": "Add graceful exit to hook scripts when not in project root",
     "2.3.10": "Fix apply-update.sh counter variables in subshell",
     "2.3.9": "Fix apply-update.sh shell compatibility and empty file handling",
     "2.3.8": "Consolidate subcommands, add triggers.json for agents/skills, add trigger-reference.md rule",

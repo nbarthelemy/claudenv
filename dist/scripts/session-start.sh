@@ -2,6 +2,9 @@
 # Session Start Hook
 # Runs when a new Claude session begins
 
+# Exit gracefully if not in project root
+[ ! -d ".claude" ] && exit 0
+
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "🚀 Session Started"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
