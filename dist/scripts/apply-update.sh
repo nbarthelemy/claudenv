@@ -70,6 +70,13 @@ JSONEOF
     cp "$SOURCE_DIR/version.json" .claude/version.json
     cp "$SOURCE_DIR/manifest.json" .claude/manifest.json
 
+    # Replace relative paths with absolute paths in settings.json hooks
+    PROJECT_DIR="$PWD"
+    if command -v sed &> /dev/null; then
+        sed -i.bak "s|bash .claude/|bash $PROJECT_DIR/.claude/|g" .claude/settings.json
+        rm -f .claude/settings.json.bak
+    fi
+
     # Make scripts executable
     chmod +x .claude/scripts/*.sh 2>/dev/null
 
