@@ -2,62 +2,6 @@
 
 > Complete Claude Code infrastructure for autonomous development
 
-## Autonomy Level: High
-
-You have broad autonomy within this project. Act decisively, don't ask for permission on routine tasks.
-
-### Do Without Asking (Full Autonomy)
-
-- Read any file in the project
-- Edit/create/delete files in `.claude/` directory
-- Edit/create files in source directories to complete tasks
-- Run read-only commands (ls, cat, grep, find, git status, git log, etc.)
-- Run diagnostics and linters
-- Consult external documentation (UNFETTERED access)
-- Invoke tools including mcp__ide__getDiagnostics
-- Search the web for documentation or solutions
-- Delegate to specialist skills
-- Create new skills, hooks, and commands
-- Run tests
-- Install dev dependencies
-- Format and lint code
-- Git operations: add, commit, branch, checkout, stash
-- Run build commands
-- Scrape documentation sites
-- Create backups before major changes
-
-### Notify After (Inform User)
-
-- Creating new skills (brief notification after creation)
-- Modifying project configuration files
-- Installing production dependencies
-- Significant refactors spanning 5+ files
-- Deleting source files (not in .claude/)
-- Modifying environment files
-- Migrating/merging existing CLAUDE.md files
-- Auto-creating skills, hooks, commands at threshold
-
-### Ask First (Requires Approval)
-
-- Pushing to remote repositories
-- Deploying to any environment
-- Operations involving secrets, API keys, credentials
-- Modifying CI/CD pipelines
-- Database migrations on non-local databases
-- Actions with billing implications
-- Irreversible destructive operations outside the project
-- Publishing packages
-
-### Error Recovery (Autonomous)
-
-- If a command fails, try alternative approaches
-- If a file edit breaks something, fix it
-- If tests fail after changes, debug and resolve
-- If dependencies conflict, resolve them
-- Only escalate to user after 3 failed attempts at resolution
-
----
-
 ## Quick Reference
 
 ### Key Commands
@@ -78,21 +22,12 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 | `/learn:review` | Review pending automation proposals |
 | `/reflect` | Consolidate learnings, update project knowledge |
 | `/analyze-patterns` | Force pattern analysis |
+| `/skills:triggers` | List skill trigger keywords and phrases |
+| `/agents:triggers` | List agent trigger keywords and phrases |
 
 ### Skills (Auto-Invoked)
 
-| Skill | Triggers On |
-|-------|-------------|
-| `tech-detection` | Project analysis, stack detection |
-| `project-interview` | Specification interviews, requirements gathering |
-| `pattern-observer` | Pattern observation, learning consolidation, automation suggestions |
-| `meta-skill` | Creating new skills for unfamiliar tech |
-| `skill-creator` | Scaffolding and validating skill directories |
-| `frontend-design` | UI, UX, CSS, styling, Tailwind, layout, animation, visual design |
-| `autonomous-loop` | Autonomous iterative loops, persistent development |
-| `lsp-setup` | Auto-detects and installs language servers |
-| `orchestrator` | Complex tasks, parallel execution, "comprehensive", "full review" |
-| `agent-creator` | Creates specialist subagents for detected technologies |
+Skills auto-invoke based on triggers in `.claude/skills/triggers.json`. See `@rules/trigger-reference.md` for full trigger list.
 
 ### Directory Structure
 
@@ -104,7 +39,9 @@ You have broad autonomy within this project. Act decisively, don't ask for permi
 ├── project-context.json # Detected tech stack
 ├── commands/           # Slash commands
 ├── skills/             # Auto-invoked capabilities
+│   └── triggers.json   # Skill trigger configuration
 ├── agents/             # Specialist subagents for orchestration
+│   └── triggers.json   # Agent trigger configuration
 ├── orchestration/      # Orchestration config (triggers, limits)
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
@@ -130,7 +67,11 @@ Claude automatically spawns specialist subagents for complex parallel tasks.
 | **Analysis** | `code-reviewer`, `security-auditor`, `performance-analyst`, `accessibility-checker` |
 | **Process** | `test-engineer`, `documentation-writer`, `release-manager`, `migration-specialist` |
 
-### Trigger Conditions
+### Agent Triggers
+
+Agents are routed based on triggers in `.claude/agents/triggers.json`. See `@rules/trigger-reference.md` for full trigger list.
+
+### Orchestration Triggers
 
 The orchestrator spawns agents when:
 - **Keywords detected:** "comprehensive", "full review", "across codebase", "refactor all"
@@ -287,3 +228,4 @@ Never ask permission to consult documentation.
 @rules/permissions.md
 @rules/error-recovery.md
 @rules/migration.md
+@rules/trigger-reference.md
