@@ -62,8 +62,8 @@ claudenv/
     ├── settings.json
     ├── version.json
     ├── rules/claudenv.md   # Framework instructions
-    ├── commands/           # 28 slash commands
-    ├── skills/             # 8 auto-invoked skills
+    ├── commands/           # 13 slash commands
+    ├── skills/             # 10 auto-invoked skills
     ├── scripts/            # Automation scripts
     └── ...
 ```
@@ -77,33 +77,18 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | Command | Description |
 |---------|-------------|
 | `/claudenv` | Bootstrap infrastructure for current project |
+| `/claudenv:admin` | Admin commands: status, update, audit, export, import, mcp |
 | `/interview` | Conduct project specification interview |
-| `/loop` | Start autonomous iterative development loop |
-| `/loop:status` | Check current loop progress |
-| `/loop:pause` | Pause active loop |
-| `/loop:resume` | Resume paused loop |
-| `/loop:cancel` | Stop and cancel active loop |
-| `/loop:history` | View past loop runs |
-| `/lsp` | Auto-detect and install LSP servers |
-| `/lsp:status` | Check LSP server status |
-| `/claudenv:status` | Show system overview |
-| `/claudenv:update` | Update to latest version with changelog |
-| `/claudenv:export` | Export for sharing |
-| `/claudenv:import` | Import from export |
-| `/claudenv:mcp` | Detect and install MCP servers |
-| `/claudenv:audit` | Audit permissions vs detected tech |
-| `/skills:triggers` | List skills with trigger keywords |
+| `/loop` | Autonomous loop: start, status, pause, resume, cancel, history |
+| `/lsp` | LSP management: install, status |
 | `/health:check` | Verify infrastructure integrity |
-| `/learn:review` | Review pending automation proposals |
-| `/learn:implement` | Implement a learning proposal |
+| `/learn` | Learning system: review, implement |
 | `/reflect` | Consolidate learnings, update project knowledge |
 | `/analyze-patterns` | Force pattern analysis |
-| `/backup:create` | Create infrastructure backup |
-| `/backup:restore` | Restore from backup |
-| `/autonomy:pause` | Temporarily reduce autonomy |
-| `/autonomy:resume` | Restore autonomy level |
-| `/debug:agent` | Debug a specific skill |
-| `/debug:hooks` | Debug hook configuration |
+| `/triggers` | List skill and agent triggers |
+| `/backup` | Backup management: create, restore, list |
+| `/autonomy` | Autonomy control: pause, resume |
+| `/debug` | Debug tools: hooks, agent |
 
 ### Skills (Auto-Invoked)
 
@@ -155,7 +140,7 @@ your-project/
     │   ├── autonomy.md     # Autonomy definitions
     │   ├── permissions.md  # Permission matrix
     │   └── ...
-    ├── commands/           # 28 slash commands
+    ├── commands/           # 13 slash commands
     ├── skills/             # 10 auto-invoked skills
     ├── agents/             # 12+ specialist subagents
     ├── orchestration/      # Orchestration config
@@ -460,6 +445,35 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.3.10
+- **Fixed:** `apply-update.sh` counter variables lost in subshell (use for loop instead of pipe)
+
+### v2.3.9
+- **Fixed:** `apply-update.sh` shell compatibility (zsh) and empty file handling
+
+### v2.3.8
+- **Changed:** Consolidated subcommands into parent commands (e.g., `/loop status` instead of `/loop:status`)
+- **Added:** `triggers.json` for skills and agents auto-routing
+- **Added:** `trigger-reference.md` rule for matching user requests
+
+### v2.3.7
+- **Fixed:** Installer now preserves custom content in existing installations
+- **Added:** `infrastructure-*` commands to deprecated list
+
+### v2.3.6
+- **Changed:** Commands now use JSON-output pattern for inline formatting
+- **Added:** Audit, debug, and backup scripts
+
+### v2.3.5
+- **Added:** `check-update.sh` and `apply-update.sh` for update command
+
+### v2.3.4
+- **Added:** Proposal-based skill/agent creation from patterns
+- **Fixed:** Grep exit code handling in scripts
+
+### v2.3.3
+- **Added:** Manifest-based updates to remove deprecated files while preserving user content
 
 ### v2.3.2
 - **Fixed:** `/claudenv:update` now stops immediately when versions match
