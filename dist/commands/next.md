@@ -114,10 +114,11 @@ Show the TODO.md summary, then interview about execution:
 - Track A: {description} ({n} tasks)
 - Track B: {description} ({n} tasks)
 
-Run these in parallel? (requires 2 terminals)"
-- Yes, run in parallel
-- No, run sequentially
-- Pick one track only
+How do you want to run these?"
+- **Parallel (subagents)** - Spawn background agents for each track
+- **Parallel (terminals)** - Output commands for separate terminals
+- **Sequential** - Run one after the other
+- **Pick one** - Choose a single track
 
 **Question 3 (if parallel declined or single track):**
 "Which track to start?"
@@ -126,28 +127,69 @@ Run these in parallel? (requires 2 terminals)"
 - {Other task}
 - Just show commands (don't run)
 
-### 6. Execute Loop
+### 6. Execute Based on Selection
 
-After user selects, **immediately invoke the /loop command** using the Skill tool:
+#### Option A: Parallel (subagents)
+
+Spawn background agents using the Task tool:
+
+```
+# Spawn both tracks as background agents
+Task(
+  subagent_type: "general-purpose",
+  description: "Track A: {name}",
+  prompt: "Complete these tasks from TODO.md Track A: {task_list}. Output TRACK_A_COMPLETE when done.",
+  run_in_background: true
+)
+
+Task(
+  subagent_type: "general-purpose",
+  description: "Track B: {name}",
+  prompt: "Complete these tasks from TODO.md Track B: {task_list}. Output TRACK_B_COMPLETE when done.",
+  run_in_background: true
+)
+```
+
+Then monitor progress:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 Parallel Execution Started
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Track A: Running in background (agent_id: xxx)
+Track B: Running in background (agent_id: xxx)
+
+Use /tasks to monitor progress
+Use TaskOutput(task_id, block=false) to check status
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+#### Option B: Parallel (terminals)
+
+Output commands for separate terminals:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Parallel Commands Ready
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Terminal 1:
+/loop "Track A: {description}" --until "TRACK_A_COMPLETE" --max 15
+
+# Terminal 2:
+/loop "Track B: {description}" --until "TRACK_B_COMPLETE" --max 15
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+#### Option C: Sequential / Single Track
+
+Invoke /loop directly using the Skill tool:
 
 ```
 Skill: loop
 Args: "{task_description}" --until "{condition}" --max {n}
-```
-
-For parallel tracks, output the second command for the user to run in another terminal:
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 Starting: {selected_track}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Running Track A in this terminal...
-
-To run Track B in parallel, open another terminal and run:
-/loop "Track B: {description}" --until "TRACK_B_COMPLETE" --max 15
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ## Subcommands
