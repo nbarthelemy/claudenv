@@ -102,21 +102,29 @@ Create/update `.claude/TODO.md`:
 
 ### 5. Present Options & Execute
 
-Show the TODO.md summary, then use AskUserQuestion to select what to run:
+Show the TODO.md summary, then interview about execution:
 
-**Question: "What would you like to work on?"**
+**Question 1 (if blocking tasks exist):**
+"There are blocking tasks that should run first. Start with these?"
+- Yes, run blocking tasks first
+- Skip to parallel tracks
 
-Options based on generated tasks:
-- **Option 1**: "{Blocking task}" (P0 - do this first)
-- **Option 2**: "{Track A name}" (can run in parallel)
-- **Option 3**: "{Track B name}" (can run in parallel)
-- **Option 4**: "Show all commands" (just output, don't run)
-- **Other**: Custom task description
+**Question 2 (if multiple parallel tracks identified):**
+"I found {n} tracks that can run in parallel:
+- Track A: {description} ({n} tasks)
+- Track B: {description} ({n} tasks)
 
-If parallel tracks selected, ask:
-**"Run both tracks in parallel? (requires 2 terminals)"**
-- Yes - output both commands with instructions
-- No - run just this track
+Run these in parallel? (requires 2 terminals)"
+- Yes, run in parallel
+- No, run sequentially
+- Pick one track only
+
+**Question 3 (if parallel declined or single track):**
+"Which track to start?"
+- {Track A name}
+- {Track B name}
+- {Other task}
+- Just show commands (don't run)
 
 ### 6. Execute Loop
 
