@@ -62,7 +62,7 @@ claudenv/
     ├── settings.json
     ├── version.json
     ├── rules/claudenv.md   # Framework instructions
-    ├── commands/           # 13 slash commands
+    ├── commands/           # 14 slash commands
     ├── skills/             # 10 auto-invoked skills
     ├── scripts/            # Automation scripts
     └── ...
@@ -79,6 +79,7 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | `/claudenv` | Bootstrap infrastructure for current project |
 | `/claudenv:admin` | Admin commands: status, update, audit, export, import, mcp |
 | `/interview` | Conduct project specification interview |
+| `/next` | Analyze codebase, create TODO.md, and execute /loop commands |
 | `/loop` | Autonomous loop: start, status, pause, resume, cancel, history |
 | `/lsp` | LSP management: install, status |
 | `/health:check` | Verify infrastructure integrity |
@@ -140,7 +141,7 @@ your-project/
     │   ├── autonomy.md     # Autonomy definitions
     │   ├── permissions.md  # Permission matrix
     │   └── ...
-    ├── commands/           # 13 slash commands
+    ├── commands/           # 14 slash commands
     ├── skills/             # 10 auto-invoked skills
     ├── agents/             # 12+ specialist subagents
     ├── orchestration/      # Orchestration config
@@ -240,7 +241,48 @@ Core philosophy:
 - "Specific over vague — skip insights that aren't actionable"
 - "Accurate over comprehensive — wrong info is worse than missing"
 
-### 4. Autonomous Loops (`/loop`)
+### 4. Task Planning (`/next`)
+
+The `/next` command analyzes your codebase and creates actionable development plans:
+
+```bash
+/next              # Full analysis, create TODO.md, interview & execute
+/next status       # Show TODO.md progress
+/next refresh      # Re-analyze without full confirmation
+/next complete X   # Mark task X complete
+```
+
+**What it does:**
+1. Gathers context (SPEC.md, git history, recent changes)
+2. Discovers work items (TODOs, FIXMEs, incomplete implementations)
+3. Identifies parallel development opportunities
+4. Creates `.claude/TODO.md` with prioritized, grouped tasks
+5. Interviews you about execution preferences
+6. Executes selected `/loop` command
+
+**Parallel Execution Options:**
+- **Subagents** - Spawn background agents for each track (monitor with `/tasks`)
+- **Terminals** - Output commands for separate terminal windows
+- **Sequential** - Run tracks one after another
+- **Single** - Pick one track to focus on
+
+**TODO.md Structure:**
+```markdown
+## Active Tracks
+
+### Track A: Frontend [PARALLEL]
+- [ ] P1: Implement login form
+- [ ] P2: Add validation
+
+### Track B: API [PARALLEL]
+- [ ] P1: Create auth endpoint
+- [ ] P2: Add rate limiting
+
+### Sequential: Database [BLOCKING]
+- [ ] P0: Run migrations (blocks: Track A, Track B)
+```
+
+### 5. Autonomous Loops (`/loop`)
 
 For persistent, iterative development:
 
@@ -445,6 +487,17 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.3.13
+- **Added:** `/next` command for task planning and parallel execution
+- **Added:** Subagent spawning for parallel track execution
+- **Added:** TODO.md generation with priority grouping
+
+### v2.3.12
+- **Fixed:** Use absolute paths in hook commands for reliable execution
+
+### v2.3.11
+- **Fixed:** Graceful exit for hook scripts when not in project root
 
 ### v2.3.10
 - **Fixed:** `apply-update.sh` counter variables lost in subshell (use for loop instead of pipe)
