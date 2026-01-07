@@ -100,26 +100,43 @@ Create/update `.claude/TODO.md`:
 - [x] {date}: {item}
 ```
 
-### 5. Generate Loop Commands
+### 5. Present Options & Execute
 
-Output ready-to-run commands:
+Show the TODO.md summary, then use AskUserQuestion to select what to run:
+
+**Question: "What would you like to work on?"**
+
+Options based on generated tasks:
+- **Option 1**: "{Blocking task}" (P0 - do this first)
+- **Option 2**: "{Track A name}" (can run in parallel)
+- **Option 3**: "{Track B name}" (can run in parallel)
+- **Option 4**: "Show all commands" (just output, don't run)
+- **Other**: Custom task description
+
+If parallel tracks selected, ask:
+**"Run both tracks in parallel? (requires 2 terminals)"**
+- Yes - output both commands with instructions
+- No - run just this track
+
+### 6. Execute Loop
+
+After user selects, **immediately invoke the /loop command** using the Skill tool:
+
+```
+Skill: loop
+Args: "{task_description}" --until "{condition}" --max {n}
+```
+
+For parallel tracks, output the second command for the user to run in another terminal:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 Next Steps Ready
+📋 Starting: {selected_track}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-TODO.md: {n} tasks ({parallel} parallel, {sequential} sequential)
+Running Track A in this terminal...
 
-## Run These Commands
-
-# If blocking tasks exist, run first:
-/loop "Complete: {blocking_task}" --until "{done_marker}" --max 10
-
-# Parallel Track A (Terminal 1):
-/loop "Track A: {description}" --until "TRACK_A_COMPLETE" --max 15
-
-# Parallel Track B (Terminal 2):
+To run Track B in parallel, open another terminal and run:
 /loop "Track B: {description}" --until "TRACK_B_COMPLETE" --max 15
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
