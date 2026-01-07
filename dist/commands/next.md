@@ -1,13 +1,37 @@
 ---
 description: Analyze codebase, create TODO.md with prioritized tasks, and generate /loop commands
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
 ---
 
 # /next - Development Task Planning
 
-Analyze the project, determine next steps, create/update `.claude/TODO.md`, and generate executable `/loop` commands.
+Analyze the project, determine next steps, create/update `.claude/TODO.md`, and generate executable `/loop` commands with multi-agent coordination.
 
 ## Process
+
+### 0. Check Coordination Status
+
+First, check if other agents are already working:
+
+```bash
+bash .claude/scripts/todo-coordinator.sh status
+```
+
+If active agents found, show:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 Active Agents Detected
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Agent: agent-term1 | Track A: Frontend | Since: 5 min ago
+  → Working on: "Implement login form"
+
+Agent: agent-term2 | Track B: API | Since: 3 min ago
+  → Working on: "Create auth endpoint"
+
+Available tracks: Track C (unclaimed)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 ### 1. Gather Context
 
@@ -131,21 +155,35 @@ How do you want to run these?"
 
 #### Option A: Parallel (subagents)
 
-Spawn background agents using the Task tool:
+Register and spawn background agents using the Task tool:
+
+```bash
+# Generate agent IDs
+AGENT_A="agent-$(hostname)-$(date +%s)-a"
+AGENT_B="agent-$(hostname)-$(date +%s)-b"
+
+# Register both agents
+bash .claude/scripts/todo-coordinator.sh register "$AGENT_A" "Track A"
+bash .claude/scripts/todo-coordinator.sh register "$AGENT_B" "Track B"
+```
+
+Then spawn with coordination instructions:
 
 ```
-# Spawn both tracks as background agents
 Task(
   subagent_type: "general-purpose",
   description: "Track A: {name}",
-  prompt: "Complete these tasks from TODO.md Track A: {task_list}. Output TRACK_A_COMPLETE when done.",
-  run_in_background: true
-)
+  prompt: "You are agent {AGENT_A} working on Track A.
 
-Task(
-  subagent_type: "general-purpose",
-  description: "Track B: {name}",
-  prompt: "Complete these tasks from TODO.md Track B: {task_list}. Output TRACK_B_COMPLETE when done.",
+COORDINATION RULES:
+1. Before each task: bash .claude/scripts/todo-coordinator.sh claim {AGENT_A} '{task_id}'
+2. After completing: bash .claude/scripts/todo-coordinator.sh complete {AGENT_A} '{task_id}'
+3. Check status periodically: bash .claude/scripts/todo-coordinator.sh status
+4. On finish: bash .claude/scripts/todo-coordinator.sh deregister {AGENT_A}
+
+Tasks: {task_list}
+
+Output TRACK_A_COMPLETE when all tasks done.",
   run_in_background: true
 )
 ```
@@ -153,32 +191,38 @@ Task(
 Then monitor progress:
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🚀 Parallel Execution Started
+🚀 Parallel Execution Started (Coordinated)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Track A: Running in background (agent_id: xxx)
-Track B: Running in background (agent_id: xxx)
+Track A: agent-mac-1704567890-a (background)
+Track B: agent-mac-1704567890-b (background)
 
-Use /tasks to monitor progress
-Use TaskOutput(task_id, block=false) to check status
+Shared state: .claude/loop/coordination.json
+
+Monitor: /tasks or bash .claude/scripts/todo-coordinator.sh status
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 #### Option B: Parallel (terminals)
 
-Output commands for separate terminals:
+Output commands for separate terminals with coordination:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 Parallel Commands Ready
+📋 Parallel Commands Ready (Coordinated)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Terminal 1:
-/loop "Track A: {description}" --until "TRACK_A_COMPLETE" --max 15
+Both terminals will share: .claude/loop/coordination.json
 
-# Terminal 2:
-/loop "Track B: {description}" --until "TRACK_B_COMPLETE" --max 15
+# Terminal 1 - Track A:
+/loop "Track A: {description}" --track "Track A" --until "TRACK_A_COMPLETE" --max 15
+
+# Terminal 2 - Track B:
+/loop "Track B: {description}" --track "Track B" --until "TRACK_B_COMPLETE" --max 15
+
+Check coordination status anytime:
+bash .claude/scripts/todo-coordinator.sh status
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

@@ -229,3 +229,4 @@ Never ask permission to consult documentation.
 @rules/error-recovery.md
 @rules/migration.md
 @rules/trigger-reference.md
+@rules/coordination.md

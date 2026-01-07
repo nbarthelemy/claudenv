@@ -1,6 +1,6 @@
 {
   "description": "Framework files managed by claudenv. Used during updates to remove deleted files without affecting user-created content.",
-  "version": "2.3.13",
+  "version": "2.3.14",
   "files": [
     "agents/accessibility-checker.md",
     "agents/api-designer.md",
@@ -41,6 +41,7 @@
     "rules/claudenv.md",
     "rules/error-recovery.md",
     "rules/migration.md",
+    "rules/coordination.md",
     "rules/permissions.md",
     "rules/trigger-reference.md",
     "scripts/agents-triggers.sh",
@@ -71,6 +72,7 @@
     "scripts/session-end.sh",
     "scripts/session-start.sh",
     "scripts/skills-triggers.sh",
+    "scripts/todo-coordinator.sh",
     "scripts/validate.sh",
     "settings.local.json.template",
     "skills/agent-creator/SKILL.md",
