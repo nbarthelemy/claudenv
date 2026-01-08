@@ -163,6 +163,25 @@ EOF
     echo "  - Created CLAUDE.md with framework import"
 fi
 
+# Create TODO.md if it doesn't exist (check both .claude and root)
+if [ ! -f "$TARGET/TODO.md" ] && [ ! -f "./TODO.md" ]; then
+    cat > "$TARGET/TODO.md" << 'EOF'
+# Development TODO
+
+> Track progress by checking off items: `[x]`
+
+## Current Focus
+
+- [ ]
+
+## Backlog
+
+- [ ]
+
+EOF
+    echo "  - Created TODO.md"
+fi
+
 # Count what was installed
 SKILLS=$(find "$TARGET/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
 COMMANDS=$(find "$TARGET/commands" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
