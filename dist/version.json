@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "2.4.4",
+  "infrastructureVersion": "2.4.5",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-08T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "2.4.5": "Version bump to propagate TODO.md template and loop-cleanup.sh",
     "2.4.4": "Add TODO.md template to dist, add loop-cleanup.sh to manifest",
     "2.4.3": "Auto-create TODO.md in .claude/ during installation if none exists",
     "2.4.2": "Look for TODO.md in .claude/ first, then fall back to repo root",
