@@ -95,6 +95,94 @@ The orchestrator is a SKILL (runs in main context) so it CAN spawn subagents via
 
 ---
 
+## Skill Architecture (Claude Code 2.1+)
+
+Claudenv leverages advanced skill features from Claude Code 2.1:
+
+### Forked Context (`context: fork`)
+
+Heavy-analysis skills run in isolated forked contexts to prevent main context pollution:
+
+```yaml
+---
+name: orchestrator
+context: fork
+allowed-tools:
+  - Read
+  - Task
+---
+```
+
+**Skills using forked context:**
+- `orchestrator` - Complex multi-agent coordination
+- `pattern-observer` - Background pattern analysis
+- `tech-detection` - Project stack analysis
+- `meta-skill` - Technology research and skill creation
+- `agent-creator` - Specialist agent generation
+
+### Agent Delegation (`agent` field)
+
+Skills can specify which agent type should execute them:
+
+```yaml
+---
+name: frontend-design
+agent: frontend-developer
+---
+```
+
+### YAML-Style Tool Lists
+
+Cleaner frontmatter using YAML lists instead of comma-separated strings:
+
+```yaml
+allowed-tools:
+  - Read
+  - Write
+  - Bash(npm *)
+  - Bash(npx *)
+```
+
+### Skill Hooks
+
+Skills can define their own hooks that run during skill execution:
+
+```yaml
+hooks:
+  Stop:
+    - command: bash .claude/scripts/cleanup.sh
+```
+
+### One-Time Hooks (`once: true`)
+
+Session startup hooks run only once per session:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "",
+      "once": true,
+      "hooks": [{"type": "command", "command": "bash .claude/scripts/session-start.sh"}]
+    }]
+  }
+}
+```
+
+### Agent Disabling
+
+Disable specific agents via permissions:
+
+```json
+{
+  "permissions": {
+    "deny": ["Task(security-auditor)"]
+  }
+}
+```
+
+---
+
 ## Automatic Correction Capture
 
 When users correct Claude about project details, facts are automatically captured and stored.
