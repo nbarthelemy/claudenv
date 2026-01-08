@@ -4,7 +4,16 @@
 
 # Always resolve paths relative to repo root
 REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-TODO_FILE="$REPO_ROOT/.claude/TODO.md"
+
+# Look for TODO.md in .claude first, then root
+if [ -f "$REPO_ROOT/.claude/TODO.md" ]; then
+    TODO_FILE="$REPO_ROOT/.claude/TODO.md"
+elif [ -f "$REPO_ROOT/TODO.md" ]; then
+    TODO_FILE="$REPO_ROOT/TODO.md"
+else
+    TODO_FILE="$REPO_ROOT/.claude/TODO.md"  # Default location for new files
+fi
+
 STATE_FILE="$REPO_ROOT/.claude/loop/coordination.json"
 LOCK_FILE="$REPO_ROOT/.claude/loop/.coordination.lock"
 

@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "2.4.1",
+  "infrastructureVersion": "2.4.2",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-08T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "2.4.2": "Look for TODO.md in .claude/ first, then fall back to repo root",
     "2.4.1": "Fix coordination/loop scripts to resolve paths relative to git repo root instead of CWD",
     "2.4.0": "Adopt Claude Code 2.1 features: context:fork for skills, agent field, YAML-style allowed-tools, skill hooks, once:true hooks, new wildcard bash permissions",
     "2.3.14": "Add multi-agent coordination system for parallel terminal execution",
