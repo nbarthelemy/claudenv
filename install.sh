@@ -165,20 +165,7 @@ fi
 
 # Create TODO.md if it doesn't exist (check both .claude and root)
 if [ ! -f "$TARGET/TODO.md" ] && [ ! -f "./TODO.md" ]; then
-    cat > "$TARGET/TODO.md" << 'EOF'
-# Development TODO
-
-> Track progress by checking off items: `[x]`
-
-## Current Focus
-
-- [ ]
-
-## Backlog
-
-- [ ]
-
-EOF
+    cp "$DIST/TODO.md" "$TARGET/TODO.md"
     echo "  - Created TODO.md"
 fi
 
