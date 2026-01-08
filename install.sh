@@ -128,6 +128,9 @@ fi
 mkdir -p "$TARGET/logs"
 mkdir -p "$TARGET/backups"
 mkdir -p "$TARGET/loop"
+mkdir -p "$TARGET/plans"
+mkdir -p "$TARGET/rca"
+mkdir -p "$TARGET/reference"
 
 # Make scripts executable
 chmod +x "$TARGET/scripts/"*.sh 2>/dev/null || true

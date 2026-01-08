@@ -182,6 +182,42 @@
         "need an expert for"
       ],
       "auto_trigger": "During /claudenv when new technologies detected"
+    },
+
+    "spec-workflow": {
+      "keywords": [
+        "spec", "specification", "setup", "bootstrap"
+      ],
+      "phrases": [
+        "set up project",
+        "bootstrap project",
+        "create specification",
+        "project specification",
+        "initialize project",
+        "new project from scratch",
+        "start fresh project",
+        "create project spec"
+      ],
+      "note": "Triggers /spec command for full project setup"
+    },
+
+    "autopilot-workflow": {
+      "keywords": [
+        "autopilot", "autonomous", "unattended"
+      ],
+      "phrases": [
+        "complete all features",
+        "work through todo",
+        "finish everything",
+        "run autonomously",
+        "hands-off mode",
+        "complete without me",
+        "work overnight",
+        "autonomous completion",
+        "finish the todo list",
+        "process all features"
+      ],
+      "note": "Triggers /autopilot for fully autonomous feature completion"
     }
   },
 

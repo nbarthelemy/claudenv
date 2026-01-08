@@ -14,9 +14,9 @@ dist/lsp-config.json
 dist/settings.local.json
 
 # Generated at root (from testing)
-project-context.json
-SPEC.md
-lsp-config.json
+/project-context.json
+/SPEC.md
+/lsp-config.json
 
 # Autonomy state
 .autonomy-paused

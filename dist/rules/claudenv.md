@@ -8,19 +8,29 @@
 
 | Command | Description |
 |---------|-------------|
+| `/spec` | Full project setup: interview, tech detect, CLAUDE.md, TODO.md |
+| `/prime` | Load comprehensive project context (auto-runs at session start) |
+| `/feature <name>` | Plan a feature, save to `.claude/plans/` |
+| `/next` | Interactive feature workflow - pick, plan, execute with confirmations |
+| `/autopilot` | Fully autonomous feature completion from TODO.md |
+| `/execute <plan>` | Execute plan via `/loop --plan` + `/validate` |
+| `/validate` | Run stack-aware validation (lint, type-check, test, build) |
+| `/rca <issue>` | Root cause analysis for bugs |
 | `/claudenv` | Bootstrap infrastructure for current project |
 | `/interview` | Conduct project specification interview |
 | `/loop` | Start autonomous iterative development loop |
-| `/loop:status` | Check current loop progress |
-| `/loop:pause` | Pause active loop |
-| `/loop:resume` | Resume paused loop |
-| `/loop:cancel` | Stop and cancel active loop |
+| `/loop --plan <file>` | Execute structured plan file (phases/tasks) |
+| `/loop status` | Check current loop progress |
+| `/loop pause` | Pause active loop |
+| `/loop resume` | Resume paused loop |
+| `/loop cancel` | Stop and cancel active loop |
 | `/lsp` | Auto-detect and install LSP servers |
 | `/lsp:status` | Check LSP server status |
 | `/claudenv:status` | Show system overview |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn:review` | Review pending automation proposals |
 | `/reflect` | Consolidate learnings, update project knowledge |
+| `/reflect evolve` | Analyze failures and propose system improvements |
 | `/analyze-patterns` | Force pattern analysis |
 | `/skills:triggers` | List skill trigger keywords and phrases |
 | `/agents:triggers` | List agent trigger keywords and phrases |
@@ -46,12 +56,173 @@ Skills auto-invoke based on triggers in `.claude/skills/triggers.json`. See `@ru
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
+├── reference/          # Curated best practices docs (read by /prime)
+├── plans/              # Feature implementation plans (/feature output)
+├── rca/                # Root cause analysis documents (/rca output)
 ├── learning/           # Pattern observations
 ├── loop/               # Autonomous loop state & history
 ├── lsp-config.json     # Installed LSP servers (generated)
 ├── logs/               # Execution logs
 └── backups/            # Auto-backups
 ```
+
+---
+
+## PIV Workflow (Prime-Implement-Validate)
+
+A structured approach to feature development that ensures context-rich, one-pass implementation success.
+
+### Overview
+
+```
+/spec → /prime → /feature → /execute → /validate
+         │                      │
+         │                      └── calls /loop --plan + /validate
+         │
+         └── auto-runs at session start
+```
+
+**Workflow Options:**
+- **Interactive**: `/next` - Pick features, confirm each step
+- **Autonomous**: `/autopilot` - Complete all features without interaction
+
+### /spec - Project Setup
+
+Full project initialization:
+
+```bash
+/spec
+```
+
+1. Runs `/interview` for deep questioning
+2. Detects tech stack via `detect-stack.sh`
+3. Refines CLAUDE.md with project rules
+4. Extracts features from SPEC.md
+5. Populates TODO.md with features
+
+### /prime - Context Loading
+
+Runs automatically at session start. Loads:
+- Project structure and tech stack
+- Documentation (CLAUDE.md, SPEC.md, README)
+- Reference materials from `.claude/reference/`
+- Current git state and recent changes
+- Active work (TODO.md, existing plans)
+
+### /feature - Feature Planning
+
+Creates persistent implementation plans:
+
+```bash
+/feature "Add user authentication"
+```
+
+Outputs to `.claude/plans/add-user-authentication.md`:
+- Overview and user stories
+- Implementation phases with atomic tasks
+- Testing strategy
+- Validation commands
+- Acceptance criteria
+
+### /execute - Plan Execution
+
+Thin orchestrator that delegates work:
+
+```bash
+/execute .claude/plans/add-user-authentication.md
+```
+
+1. Calls `/loop --plan <file>` to execute tasks
+2. Runs `/validate` after completion
+3. Updates TODO.md on success
+
+### /next - Interactive Workflow
+
+Work through features one at a time with confirmation:
+
+```bash
+/next
+```
+
+1. Shows available features from TODO.md
+2. Creates plan if needed via `/feature`
+3. Confirms before each execution
+4. Asks "Continue to next?" after completion
+
+### /autopilot - Fully Autonomous
+
+Complete all features without interaction:
+
+```bash
+/autopilot                    # Complete all features
+/autopilot --max-features 3   # Limit to 3 features
+/autopilot --dry-run         # Show plan only
+/autopilot --pause-on-failure # Stop on first failure
+```
+
+Safety limits: 4h max time, $50 max cost, no git push, no deploy.
+
+### /validate - Stack-Aware Validation
+
+Runs appropriate checks for detected tech stack:
+
+```bash
+/validate           # Full validation
+/validate --fix     # Auto-fix lint issues
+/validate --quick   # Skip slow checks
+```
+
+Automatically runs: lint, type-check, test, build
+
+### /rca - Root Cause Analysis
+
+For bug investigation before fixing:
+
+```bash
+/rca #123                          # GitHub issue
+/rca "Login fails after reset"     # Description
+```
+
+Creates `.claude/rca/{slug}.md` with:
+- Issue summary and reproduction steps
+- Root cause identification
+- Impact assessment
+- Proposed fix strategy
+- Testing plan
+
+---
+
+## Reference Documentation
+
+Store curated best practices in `.claude/reference/`. These are read during `/prime` to provide stack-specific guidance.
+
+### Purpose
+
+Reference docs help Claude:
+- Follow framework-specific patterns
+- Avoid common pitfalls
+- Use idiomatic code
+- Understand project conventions
+
+### Suggested Files
+
+| Stack | Suggested Reference Docs |
+|-------|-------------------------|
+| **React** | `react-best-practices.md`, `state-management.md` |
+| **FastAPI** | `fastapi-best-practices.md`, `pydantic-patterns.md` |
+| **Next.js** | `nextjs-best-practices.md`, `routing-patterns.md` |
+| **Go** | `go-conventions.md`, `error-handling.md` |
+| **Testing** | `testing-strategy.md`, `e2e-patterns.md` |
+
+### Creating Reference Docs
+
+Each doc should include:
+1. Key principles
+2. Common patterns with examples
+3. Anti-patterns to avoid
+4. Project-specific conventions
+
+See `.claude/reference/README.md` for templates.
 
 ---
 

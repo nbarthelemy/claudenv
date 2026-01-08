@@ -1,264 +1,282 @@
 ---
-description: Analyze codebase, create TODO.md with prioritized tasks, and generate /loop commands
+description: Interactive feature workflow - pick feature, create plan, execute with confirmation
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
 ---
 
-# /next - Development Task Planning
+# /next - Interactive Feature Workflow
 
-Analyze the project, determine next steps, create/update `.claude/TODO.md`, and generate executable `/loop` commands with multi-agent coordination.
+Interactively work through features from TODO.md. Picks a feature, creates a plan if needed, and executes with user confirmation at each step.
+
+## Usage
+
+```
+/next                    Pick next feature and start
+/next --list            Show available features
+/next status            Show current progress
+/next complete <item>   Manually mark item complete
+```
 
 ## Process
 
-### 0. Check Coordination Status
-
-First, check if other agents are already working:
+### Step 1: Check Prerequisites
 
 ```bash
-bash .claude/scripts/todo-coordinator.sh status
+[ -f ".claude/TODO.md" ] || echo "TODO_MISSING"
+[ -f ".claude/SPEC.md" ] || echo "SPEC_MISSING"
 ```
 
-If active agents found, show:
+If TODO.md missing:
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 Active Agents Detected
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Agent: agent-term1 | Track A: Frontend | Since: 5 min ago
-  → Working on: "Implement login form"
-
-Agent: agent-term2 | Track B: API | Since: 3 min ago
-  → Working on: "Create auth endpoint"
-
-Available tracks: Track C (unclaimed)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+No TODO.md found. Run /spec first to create project specification
+and populate the feature list.
 ```
 
-### 1. Gather Context
+Output `NEXT_STARTED` marker.
 
-Read and analyze (silently):
-- `.claude/SPEC.md` - Project specification
-- `.claude/CLAUDE.md` - Project instructions
-- `.claude/project-context.json` - Tech stack
-- `.claude/TODO.md` - Existing tasks (if present)
-- `README.md` - Project overview
-- `git log --oneline -20` - Recent commits
-- `git status` - Uncommitted work
-- `git diff --stat HEAD~5` - Recent changes
+### Step 2: Parse TODO.md
 
-### 2. Discover Work Items
+Read and identify uncompleted features:
 
-Search for incomplete work:
 ```bash
-# TODOs and FIXMEs
-grep -rn "TODO\|FIXME\|XXX\|HACK" --include="*.{ts,tsx,js,jsx,py,go,rs,rb}" . 2>/dev/null | head -50
-
-# Incomplete implementations
-grep -rn "not implemented\|throw new Error\|pass  #\|unimplemented!" --include="*.{ts,tsx,js,jsx,py,go,rs,rb}" . 2>/dev/null | head -20
+# Find unchecked items in Features section
+grep -n "^- \[ \]" .claude/TODO.md
 ```
 
-Analyze for:
-- **Incomplete features** - Started but not finished
-- **Missing tests** - Code without test coverage
-- **Technical debt** - Areas needing refactoring
-- **Blocked items** - Dependencies not yet resolved
-- **Next logical steps** - Based on recent work
+Categories:
+- `- [ ]` = Available
+- `- [~]` = In progress (skip)
+- `- [x]` = Completed (skip)
+- `- [!]` = Blocked (show but warn)
 
-### 3. Present & Confirm
+### Step 3: Present Feature Selection
 
-Use AskUserQuestion to present findings:
+Use AskUserQuestion to let user choose:
 
-**Question 1: Scope**
-"I found {n} potential work items. What's the focus for this session?"
-- Current feature completion
-- Bug fixes / technical debt
-- New feature development
-- Testing / quality
-- Other (specify)
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Available Features
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Question 2: Priorities**
-Present top 5-10 items, ask user to confirm/reorder/remove.
+1. Add user authentication
+2. Create API endpoints
+3. Build dashboard UI
+4. Add email notifications
 
-**Question 3: Parallelization**
-"Which of these can be worked on independently?"
-- Show items that don't conflict (different files/modules)
-- Confirm parallel tracks
+Which feature would you like to work on?
+```
 
-### 4. Write TODO.md
+Options:
+- Feature 1 (first in list - recommended)
+- Feature 2
+- Feature 3
+- Feature 4
+- Show more / Other
 
-Create/update `.claude/TODO.md`:
+Output `FEATURE_SELECTED: {name}` marker.
+
+### Step 4: Check for Existing Plan
+
+Convert feature name to kebab-case and check for plan:
+
+```bash
+SLUG=$(echo "{feature}" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
+[ -f ".claude/plans/${SLUG}.md" ] && echo "PLAN_EXISTS"
+```
+
+### Step 5: Create Plan (if needed)
+
+If no plan exists, invoke `/feature`:
+
+```
+Creating detailed implementation plan...
+
+Skill: feature
+Args: "{selected_feature_description}"
+```
+
+Wait for plan creation. Then present:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Plan Created
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feature: {name}
+Plan: .claude/plans/{slug}.md
+
+Phases: {n}
+Tasks: {m}
+
+Would you like to:
+```
+
+Use AskUserQuestion:
+- Review the plan first
+- Proceed to execution
+- Skip this feature
+
+Output `PLAN_CREATED` marker if new plan was made.
+
+### Step 6: Mark In Progress
+
+Update TODO.md to show feature is being worked on:
 
 ```markdown
-# Development TODO
-
-> Updated: {timestamp}
-> Focus: {session_focus}
-
-## Active Tracks
-
-### Track A: {name} [PARALLEL]
-> {description} | Est: {n} iterations
-
-- [ ] P1: {task_description}
-  - Files: `path/to/file.ts`
-  - Verify: `{test_command}`
-- [ ] P2: {task_description}
-
-### Track B: {name} [PARALLEL]
-> {description} | Est: {n} iterations
-
-- [ ] P1: {task_description}
-- [ ] P2: {task_description}
-
-### Sequential: {name} [BLOCKING]
-> Must complete before parallel tracks
-
-- [ ] P0: {blocking_task}
-  - Blocks: Track A, Track B
-- [ ] P1: {next_task}
-  - Depends: above
-
-## Backlog
-- [ ] P3: {future_item}
-
-## Completed
-- [x] {date}: {item}
+- [~] {Feature name} (started {date})
 ```
 
-### 5. Present Options & Execute
+### Step 7: Confirm Execution
 
-Show the TODO.md summary, then interview about execution:
+Use AskUserQuestion:
 
-**Question 1 (if blocking tasks exist):**
-"There are blocking tasks that should run first. Start with these?"
-- Yes, run blocking tasks first
-- Skip to parallel tracks
-
-**Question 2 (if multiple parallel tracks identified):**
-"I found {n} tracks that can run in parallel:
-- Track A: {description} ({n} tasks)
-- Track B: {description} ({n} tasks)
-
-How do you want to run these?"
-- **Parallel (subagents)** - Spawn background agents for each track
-- **Parallel (terminals)** - Output commands for separate terminals
-- **Sequential** - Run one after the other
-- **Pick one** - Choose a single track
-
-**Question 3 (if parallel declined or single track):**
-"Which track to start?"
-- {Track A name}
-- {Track B name}
-- {Other task}
-- Just show commands (don't run)
-
-### 6. Execute Based on Selection
-
-#### Option A: Parallel (subagents)
-
-Register and spawn background agents using the Task tool:
-
-```bash
-# Generate agent IDs
-AGENT_A="agent-$(hostname)-$(date +%s)-a"
-AGENT_B="agent-$(hostname)-$(date +%s)-b"
-
-# Register both agents
-bash .claude/scripts/todo-coordinator.sh register "$AGENT_A" "Track A"
-bash .claude/scripts/todo-coordinator.sh register "$AGENT_B" "Track B"
-```
-
-Then spawn with coordination instructions:
-
-```
-Task(
-  subagent_type: "general-purpose",
-  description: "Track A: {name}",
-  prompt: "You are agent {AGENT_A} working on Track A.
-
-COORDINATION RULES:
-1. Before each task: bash .claude/scripts/todo-coordinator.sh claim {AGENT_A} '{task_id}'
-2. After completing: bash .claude/scripts/todo-coordinator.sh complete {AGENT_A} '{task_id}'
-3. Check status periodically: bash .claude/scripts/todo-coordinator.sh status
-4. On finish: bash .claude/scripts/todo-coordinator.sh deregister {AGENT_A}
-
-Tasks: {task_list}
-
-Output TRACK_A_COMPLETE when all tasks done.",
-  run_in_background: true
-)
-```
-
-Then monitor progress:
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🚀 Parallel Execution Started (Coordinated)
+🚀 Ready to Execute
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Track A: agent-mac-1704567890-a (background)
-Track B: agent-mac-1704567890-b (background)
+Feature: {name}
+Plan: .claude/plans/{slug}.md
 
-Shared state: .claude/loop/coordination.json
+This will:
+  • Execute {n} tasks across {m} phases
+  • Run validation after completion
+  • Update TODO.md on success
 
-Monitor: /tasks or bash .claude/scripts/todo-coordinator.sh status
+Proceed with execution?
+```
+
+Options:
+- Yes, start execution
+- Show plan details first
+- Skip this feature
+- Cancel
+
+### Step 8: Execute Plan
+
+Invoke `/execute`:
+
+```
+Skill: execute
+Args: ".claude/plans/{slug}.md"
+```
+
+Wait for execution to complete.
+
+Output `EXECUTION_STARTED` marker.
+
+### Step 9: Post-Execution
+
+After `/execute` completes:
+
+If successful:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Feature Complete: {name}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TODO.md: Updated ✓
+Plan: Marked complete ✓
+
+Remaining features: {n}
+```
+
+Output `FEATURE_COMPLETE` marker.
+
+Use AskUserQuestion:
+
+```
+Continue to next feature?
+```
+
+Options:
+- Yes, show me the next feature
+- No, I'm done for now
+
+If user says Yes, loop back to Step 2.
+
+If failed:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ Feature Needs Attention: {name}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Some issues need to be resolved.
+See validation output above.
+
+Options:
+  • Fix issues and run /validate
+  • Resume with /execute:resume
+  • Skip and move to next feature
+```
+
+### Step 10: Session End
+
+When user chooses to stop:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Session Summary
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Features completed: {n}
+Features remaining: {m}
+
+To continue later:
+  /next         - Resume interactive workflow
+  /autopilot    - Complete remaining autonomously
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-#### Option B: Parallel (terminals)
-
-Output commands for separate terminals with coordination:
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 Parallel Commands Ready (Coordinated)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Both terminals will share: .claude/loop/coordination.json
-
-# Terminal 1 - Track A:
-/loop "Track A: {description}" --track "Track A" --until "TRACK_A_COMPLETE" --max 15
-
-# Terminal 2 - Track B:
-/loop "Track B: {description}" --track "Track B" --until "TRACK_B_COMPLETE" --max 15
-
-Check coordination status anytime:
-bash .claude/scripts/todo-coordinator.sh status
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-#### Option C: Sequential / Single Track
-
-Invoke /loop directly using the Skill tool:
-
-```
-Skill: loop
-Args: "{task_description}" --until "{condition}" --max {n}
-```
+Output `NEXT_STOPPED` marker.
 
 ## Subcommands
 
+### /next --list
+Show all features from TODO.md without starting workflow.
+
 ### /next status
-Show TODO.md progress summary without re-analyzing.
+Show progress summary:
+- Features completed
+- Features in progress
+- Features remaining
+- Current plan status
 
-### /next refresh
-Re-analyze and update TODO.md, skip confirmation for unchanged items.
+### /next complete <item>
+Manually mark a TODO item as complete with timestamp.
 
-### /next complete {task}
-Mark a task complete, move to Completed section with timestamp.
-
-## Loop Integration
-
-Generated `/loop` commands should:
-- Use `--verify` with actual test commands when available
-- Use `--until` with detectable completion markers
-- Set reasonable `--max` based on task complexity (5-20)
-- Include `--max-time` for long-running tasks
+### /next skip <item>
+Skip a feature (mark with reason).
 
 ## Markers
 
-When completing tasks, output these markers for loop detection:
-- `TRACK_A_COMPLETE` - Track A finished
-- `TRACK_B_COMPLETE` - Track B finished
-- `ALL_TASKS_COMPLETE` - Everything done
-- `BLOCKED: {reason}` - Cannot proceed, needs input
+- `NEXT_STARTED` - Workflow began
+- `FEATURE_SELECTED: {name}` - User chose a feature
+- `PLAN_CREATED` - New plan was generated
+- `EXECUTION_STARTED` - Started /execute
+- `FEATURE_COMPLETE` - Feature done successfully
+- `FEATURE_FAILED` - Feature had issues
+- `NEXT_STOPPED` - User ended session
+
+## Integration
+
+```
+/spec → Creates TODO.md with features
+    ↓
+/next (interactive loop)
+    ├── Select feature from TODO.md
+    ├── /feature (create plan if needed)
+    ├── Confirm with user
+    ├── /execute (runs /loop + /validate)
+    ├── Update TODO.md
+    └── Ask: Continue? → loop or stop
+
+/autopilot → Autonomous version (no confirmations)
+```
+
+## Tips
+
+- Run `/spec` first to populate TODO.md
+- Features are not pre-prioritized - you choose the order
+- Plans are reusable - if execution fails, fix and run again
+- Use `/autopilot` for hands-off completion of remaining features

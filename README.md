@@ -76,15 +76,24 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 
 | Command | Description |
 |---------|-------------|
+| `/spec` | Full project setup: interview, tech detect, CLAUDE.md, TODO.md |
+| `/prime` | Load comprehensive project context (auto-runs at session start) |
+| `/feature <name>` | Plan a feature, save to `.claude/plans/` |
+| `/next` | Interactive feature workflow - pick, plan, execute with confirmations |
+| `/autopilot` | Fully autonomous feature completion from TODO.md |
+| `/execute <plan>` | Execute plan via `/loop --plan` + `/validate` |
+| `/validate` | Stack-aware validation: lint, type-check, test, build |
+| `/rca <issue>` | Root cause analysis for bugs |
 | `/claudenv` | Bootstrap infrastructure for current project |
 | `/claudenv:admin` | Admin commands: status, update, audit, export, import, mcp |
 | `/interview` | Conduct project specification interview |
-| `/next` | Analyze codebase, create TODO.md, and execute /loop commands |
 | `/loop` | Autonomous loop: start, status, pause, resume, cancel, history |
+| `/loop --plan <file>` | Execute structured plan file (phases/tasks) |
 | `/lsp` | LSP management: install, status |
 | `/health:check` | Verify infrastructure integrity |
 | `/learn` | Learning system: review, implement |
 | `/reflect` | Consolidate learnings, update project knowledge |
+| `/reflect evolve` | Analyze failures and propose system improvements |
 | `/analyze-patterns` | Force pattern analysis |
 | `/triggers` | List skill and agent triggers |
 | `/backup` | Backup management: create, restore, list |
@@ -241,46 +250,58 @@ Core philosophy:
 - "Specific over vague — skip insights that aren't actionable"
 - "Accurate over comprehensive — wrong info is worse than missing"
 
-### 4. Task Planning (`/next`)
+### 4. PIV Workflow (Prime-Implement-Validate)
 
-The `/next` command analyzes your codebase and creates actionable development plans:
+A structured approach to feature development:
 
+```
+/spec → /prime → /feature → /execute → /validate
+         │                      │
+         │                      └── calls /loop --plan + /validate
+         │
+         └── auto-runs at session start
+```
+
+**Workflow Options:**
+- **Interactive**: `/next` - Pick features, confirm each step
+- **Autonomous**: `/autopilot` - Complete all features without interaction
+
+**`/spec` - Project Setup:**
 ```bash
-/next              # Full analysis, create TODO.md, interview & execute
-/next status       # Show TODO.md progress
-/next refresh      # Re-analyze without full confirmation
-/next complete X   # Mark task X complete
+/spec    # Full setup: interview → tech detect → CLAUDE.md → TODO.md
+```
+Creates prioritized TODO.md with plan file references:
+- P0 (foundation) → P1 (core) → P2 (enhancements)
+- Each feature links to `.claude/plans/{feature-slug}.md`
+
+**`/feature` - Feature Planning:**
+```bash
+/feature "Add user authentication"
+# Creates .claude/plans/add-user-authentication.md
 ```
 
-**What it does:**
-1. Gathers context (SPEC.md, git history, recent changes)
-2. Discovers work items (TODOs, FIXMEs, incomplete implementations)
-3. Identifies parallel development opportunities
-4. Creates `.claude/TODO.md` with prioritized, grouped tasks
-5. Interviews you about execution preferences
-6. Executes selected `/loop` command
-
-**Parallel Execution Options:**
-- **Subagents** - Spawn background agents for each track (monitor with `/tasks`)
-- **Terminals** - Output commands for separate terminal windows
-- **Sequential** - Run tracks one after another
-- **Single** - Pick one track to focus on
-
-**TODO.md Structure:**
-```markdown
-## Active Tracks
-
-### Track A: Frontend [PARALLEL]
-- [ ] P1: Implement login form
-- [ ] P2: Add validation
-
-### Track B: API [PARALLEL]
-- [ ] P1: Create auth endpoint
-- [ ] P2: Add rate limiting
-
-### Sequential: Database [BLOCKING]
-- [ ] P0: Run migrations (blocks: Track A, Track B)
+**`/execute` - Plan Execution:**
+```bash
+/execute .claude/plans/add-user-authentication.md
+# Runs /loop --plan + /validate, updates TODO.md
 ```
+
+**`/next` - Interactive Workflow:**
+```bash
+/next              # Pick feature, create plan, execute with confirmation
+/next --list       # Show available features
+/next status       # Show progress
+```
+
+**`/autopilot` - Fully Autonomous:**
+```bash
+/autopilot                    # Complete all features
+/autopilot --max-features 3   # Limit to 3 features
+/autopilot --dry-run         # Show plan only
+/autopilot --pause-on-failure # Stop on first failure
+```
+
+Safety limits: 4h max time, $50 max cost, no git push, no deploy.
 
 ### 5. Autonomous Loops (`/loop`)
 
@@ -290,36 +311,41 @@ For persistent, iterative development:
 # Basic loop - iterate until condition met
 /loop "Fix all TypeScript errors" --until "Found 0 errors" --max 10
 
-# Test-driven development loop
-/loop "Implement user auth" --mode tdd --verify "npm test" --until-exit 0
+# Plan-based execution
+/loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE" --max 30
 
-# Overnight build with limits
-/loop "Build complete API" --until "COMPLETE" --max 50 --max-time 8h --max-cost $20
+# Test-driven development loop
+/loop "Implement user auth" --verify "npm test" --until-exit 0
 ```
 
+**Plan Mode (`--plan`):**
+```bash
+/loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE"
+/loop --plan .claude/plans/feature.md --validate-after-phase
+```
+
+Executes structured plans with phases and tasks, outputs markers:
+- `TASK_COMPLETE: {id}` - Task done
+- `PHASE_COMPLETE: {name}` - Phase done
+- `PLAN_COMPLETE` - All phases done
+
 **Completion Conditions:**
-- `--until "<text>"` - Exit when output contains exact phrase
-- `--until-exit <code>` - Exit when verification command returns code
-- `--until-regex "<pattern>"` - Exit when output matches regex
+- `--until "<text>"` - Exit when output contains phrase
+- `--until-exit <code>` - Exit when verify command returns code
 
 **Safety Limits:**
 - `--max <n>` - Maximum iterations (default: 20)
 - `--max-time <duration>` - Maximum time (default: 2h)
 - `--max-cost <amount>` - Maximum estimated cost
 
-**Loop Modes:**
-- `--mode standard` - Basic iteration (default)
-- `--mode tdd` - Test-driven development
-- `--mode refine` - Quality refinement
-
 **Loop Control:**
-- `/loop:status` - Check progress
-- `/loop:pause` - Pause with checkpoint
-- `/loop:resume` - Resume from checkpoint
-- `/loop:cancel` - Stop and archive
-- `/loop:history` - View past loops
+- `/loop status` - Check progress
+- `/loop pause` - Pause with checkpoint
+- `/loop resume` - Resume from checkpoint
+- `/loop cancel` - Stop and archive
+- `/loop history` - View past loops
 
-### 5. LSP Code Intelligence
+### 6. LSP Code Intelligence
 
 Language servers are **automatically installed** during `/claudenv` and when new file types are detected.
 
@@ -363,7 +389,7 @@ outgoingCalls     - Find what this function calls
 - `/lsp` - Manually trigger LSP detection
 - `/lsp:status` - Check installed servers
 
-### 6. MCP Server Management
+### 7. MCP Server Management
 
 Claudenv can detect and install MCP (Model Context Protocol) servers referenced in your project settings.
 
@@ -389,7 +415,7 @@ Claudenv can detect and install MCP (Model Context Protocol) servers referenced 
 - `/claudenv:mcp list` - List installed and referenced MCPs
 - `/claudenv:mcp install <name>` - Install a specific MCP server
 
-### 7. Subagent Orchestration
+### 8. Subagent Orchestration
 
 Claude automatically spawns specialist subagents for complex parallel tasks:
 
@@ -419,7 +445,7 @@ During `/claudenv`, the framework automatically creates specialist agents for yo
 
 **Key constraint:** Subagents cannot spawn other subagents (flat hierarchy). The orchestrator is a SKILL running in main context, enabling it to spawn agents.
 
-### 8. Self-Extension
+### 9. Self-Extension
 
 When encountering unfamiliar technology:
 1. Meta-agent researches documentation
@@ -487,6 +513,21 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.6.0
+- **Added:** `/spec` command - Full project setup with prioritized TODO.md and plan file scaffolding
+- **Added:** `/autopilot` command - Fully autonomous feature completion with safety limits (4h max, $50 max)
+- **Added:** `/loop --plan` flag - Structured plan execution with phases/tasks and markers
+- **Added:** `/reflect evolve` mode - Analyze failures and propose system improvements
+- **Changed:** `/execute` refactored to thin orchestrator (calls `/loop --plan` + `/validate`)
+- **Changed:** `/next` rewritten for interactive feature workflow with confirmations
+- **Added:** Feature prioritization (P0/P1/P2) with plan file references in TODO.md
+- **Added:** `autopilot-manager.sh` script for autopilot state management
+- **Added:** Plan state tracking in `.claude/loop/plan-state.json`
+
+### v2.5.0
+- **Added:** PIV workflow: `/prime`, `/feature`, `/execute`, `/validate`, `/rca` commands
+- **Added:** `.claude/reference/` for curated docs, `.claude/plans/` and `.claude/rca/` for artifacts
 
 ### v2.3.13
 - **Added:** `/next` command for task planning and parallel execution
