@@ -2,9 +2,11 @@
 # TODO Coordinator - Shared state for parallel agent coordination
 # Manages task claiming, status tracking, and conflict prevention
 
-TODO_FILE=".claude/TODO.md"
-STATE_FILE=".claude/loop/coordination.json"
-LOCK_FILE=".claude/loop/.coordination.lock"
+# Always resolve paths relative to repo root
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+TODO_FILE="$REPO_ROOT/.claude/TODO.md"
+STATE_FILE="$REPO_ROOT/.claude/loop/coordination.json"
+LOCK_FILE="$REPO_ROOT/.claude/loop/.coordination.lock"
 
 # Initialize state file if missing
 init_state() {

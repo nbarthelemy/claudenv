@@ -4,7 +4,10 @@
 
 set -e
 
-LOOP_DIR=".claude/loop"
+# Always resolve paths relative to repo root
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+
+LOOP_DIR="$REPO_ROOT/.claude/loop"
 STATE_FILE="$LOOP_DIR/state.json"
 HISTORY_DIR="$LOOP_DIR/history"
 CHECKPOINTS_DIR="$LOOP_DIR/checkpoints"

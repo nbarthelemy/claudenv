@@ -2,12 +2,15 @@
 # Loop Cleanup Script
 # Called when autonomous-loop skill stops (via skill hook)
 
+# Always resolve paths relative to repo root
+REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+
 # Exit gracefully if not in a project with claudenv
-if [ ! -d ".claude" ]; then
+if [ ! -d "$REPO_ROOT/.claude" ]; then
     exit 0
 fi
 
-LOOP_DIR=".claude/loop"
+LOOP_DIR="$REPO_ROOT/.claude/loop"
 STATE_FILE="$LOOP_DIR/state.json"
 
 # Check if loop state exists
