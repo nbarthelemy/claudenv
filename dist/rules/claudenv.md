@@ -16,6 +16,7 @@
 | `/execute <plan>` | Execute plan via `/loop --plan` + `/validate` |
 | `/validate` | Run stack-aware validation (lint, type-check, test, build) |
 | `/rca <issue>` | Root cause analysis for bugs |
+| `/backlog` | Send current or specified task to the backlog |
 | `/claudenv` | Bootstrap infrastructure for current project |
 | `/interview` | Conduct project specification interview |
 | `/loop` | Start autonomous iterative development loop |
@@ -65,6 +66,14 @@ Skills auto-invoke based on triggers in `.claude/skills/triggers.json`. See `@ru
 ├── logs/               # Execution logs
 └── backups/            # Auto-backups
 ```
+
+### Conventions
+
+**Timestamps**: All generated files use `YYYY-MM-DD HH:MM` format (24-hour, local time).
+- Example: `2026-01-09 14:30`
+- Applies to: SPEC.md, TODO.md, plans, RCA documents, logs
+
+**File naming**: kebab-case for generated files (e.g., `add-user-authentication.md`)
 
 ---
 
