@@ -515,6 +515,10 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v2.6.2
+- **Added:** `/docs` command - Systematic documentation review and optimization
+- **Added:** `/shipit` command - Version bump, commit, and push in one step
+
 ### v2.6.1
 - **Added:** `/backlog` command - Send current or specified task to the backlog
 - **Changed:** Standardized timestamp format to `YYYY-MM-DD HH:MM` across all generated files
