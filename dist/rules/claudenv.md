@@ -57,7 +57,7 @@ Skills auto-invoke based on triggers in `.claude/skills/triggers.json`. See `@ru
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
-├── reference/          # Curated best practices docs (read by /prime)
+├── references/          # Curated best practices docs (read by /prime)
 ├── plans/              # Feature implementation plans (/feature output)
 ├── rca/                # Root cause analysis documents (/rca output)
 ├── learning/           # Pattern observations
@@ -114,7 +114,7 @@ Full project initialization:
 Runs automatically at session start. Loads:
 - Project structure and tech stack
 - Documentation (CLAUDE.md, SPEC.md, README)
-- Reference materials from `.claude/reference/`
+- Reference materials from `.claude/references/`
 - Current git state and recent changes
 - Active work (TODO.md, existing plans)
 
@@ -203,7 +203,7 @@ Creates `.claude/rca/{slug}.md` with:
 
 ## Reference Documentation
 
-Store curated best practices in `.claude/reference/`. These are read during `/prime` to provide stack-specific guidance.
+Store curated best practices in `.claude/references/`. These are read during `/prime` to provide stack-specific guidance.
 
 ### Purpose
 
@@ -231,7 +231,7 @@ Each doc should include:
 3. Anti-patterns to avoid
 4. Project-specific conventions
 
-See `.claude/reference/README.md` for templates.
+See `.claude/references/README.md` for templates.
 
 ---
 

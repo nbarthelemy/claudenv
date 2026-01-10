@@ -33,7 +33,7 @@ Read these files (silently, don't output contents):
 
 ### 3. Read Reference Materials
 
-If `.claude/reference/` exists, read all files in that directory. These contain curated best practices for the project's tech stack.
+If `.claude/references/` exists, read all files in that directory. These contain curated best practices for the project's tech stack.
 
 ### 4. Identify Key Files
 
@@ -109,7 +109,7 @@ Current State:
 Active Work:
   - {in_progress_item or "None"}
 
-Reference Docs: {count} files in .claude/reference/
+Reference Docs: {count} files in .claude/references/
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

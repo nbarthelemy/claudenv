@@ -151,7 +151,7 @@ For regular projects with claudenv installed:
 1. `README.md`
 2. `.claude/CLAUDE.md` (if exists)
 3. `docs/**/*.md` (if docs/ exists)
-4. `.claude/reference/**/*.md` (project-specific reference docs)
+4. `.claude/references/**/*.md` (project-specific reference docs)
 5. Project-created commands, skills, agents, rules, scripts (see below)
 
 **Framework vs Project Files:**

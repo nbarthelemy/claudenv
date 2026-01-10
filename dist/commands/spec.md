@@ -68,7 +68,7 @@ CLAUDE.md appears to have significant content ({n} lines).
 Should I:
 1. Keep as-is (it's all essential)
 2. Extract architecture details to SPEC.md
-3. Extract patterns to .claude/reference/
+3. Extract patterns to .claude/references/
 4. Help me review what to keep
 ```
 
