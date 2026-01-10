@@ -90,16 +90,29 @@ Identify discrete, implementable units. Each feature should be:
 - `P1` - Core MVP features
 - `P2` - Enhancement/nice-to-have
 
-Use AskUserQuestion if priority is unclear:
+**Infer dependencies** by analyzing:
+- Explicit mentions: "requires X", "after Y is complete", "depends on Z"
+- Implicit ordering: Data models before APIs, Auth before protected features
+- Priority relationships: P1 features implicitly depend on P0 features (foundation)
+
+Common dependency patterns:
+| Feature Type | Typically Depends On |
+|--------------|---------------------|
+| API endpoints | Database schema, Auth |
+| Frontend pages | API endpoints, Auth |
+| Integrations | Core features they extend |
+| Tests | Features they test |
+
+Use AskUserQuestion if priority or dependencies are unclear:
 
 ```
 I've identified {n} features. Help me prioritize:
 
 {Feature Name}
 - Seems like: P1 (core feature)
-- Dependencies: none detected
+- Dependencies: {Database schema, User auth}
 
-Is this priority correct?
+Are these dependencies correct?
 ```
 
 ### Step 6: Create Feature Plan Files
@@ -146,17 +159,28 @@ Create/update `.claude/TODO.md`:
 
 ## P0 - Foundation
 
-- [ ] **{Feature 1}**: {description} → [plan](.claude/plans/{slug}.md)
-- [ ] **{Feature 2}**: {description} → [plan](.claude/plans/{slug}.md)
+- [ ] **Database schema**: Set up data models
+  → [plan](.claude/plans/database-schema.md)
+
+- [ ] **User auth**: JWT authentication
+  → [plan](.claude/plans/user-auth.md)
+  → depends: Database schema
 
 ## P1 - Core Features
 
-- [ ] **{Feature 3}**: {description} → [plan](.claude/plans/{slug}.md)
-- [ ] **{Feature 4}**: {description} → [plan](.claude/plans/{slug}.md)
+- [ ] **API endpoints**: REST API for core entities
+  → [plan](.claude/plans/api-endpoints.md)
+  → depends: Database schema, User auth
+
+- [ ] **Frontend pages**: Main application UI
+  → [plan](.claude/plans/frontend-pages.md)
+  → depends: API endpoints, User auth
 
 ## P2 - Enhancements
 
-- [ ] **{Feature 5}**: {description} → [plan](.claude/plans/{slug}.md)
+- [ ] **Email notifications**: Send alerts to users
+  → [plan](.claude/plans/email-notifications.md)
+  → depends: User auth
 
 ## Setup Tasks
 
@@ -170,9 +194,16 @@ Create/update `.claude/TODO.md`:
 ```
 
 **Format notes:**
-- Features link to their plan files
-- P0 features should be completed first (they may block others)
-- Use checkboxes: `[ ]` pending, `[~]` in progress, `[x]` complete
+- Features link to their plan files with `→ [plan](path)`
+- Dependencies declared with `→ depends: Feature A, Feature B`
+- P0 features are implicitly dependencies of P1 features
+- Use checkboxes: `[ ]` pending, `[~]` in progress, `[x]` complete, `[!]` blocked
+
+**Dependency rules:**
+- Features only execute when ALL dependencies are completed
+- Failed dependencies block dependent features
+- Dependency graph is parsed by `dependency-graph.sh`
+- Use `/autopilot graph` to visualize dependencies
 
 Output `FEATURES_EXTRACTED` marker.
 

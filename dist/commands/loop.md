@@ -28,7 +28,9 @@ allowed-tools: Bash, Read, Write, Edit
 | `--track "<name>"` | Track name for coordination |
 | `--agent-id "<id>"` | Agent ID (auto-generated if not provided) |
 | `--plan "<file>"` | Execute structured plan file (phases/tasks) |
-| `--validate-after-phase` | Run /validate after each phase (with --plan) |
+| `--validate-after-task` | Run fast lint check after each task (with --plan) |
+| `--validate-after-phase` | Run types+tests after each phase (with --plan) |
+| `--validate-all` | Enable all validation tiers (with --plan) |
 
 ## Actions
 
@@ -216,12 +218,35 @@ npm test
 }
 ```
 
+### Incremental Validation
+
+When validation flags are enabled, the loop runs tiered validation to catch errors early:
+
+| Tier | Flag | When | What | Time |
+|------|------|------|------|------|
+| Task | `--validate-after-task` | After each task | Lint with auto-fix | <5s |
+| Phase | `--validate-after-phase` | After each phase | Type check + affected tests | <30s |
+| All | `--validate-all` | Both tiers | Lint + types + tests | varies |
+
+Validation runs:
+```bash
+bash .claude/scripts/incremental-validate.sh task --fix   # Task tier
+bash .claude/scripts/incremental-validate.sh phase        # Phase tier
+```
+
+If validation fails, the task/phase is NOT marked complete, and error details are reported.
+
 ### Plan Mode Markers
 
 - `PLAN_STARTED` - Plan execution began
 - `TASK_COMPLETE: {task_id}` - Individual task done
+- `TASK_VALIDATION_STARTED` - Task validation begun
+- `TASK_VALIDATION_PASSED` - Task passed lint check
+- `TASK_VALIDATION_FAILED` - Task failed lint check
 - `PHASE_COMPLETE: {phase_name}` - All tasks in phase done
-- `PHASE_VALIDATION_PASSED` / `PHASE_VALIDATION_FAILED` - After phase validation
+- `PHASE_VALIDATION_STARTED` - Phase validation begun
+- `PHASE_VALIDATION_PASSED` - Phase passed type check + tests
+- `PHASE_VALIDATION_FAILED` - Phase failed validation
 - `PLAN_COMPLETE` - All phases done
 - `PLAN_BLOCKED: {reason}` - Cannot proceed
 

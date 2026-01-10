@@ -339,6 +339,7 @@ PLAN_STATE_FILE="$LOOP_DIR/plan-state.json"
 init_plan() {
     local plan_file="$1"
     local validate_after_phase="${2:-false}"
+    local validate_after_task="${3:-false}"
 
     init_dirs
 
@@ -362,13 +363,16 @@ init_plan() {
   "status": "running",
   "startedAt": "$now",
   "validateAfterPhase": $validate_after_phase,
+  "validateAfterTask": $validate_after_task,
   "currentPhase": 1,
+  "currentPhaseStartedAt": "$now",
   "currentTask": null,
   "totalPhases": $phase_count,
   "totalTasks": $task_count,
   "tasksCompleted": [],
   "phasesCompleted": [],
-  "validationResults": {}
+  "validationResults": {},
+  "validationFailures": 0
 }
 EOF
 
@@ -415,6 +419,28 @@ complete_plan_task() {
     local plan_file=$(jq -r '.planFile' "$PLAN_STATE_FILE")
     local now=$(timestamp)
 
+    # Check if task validation is enabled
+    local validate_tasks=$(jq -r '.validateAfterTask // false' "$PLAN_STATE_FILE")
+    if [ "$validate_tasks" = "true" ]; then
+        echo "TASK_VALIDATION_STARTED"
+
+        # Run task-level validation with auto-fix
+        local validation_script="$REPO_ROOT/.claude/scripts/incremental-validate.sh"
+        if [ -f "$validation_script" ]; then
+            local validation_result
+            if validation_result=$(bash "$validation_script" task --fix 2>&1); then
+                echo "TASK_VALIDATION_PASSED"
+            else
+                echo "TASK_VALIDATION_FAILED"
+                echo "$validation_result"
+                # Increment failure counter
+                jq '.validationFailures += 1' "$PLAN_STATE_FILE" > "$PLAN_STATE_FILE.tmp"
+                mv "$PLAN_STATE_FILE.tmp" "$PLAN_STATE_FILE"
+                return 1
+            fi
+        fi
+    fi
+
     # Add to completed list
     jq ".tasksCompleted += [\"$task_id\"] | .currentTask = \"$task_id\" | .lastUpdated = \"$now\"" "$PLAN_STATE_FILE" > "$PLAN_STATE_FILE.tmp"
     mv "$PLAN_STATE_FILE.tmp" "$PLAN_STATE_FILE"
@@ -441,7 +467,34 @@ complete_plan_phase() {
     local now=$(timestamp)
     local current=$(jq -r '.currentPhase' "$PLAN_STATE_FILE")
 
-    jq ".phasesCompleted += [\"$phase_name\"] | .currentPhase = $((current + 1)) | .lastUpdated = \"$now\"" "$PLAN_STATE_FILE" > "$PLAN_STATE_FILE.tmp"
+    # Check if phase validation is enabled
+    local validate_phases=$(jq -r '.validateAfterPhase // false' "$PLAN_STATE_FILE")
+    if [ "$validate_phases" = "true" ]; then
+        echo "PHASE_VALIDATION_STARTED"
+
+        # Run phase-level validation (types + tests)
+        local validation_script="$REPO_ROOT/.claude/scripts/incremental-validate.sh"
+        if [ -f "$validation_script" ]; then
+            local validation_result
+            if validation_result=$(bash "$validation_script" phase 2>&1); then
+                echo "PHASE_VALIDATION_PASSED"
+                # Record success
+                record_phase_validation "$phase_name" "true" "$validation_result"
+            else
+                echo "PHASE_VALIDATION_FAILED"
+                echo "$validation_result"
+                # Record failure
+                record_phase_validation "$phase_name" "false" "$validation_result"
+                # Increment failure counter
+                jq '.validationFailures += 1' "$PLAN_STATE_FILE" > "$PLAN_STATE_FILE.tmp"
+                mv "$PLAN_STATE_FILE.tmp" "$PLAN_STATE_FILE"
+                return 1
+            fi
+        fi
+    fi
+
+    # Update phase start time for next phase
+    jq ".phasesCompleted += [\"$phase_name\"] | .currentPhase = $((current + 1)) | .currentPhaseStartedAt = \"$now\" | .lastUpdated = \"$now\"" "$PLAN_STATE_FILE" > "$PLAN_STATE_FILE.tmp"
     mv "$PLAN_STATE_FILE.tmp" "$PLAN_STATE_FILE"
 
     echo "PHASE_COMPLETE: $phase_name"

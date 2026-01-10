@@ -100,6 +100,8 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | `/backup` | Backup management: create, restore, list |
 | `/autonomy` | Autonomy control: pause, resume |
 | `/debug` | Debug tools: hooks, agent |
+| `/docs` | Documentation review and optimization |
+| `/shipit` | Release: version bump, commit, push |
 
 ### Skills (Auto-Invoked)
 
@@ -514,6 +516,17 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v3.0.0
+- **Added:** Ultimate Autonomous Workflow for `/autopilot`
+- **Added:** Incremental validation system (task/phase/feature tiers)
+- **Added:** Git feature isolation (branch per feature with automatic rollback)
+- **Added:** Dependency graph for smart feature execution order
+- **Added:** 7 new scripts: `dependency-graph.sh`, `git-isolation-manager.sh`, `incremental-validate.sh`, `get-affected-files.sh`, `validate-task.sh`, `validate-phase.sh`
+- **Added:** Comprehensive test suite (74 tests, 100% action coverage)
+- **Added:** Coverage analyzer (`tests/run-coverage.sh`)
+- **Changed:** `/autopilot` now supports `--isolate`, `--validate-after-task`, `--validate-after-phase` flags
+- **Changed:** `/loop` now supports `--validate-after-task` and `--validate-after-phase` flags
 
 ### v2.6.4
 - **Added:** Comprehensive project analysis phase to `/docs` command

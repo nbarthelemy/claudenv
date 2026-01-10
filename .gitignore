@@ -25,6 +25,9 @@ dist/.autonomy-paused
 # Proposal tracking state (prevents duplicate proposals)
 .claude/learning/.*_proposed
 
+# Test coverage
+/coverage/
+
 # OS files
 .DS_Store
 Thumbs.db
