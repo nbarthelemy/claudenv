@@ -517,6 +517,10 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.1
+- **Added:** Extract workspace package to standalone repo
+- **Added:** Template variable substitution for generated files
+
 ### v3.0.0
 - **Added:** Ultimate Autonomous Workflow for `/autopilot`
 - **Added:** Incremental validation system (task/phase/feature tiers)
