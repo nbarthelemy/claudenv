@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "2.6.3",
+  "infrastructureVersion": "2.6.4",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
-  "lastUpdated": "2026-01-10T12:00:00Z",
+  "lastUpdated": "2026-01-10T11:15:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "2.6.4": "Add comprehensive project analysis to /docs command, distinguish framework vs project files using manifest",
     "2.6.3": "Fix /docs command to only update framework files when run from claudenv repo, fix deprecated colon syntax in docs",
     "2.6.2": "Add /docs command for documentation updates, /shipit command for releases",
     "2.6.1": "Add /backlog command to send current or specified task to backlog. Standardize timestamps to YYYY-MM-DD HH:MM format across all generated files",

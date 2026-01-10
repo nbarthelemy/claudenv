@@ -515,6 +515,12 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v2.6.4
+- **Added:** Comprehensive project analysis phase to `/docs` command
+- **Added:** Framework vs project file distinction using manifest.json
+- **Changed:** `/docs` now inventories all components before processing
+- **Changed:** Project mode shows separate counts for framework and project files
+
 ### v2.6.3
 - **Fixed:** `/docs` command now only updates framework files when run from claudenv repo
 - **Fixed:** Deprecated colon syntax in claudenv.md and README.md
