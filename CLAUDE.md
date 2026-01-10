@@ -136,7 +136,7 @@ mkdir /tmp/test-project && cd /tmp/test-project
 2. Update `README.md` changelog section
 3. Commit with descriptive message
 4. Push to main
-5. Users update via `/claudenv:update` or fresh install
+5. Users update via `/claudenv update` or fresh install
 
 ## Key Files
 

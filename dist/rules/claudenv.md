@@ -428,11 +428,11 @@ For persistent, iterative development use `/loop`:
 
 **Loop Commands:**
 - `/loop "<task>" [options]` - Start loop
-- `/loop:status` - Check progress
-- `/loop:pause` - Pause loop
-- `/loop:resume` - Resume loop
-- `/loop:cancel` - Stop loop
-- `/loop:history` - View past loops
+- `/loop status` - Check progress
+- `/loop pause` - Pause loop
+- `/loop resume` - Resume loop
+- `/loop cancel` - Stop loop
+- `/loop history` - View past loops
 
 **Completion Options:**
 - `--until "<text>"` - Exit when output contains exact phrase

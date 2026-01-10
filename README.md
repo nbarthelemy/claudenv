@@ -62,7 +62,7 @@ claudenv/
     ├── settings.json
     ├── version.json
     ├── rules/claudenv.md   # Framework instructions
-    ├── commands/           # 14 slash commands
+    ├── commands/           # 22 slash commands
     ├── skills/             # 10 auto-invoked skills
     ├── scripts/            # Automation scripts
     └── ...
@@ -84,6 +84,7 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | `/execute <plan>` | Execute plan via `/loop --plan` + `/validate` |
 | `/validate` | Stack-aware validation: lint, type-check, test, build |
 | `/rca <issue>` | Root cause analysis for bugs |
+| `/backlog` | Send current or specified task to the backlog |
 | `/claudenv` | Bootstrap infrastructure for current project |
 | `/claudenv:admin` | Admin commands: status, update, audit, export, import, mcp |
 | `/interview` | Conduct project specification interview |
@@ -150,9 +151,9 @@ your-project/
     │   ├── autonomy.md     # Autonomy definitions
     │   ├── permissions.md  # Permission matrix
     │   └── ...
-    ├── commands/           # 14 slash commands
+    ├── commands/           # 22 slash commands
     ├── skills/             # 10 auto-invoked skills
-    ├── agents/             # 12+ specialist subagents
+    ├── agents/             # 12 specialist subagents
     ├── orchestration/      # Orchestration config
     ├── scripts/            # Automation scripts
     ├── templates/          # Generation templates
@@ -507,12 +508,16 @@ Instructions for this command...
 To update an existing Claudenv installation to the latest version:
 
 ```bash
-/claudenv:update
+/claudenv update
 ```
 
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.6.1
+- **Added:** `/backlog` command - Send current or specified task to the backlog
+- **Changed:** Standardized timestamp format to `YYYY-MM-DD HH:MM` across all generated files
 
 ### v2.6.0
 - **Added:** `/spec` command - Full project setup with prioritized TODO.md and plan file scaffolding
