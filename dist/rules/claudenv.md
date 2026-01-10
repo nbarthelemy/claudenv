@@ -26,15 +26,15 @@
 | `/loop resume` | Resume paused loop |
 | `/loop cancel` | Stop and cancel active loop |
 | `/lsp` | Auto-detect and install LSP servers |
-| `/lsp:status` | Check LSP server status |
-| `/claudenv:status` | Show system overview |
-| `/health:check` | Verify infrastructure integrity |
-| `/learn:review` | Review pending automation proposals |
+| `/lsp status` | Check LSP server status |
+| `/claudenv status` | Show system overview |
+| `/health check` | Verify infrastructure integrity |
+| `/learn review` | Review pending automation proposals |
 | `/reflect` | Consolidate learnings, update project knowledge |
 | `/reflect evolve` | Analyze failures and propose system improvements |
 | `/analyze-patterns` | Force pattern analysis |
-| `/skills:triggers` | List skill trigger keywords and phrases |
-| `/agents:triggers` | List agent trigger keywords and phrases |
+| `/triggers skills` | List skill trigger keywords and phrases |
+| `/triggers agents` | List agent trigger keywords and phrases |
 
 ### Skills (Auto-Invoked)
 
@@ -462,7 +462,7 @@ Language servers are **automatically installed** during `/claudenv` and when new
 
 **Commands:**
 - `/lsp` - Manually trigger LSP detection and installation
-- `/lsp:status` - Check which servers are installed
+- `/lsp status` - Check which servers are installed
 
 LSP is preferred over grep/search for code navigation - it understands code semantically.
 

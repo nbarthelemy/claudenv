@@ -5,18 +5,21 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 # /docs - Documentation Updater
 
-Systematically review and optimize documentation files one at a time.
+Systematically review and optimize documentation files.
 
-## Process
+## Scope Detection
 
-Process each documentation file sequentially. For each file:
+**First, determine the scope:**
 
-1. **Read** the file and count lines
-2. **Check** for issues (see rules below)
-3. **Edit** to fix issues found
-4. **Report** what changed
+1. Check if `dist/rules/claudenv.md` exists (indicates claudenv repo itself)
+2. If YES → Process **Framework Files** (full list below)
+3. If NO → Process **Project Files** only (README.md, docs/, CLAUDE.md)
 
-## Files to Process (in order)
+## Files to Process
+
+### Framework Files (claudenv repo only)
+
+Only process these when running from the claudenv repository itself:
 
 1. `dist/rules/autonomy.md`
 2. `dist/rules/permissions.md`
@@ -27,6 +30,25 @@ Process each documentation file sequentially. For each file:
 7. `dist/rules/claudenv.md`
 8. `README.md`
 
+### Project Files (user projects)
+
+For regular projects with claudenv installed:
+
+1. `README.md`
+2. `.claude/CLAUDE.md` (if exists)
+3. `docs/**/*.md` (if docs/ exists)
+
+**Do NOT modify** files in `.claude/rules/` or `.claude/skills/` - these are framework files.
+
+## Process
+
+For each file:
+
+1. **Read** the file and count lines
+2. **Check** for issues (see rules below)
+3. **Edit** to fix issues found
+4. **Report** what changed
+
 ## Optimization Rules
 
 ### 1. Size Limits
@@ -35,6 +57,7 @@ Process each documentation file sequentially. For each file:
 |-----------|---------|-----|
 | Rule files | 200 lines | 300 lines |
 | README.md | 700 lines | 800 lines |
+| Other docs | 500 lines | 700 lines |
 
 If over warning threshold: Remove redundant content.
 If over max: Suggest splitting.
@@ -45,7 +68,7 @@ Fix deprecated colon syntax → space syntax:
 - `/cmd:action` → `/cmd action`
 - `Bash(npm:*)` → `Bash(npm *)`
 
-### 3. Accuracy
+### 3. Accuracy (Framework Mode Only)
 
 **For README.md**, verify and update:
 - Command count in "# XX slash commands" matches `ls dist/commands/*.md | wc -l`
@@ -65,12 +88,17 @@ Remove content that is:
 
 ### 5. Self-Contained
 
-Each rule file should:
+Each doc file should:
 - State its purpose in the first paragraph
 - Not require reading other files to understand basics
-- Use `@rules/filename.md` for detailed cross-references
 
 ## Output Format
+
+Start with scope detection:
+
+```
+Scope: {Framework Mode | Project Mode}
+```
 
 After processing each file, report:
 
@@ -91,7 +119,7 @@ Summary: {n} files processed, {m} updated
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-## trigger-reference.md Regeneration
+## trigger-reference.md Regeneration (Framework Mode Only)
 
 When processing trigger-reference.md:
 

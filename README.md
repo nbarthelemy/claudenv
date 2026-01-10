@@ -62,7 +62,7 @@ claudenv/
     ├── settings.json
     ├── version.json
     ├── rules/claudenv.md   # Framework instructions
-    ├── commands/           # 22 slash commands
+    ├── commands/           # 24 slash commands
     ├── skills/             # 10 auto-invoked skills
     ├── scripts/            # Automation scripts
     └── ...
@@ -86,12 +86,12 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 | `/rca <issue>` | Root cause analysis for bugs |
 | `/backlog` | Send current or specified task to the backlog |
 | `/claudenv` | Bootstrap infrastructure for current project |
-| `/claudenv:admin` | Admin commands: status, update, audit, export, import, mcp |
+| `/claudenv admin` | Admin commands: status, update, audit, export, import, mcp |
 | `/interview` | Conduct project specification interview |
 | `/loop` | Autonomous loop: start, status, pause, resume, cancel, history |
 | `/loop --plan <file>` | Execute structured plan file (phases/tasks) |
 | `/lsp` | LSP management: install, status |
-| `/health:check` | Verify infrastructure integrity |
+| `/health check` | Verify infrastructure integrity |
 | `/learn` | Learning system: review, implement |
 | `/reflect` | Consolidate learnings, update project knowledge |
 | `/reflect evolve` | Analyze failures and propose system improvements |
@@ -151,7 +151,7 @@ your-project/
     │   ├── autonomy.md     # Autonomy definitions
     │   ├── permissions.md  # Permission matrix
     │   └── ...
-    ├── commands/           # 22 slash commands
+    ├── commands/           # 24 slash commands
     ├── skills/             # 10 auto-invoked skills
     ├── agents/             # 12 specialist subagents
     ├── orchestration/      # Orchestration config
@@ -388,7 +388,7 @@ outgoingCalls     - Find what this function calls
 
 **Commands:**
 - `/lsp` - Manually trigger LSP detection
-- `/lsp:status` - Check installed servers
+- `/lsp status` - Check installed servers
 
 ### 7. MCP Server Management
 
@@ -412,9 +412,9 @@ Claudenv can detect and install MCP (Model Context Protocol) servers referenced 
 - `claude-in-chrome` - Chrome extension (install from claude.ai/chrome)
 
 **Commands:**
-- `/claudenv:mcp` - Auto-detect and install missing MCPs
-- `/claudenv:mcp list` - List installed and referenced MCPs
-- `/claudenv:mcp install <name>` - Install a specific MCP server
+- `/claudenv mcp` - Auto-detect and install missing MCPs
+- `/claudenv mcp list` - List installed and referenced MCPs
+- `/claudenv mcp install <name>` - Install a specific MCP server
 
 ### 8. Subagent Orchestration
 
@@ -463,7 +463,7 @@ Create `.claude/settings.local.json` for personal settings (gitignored):
 ```json
 {
   "permissions": {
-    "allow": ["Bash(custom-command:*)"],
+    "allow": ["Bash(custom-command *)"],
     "deny": []
   },
   "env": {
@@ -514,6 +514,10 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v2.6.3
+- **Fixed:** `/docs` command now only updates framework files when run from claudenv repo
+- **Fixed:** Deprecated colon syntax in claudenv.md and README.md
 
 ### v2.6.2
 - **Added:** `/docs` command - Systematic documentation review and optimization
@@ -668,7 +672,7 @@ Contributions welcome! Please:
 2. Create a feature branch
 3. Make changes in `dist/` (distributable content)
 4. Test locally using symlinks in `.claude/`
-5. Run `/health:check` to validate
+5. Run `/health check` to validate
 6. Submit a pull request
 
 ## License
