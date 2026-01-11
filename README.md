@@ -504,7 +504,7 @@ Create `.claude/settings.local.json` for personal settings (gitignored):
 
 ### Adding Skills
 
-Create `.claude/skills/my-skill/SKILL.md`:
+Create `.claude/skills/workspace/my-skill/SKILL.md`:
 
 ```markdown
 ---

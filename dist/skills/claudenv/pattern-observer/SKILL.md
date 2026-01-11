@@ -297,7 +297,7 @@ Detect when tasks would benefit from specialist subagents:
 - `.claude/CLAUDE.md` - Project facts from corrections (## Project Facts section)
 
 ### Auto-Created
-- `.claude/skills/[name]/SKILL.md` - New skills
+- `.claude/skills/workspace/[name]/SKILL.md` - New skills
 - `.claude/agents/[name].md` - New specialist agents
 - `.claude/commands/[name].md` - New commands
 - Hook configurations in `settings.json`

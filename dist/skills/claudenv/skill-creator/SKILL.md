@@ -50,7 +50,7 @@ skill-name/
 
 Run the init script:
 ```bash
-python .claude/skills/skill-creator/scripts/init_skill.py <name> --path .claude/skills
+python .claude/skills/claudenv/skill-creator/scripts/init_skill.py <name> --path .claude/skills/workspace
 ```
 
 ### Step 2: Edit SKILL.md
@@ -74,13 +74,13 @@ python .claude/skills/skill-creator/scripts/init_skill.py <name> --path .claude/
 ### Step 4: Validate
 
 ```bash
-python .claude/skills/skill-creator/scripts/quick_validate.py .claude/skills/<name>
+python .claude/skills/claudenv/skill-creator/scripts/quick_validate.py .claude/skills/workspace/<name>
 ```
 
 ### Step 5: Package (optional)
 
 ```bash
-python .claude/skills/skill-creator/scripts/package_skill.py .claude/skills/<name>
+python .claude/skills/claudenv/skill-creator/scripts/package_skill.py .claude/skills/workspace/<name>
 ```
 
 Creates a distributable `.skill` file.

@@ -121,25 +121,29 @@ check "backups/ exists" \
 echo ""
 echo "## Skills"
 
-SKILL_COUNT=$(find -L .claude/skills -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+SKILL_COUNT=$(find -L .claude/skills/claudenv .claude/skills/workspace -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
 echo "   Found: $SKILL_COUNT skills"
 
-for skill_dir in .claude/skills/*/; do
-    if [ -d "$skill_dir" ]; then
-        skill_name=$(basename "$skill_dir")
-        if [ -f "${skill_dir}SKILL.md" ]; then
-            # Check frontmatter
-            if head -1 "${skill_dir}SKILL.md" | grep -q "^---"; then
-                echo "   ✅ $skill_name"
-                PASSED=$((PASSED + 1))
-            else
-                echo "   ⚠️  $skill_name - missing frontmatter"
-                WARNINGS=$((WARNINGS + 1))
+for namespace in claudenv workspace; do
+    if [ -d ".claude/skills/$namespace" ]; then
+        for skill_dir in .claude/skills/$namespace/*/; do
+            if [ -d "$skill_dir" ]; then
+                skill_name=$(basename "$skill_dir")
+                if [ -f "${skill_dir}SKILL.md" ]; then
+                    # Check frontmatter
+                    if head -1 "${skill_dir}SKILL.md" | grep -q "^---"; then
+                        echo "   ✅ $namespace:$skill_name"
+                        PASSED=$((PASSED + 1))
+                    else
+                        echo "   ⚠️  $namespace:$skill_name - missing frontmatter"
+                        WARNINGS=$((WARNINGS + 1))
+                    fi
+                else
+                    echo "   ❌ $namespace:$skill_name - missing SKILL.md"
+                    ERRORS=$((ERRORS + 1))
+                fi
             fi
-        else
-            echo "   ❌ $skill_name - missing SKILL.md"
-            ERRORS=$((ERRORS + 1))
-        fi
+        done
     fi
 done
 

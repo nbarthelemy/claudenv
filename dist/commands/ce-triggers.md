@@ -17,7 +17,7 @@ allowed-tools: Bash
 
 ### skills
 Run: `bash .claude/scripts/skills-triggers.sh`
-Shows all skills with keywords and phrases from `.claude/skills/triggers.json`
+Shows all skills with keywords and phrases from `.claude/skills/claudenv/triggers.json`
 
 ### agents
 Run: `bash .claude/scripts/agents-triggers.sh`

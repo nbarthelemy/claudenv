@@ -149,7 +149,7 @@ mkdir /tmp/test-project && cd /tmp/test-project
 | `dist/settings.json` | Default permissions matrix |
 | `dist/scripts/detect-stack.sh` | Tech detection (50+ technologies) |
 | `install.sh` | Smart installer |
-| `dist/skills/skill-creator/` | Scaffolds new skills |
+| `dist/skills/claudenv/skill-creator/` | Scaffolds new skills |
 
 ## Do Without Asking
 

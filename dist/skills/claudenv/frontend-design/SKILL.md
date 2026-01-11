@@ -372,9 +372,9 @@ All frontend code must:
 
 ## Documentation References
 
-- @.claude/skills/frontend-design/design-principles.md
-- @.claude/skills/frontend-design/tailwind-patterns.md
-- @.claude/skills/frontend-design/animation-library.md
+- @.claude/skills/claudenv/frontend-design/references/design-principles.md
+- @.claude/skills/claudenv/frontend-design/references/tailwind-patterns.md
+- @.claude/skills/claudenv/frontend-design/references/animation-library.md
 
 ## Delegation
 

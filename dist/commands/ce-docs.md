@@ -29,24 +29,19 @@ ls dist/rules/*.md 2>/dev/null
 **Project Mode** (uses `.claude/`, separates framework vs project files):
 
 ```bash
-# Load manifest to identify framework files
-MANIFEST=$(cat .claude/manifest.json 2>/dev/null)
+# Framework (claudenv namespace)
+FRAMEWORK_SKILLS=$(ls -d .claude/skills/claudenv/*/ 2>/dev/null | wc -l)
 
-# All files in .claude/
-ALL_COMMANDS=$(ls .claude/commands/*.md 2>/dev/null | sed 's|.claude/||')
-ALL_SKILLS=$(ls -d .claude/skills/*/ 2>/dev/null | sed 's|.claude/||')
-ALL_AGENTS=$(ls -d .claude/agents/*/ 2>/dev/null | sed 's|.claude/||')
+# Project (workspace namespace)
+WORKSPACE_SKILLS=$(ls -d .claude/skills/workspace/*/ 2>/dev/null | wc -l)
 
-# Framework files (from manifest)
-FRAMEWORK_FILES=$(echo "$MANIFEST" | jq -r '.files[]')
-
-# Project files = All - Framework
-# Use comm or grep -v to find project-only files
+# Agents
+FRAMEWORK_AGENTS=$(ls .claude/agents/*.md 2>/dev/null | wc -l)
 ```
 
 Report separately:
-- **Framework**: {n} commands, {n} skills, {n} agents (managed by claudenv)
-- **Project**: {n} commands, {n} skills, {n} agents (project-specific, document these)
+- **Framework**: {n} skills in `claudenv/`, {n} agents (managed by claudenv)
+- **Project**: {n} skills in `workspace/` (project-specific, document these)
 
 ### 1.2 Documentation Gap Analysis
 

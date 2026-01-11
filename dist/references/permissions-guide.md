@@ -116,7 +116,7 @@ pub publish, hex publish
 ## Tech-Specific Permissions
 
 Permissions are dynamically added based on detected tech stack.
-See `skills/tech-detection/command-mappings.json` for the full mapping.
+See `skills/claudenv/tech-detection/assets/command-mappings.json` for the full mapping.
 
 ### Example: Node.js Project
 

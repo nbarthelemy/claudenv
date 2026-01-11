@@ -154,7 +154,7 @@ For each detected technology:
 4. Report created agents in bootstrap summary
 ```
 
-See `.claude/skills/agent-creator/references/tech-agent-mappings.md` for full mapping.
+See `.claude/skills/claudenv/agent-creator/references/tech-agent-mappings.md` for full mapping.
 
 ---
 

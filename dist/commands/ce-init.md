@@ -100,7 +100,7 @@ Create `.claude/project-context.json` with ALL detected information:
 
 Based on detected tech stack, add appropriate command permissions.
 
-Read `.claude/skills/tech-detection/command-mappings.json` and merge relevant commands into `.claude/settings.json` allow list.
+Read `.claude/skills/claudenv/tech-detection/assets/command-mappings.json` and merge relevant commands into `.claude/settings.json` allow list.
 
 For example:
 - If `npm` detected → ensure npm commands are allowed
@@ -174,7 +174,7 @@ Based on detected tech stack, create specialist subagents for orchestration:
 | GCP | `gcp-architect` |
 | Prisma | `prisma-specialist` |
 
-See `.claude/skills/agent-creator/references/tech-agent-mappings.md` for full mapping.
+See `.claude/skills/claudenv/agent-creator/references/tech-agent-mappings.md` for full mapping.
 
 **Note**: Only create agents for technologies that need deep specialist knowledge.
 Generic agents (code-reviewer, security-auditor, etc.) are already included.

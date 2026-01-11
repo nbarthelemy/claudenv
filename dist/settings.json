@@ -129,7 +129,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/scripts/session-start.sh"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/session-start.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }
@@ -140,7 +140,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/scripts/session-end.sh"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/session-end.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }
@@ -151,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/scripts/learning-observer.sh"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/learning-observer.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }

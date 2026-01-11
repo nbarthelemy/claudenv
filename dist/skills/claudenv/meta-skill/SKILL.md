@@ -60,7 +60,7 @@ Determine:
 
 Run the scaffolding script:
 ```bash
-python .claude/skills/skill-creator/scripts/init_skill.py <name> --path .claude/skills
+python .claude/skills/claudenv/skill-creator/scripts/init_skill.py <name> --path .claude/skills/workspace
 ```
 
 ### Step 4: Populate Skill Content
@@ -89,7 +89,7 @@ Based on research, add:
 ### Step 6: Validate and Notify
 
 ```bash
-python .claude/skills/skill-creator/scripts/quick_validate.py .claude/skills/<name>
+python .claude/skills/claudenv/skill-creator/scripts/quick_validate.py .claude/skills/workspace/<name>
 ```
 
 Then notify: "Created skill: [name] for [technology]"
@@ -109,10 +109,10 @@ WebSearch: "Stripe webhooks best practices"
 
 **Initialize**:
 ```bash
-python .claude/skills/skill-creator/scripts/init_skill.py stripe-integration --path .claude/skills
+python .claude/skills/claudenv/skill-creator/scripts/init_skill.py stripe-integration --path .claude/skills/workspace
 ```
 
-**Result**: `.claude/skills/stripe-integration/SKILL.md`
+**Result**: `.claude/skills/workspace/stripe-integration/SKILL.md`
 
 ```yaml
 ---
