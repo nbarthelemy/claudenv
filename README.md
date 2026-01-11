@@ -20,7 +20,7 @@ Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infr
 
 ```bash
 # Run from your project directory
-curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh | bash
+curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/bin/install | bash
 
 # Start Claude and bootstrap
 claude
@@ -55,7 +55,7 @@ echo -e "\n@rules/claudenv.md" >> .claude/CLAUDE.md
 claudenv/
 ├── CLAUDE.md          # Dev instructions (NOT distributed to users)
 ├── README.md          # This file
-├── install.sh         # User installer script
+├── bin/install        # User installer script
 ├── LICENSE
 ├── .claude/           # Symlinks for self-dogfooding
 └── dist/              # Distributable content → user's .claude/
@@ -516,6 +516,9 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v3.0.6
+- **Changed:** Move installer to `bin/install`, remove `install.sh`
 
 ### v3.0.5
 - **Changed:** `/shipit` now runs tests before committing - tests must pass before release

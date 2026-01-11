@@ -1,12 +1,22 @@
 #!/bin/bash
 # Claudenv Installer
-# Usage: curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/install.sh | bash
+# Usage: curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/bin/install | bash
+#   or:  /path/to/claudenv/bin/install
 
 set -e
 
 REPO_URL="https://github.com/nbarthelemy/claudenv"
 BRANCH="main"
 TARGET=".claude"
+
+# Check if running from local repo
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
+if [ -d "$SCRIPT_DIR/../dist" ]; then
+    LOCAL_INSTALL=true
+    DIST="$SCRIPT_DIR/../dist"
+else
+    LOCAL_INSTALL=false
+fi
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Claudenv Installer"
@@ -43,29 +53,31 @@ if [ -d "$TARGET" ]; then
     fi
 fi
 
-echo ""
-echo "Downloading Claudenv..."
+# Download if not local install
+if [ "$LOCAL_INSTALL" = false ]; then
+    echo ""
+    echo "Downloading Claudenv..."
 
-# Create temp directory
-TEMP_DIR=$(mktemp -d)
-trap "rm -rf $TEMP_DIR" EXIT
+    # Create temp directory
+    TEMP_DIR=$(mktemp -d)
+    trap "rm -rf $TEMP_DIR" EXIT
 
-# Download and extract
-if command -v curl &> /dev/null; then
-    curl -sL "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
-elif command -v wget &> /dev/null; then
-    wget -qO- "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
-else
-    echo "Error: curl or wget required"
-    exit 1
+    # Download and extract
+    if command -v curl &> /dev/null; then
+        curl -sL "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
+    elif command -v wget &> /dev/null; then
+        wget -qO- "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
+    else
+        echo "Error: curl or wget required"
+        exit 1
+    fi
+
+    DIST="$TEMP_DIR/claudenv-${BRANCH}/dist"
 fi
-
-EXTRACTED="$TEMP_DIR/claudenv-${BRANCH}"
-DIST="$EXTRACTED/dist"
 
 # Verify manifest exists
 if [ ! -f "$DIST/manifest.json" ]; then
-    echo "Error: Downloaded archive missing manifest.json"
+    echo "Error: Missing manifest.json"
     exit 1
 fi
 
@@ -130,7 +142,7 @@ mkdir -p "$TARGET/backups"
 mkdir -p "$TARGET/loop"
 mkdir -p "$TARGET/plans"
 mkdir -p "$TARGET/rca"
-mkdir -p "$TARGET/reference"
+mkdir -p "$TARGET/references"
 
 # Make scripts executable
 chmod +x "$TARGET/scripts/"*.sh 2>/dev/null || true
@@ -168,7 +180,7 @@ fi
 
 # Create TODO.md if it doesn't exist (check both .claude and root)
 if [ ! -f "$TARGET/TODO.md" ] && [ ! -f "./TODO.md" ]; then
-    cp "$DIST/TODO.md" "$TARGET/TODO.md"
+    cp "$DIST/TODO.md" "$TARGET/TODO.md" 2>/dev/null || true
     echo "  - Created TODO.md"
 fi
 
