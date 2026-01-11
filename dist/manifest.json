@@ -1,6 +1,6 @@
 {
   "description": "Framework files managed by claudenv. Used during updates to remove deleted files without affecting user-created content.",
-  "version": "3.0.10",
+  "version": "3.0.11",
   "files": [
     ".gitignore",
     "agents/accessibility-checker.md",
@@ -133,6 +133,10 @@
     "templates/skill.md.template"
   ],
   "deprecated": [
+    "rules/claudenv.md",
+    "rules/error-recovery.md",
+    "rules/permissions.md",
+    "rules/trigger-reference.md",
     "commands/autonomy-pause.md",
     "commands/autonomy-resume.md",
     "commands/backup-create.md",
