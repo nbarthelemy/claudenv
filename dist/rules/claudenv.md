@@ -33,8 +33,8 @@
 | `/reflect` | Consolidate learnings, update project knowledge |
 | `/reflect evolve` | Analyze failures and propose system improvements |
 | `/analyze-patterns` | Force pattern analysis |
-| `/triggers skills` | List skill trigger keywords and phrases |
-| `/triggers agents` | List agent trigger keywords and phrases |
+| `/triggers skills` | List skill triggers |
+| `/triggers agents` | List agent triggers |
 
 ### Skills (Auto-Invoked)
 
