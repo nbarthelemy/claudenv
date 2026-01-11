@@ -277,7 +277,7 @@ ls -la .claude/loop/history/*.json | head -20
 
 Parse each history file for:
 - Loop/plan failures and their reasons
-- Validation failures from `/execute`
+- Validation failures from `/ce:execute`
 - Cancelled operations and why
 - Error patterns in metrics
 
@@ -399,7 +399,7 @@ Apply changes manually or request implementation.
 | Category | Example | Target File |
 |----------|---------|-------------|
 | Rule | "Always run lint before commit" | `rules/*.md` |
-| Command | "Add --dry-run to /execute" | `commands/*.md` |
+| Command | "Add --dry-run to /ce:execute" | `commands/*.md` |
 | Reference | "Document Prisma error codes" | `reference/*.md` |
 | Skill | "Create prisma-debug skill" | `skills/` |
 | Hook | "Add pre-commit validation" | `settings.json` |

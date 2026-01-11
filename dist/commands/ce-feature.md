@@ -3,13 +3,13 @@ description: Plan a feature with detailed implementation strategy saved to .clau
 allowed-tools: Read, Write, Glob, Grep, Bash, WebFetch, WebSearch, AskUserQuestion
 ---
 
-# /feature - Feature Planning
+# /ce:feature - Feature Planning
 
-Transform a feature request into a detailed, executable implementation plan. Plans are saved to `.claude/plans/` for persistence and can be executed with `/execute`.
+Transform a feature request into a detailed, executable implementation plan. Plans are saved to `.claude/plans/` for persistence and can be executed with `/ce:execute`.
 
-**Usage:** `/feature <feature-description>`
+**Usage:** `/ce:feature <feature-description>`
 
-**Example:** `/feature Add user authentication with OAuth`
+**Example:** `/ce:feature Add user authentication with OAuth`
 
 ## Philosophy
 
@@ -102,15 +102,19 @@ Create the plan document at `.claude/plans/{kebab-case-name}.md`:
 
 #### Tasks
 
-- [ ] **Task 1.1**: {Specific action}
-  - File: `path/to/file.ts`
-  - Details: {What exactly to do, including code patterns to follow}
-  - References: `path/to/similar/code.ts:45-60`
+- [ ] **Task 1.1**: {Brief description}
+  - files: `path/to/file.ts`
+  - action: {What exactly to do, including code patterns to follow}
+  - verify: `{command to verify completion, e.g., npm test -- ComponentName}`
+  - done: {Completion criteria - what indicates this task is finished}
+  - references: `path/to/similar/code.ts:45-60`
 
-- [ ] **Task 1.2**: {Specific action}
-  - Files: `path/a.ts`, `path/b.ts`
-  - Details: {Implementation specifics}
-  - Depends: Task 1.1
+- [ ] **Task 1.2**: {Brief description}
+  - files: `path/a.ts`, `path/b.ts`
+  - action: {Implementation specifics}
+  - verify: `{verification command}`
+  - done: {Completion criteria}
+  - depends: Task 1.1
 
 ### Phase 2: {Name}
 ...
@@ -193,20 +197,20 @@ Files: {files_affected}
 Validation: {commands_available}
 
 Ready to implement? Run:
-  /execute .claude/plans/{filename}.md
+  /ce:execute .claude/plans/{filename}.md
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ## Subcommands
 
-### /feature:list
+### /ce:feature:list
 List all plans in `.claude/plans/`
 
-### /feature:status
+### /ce:feature:status
 Show status of all plans (draft, ready, in_progress, completed)
 
-### /feature:delete <name>
+### /ce:feature:delete <name>
 Remove a plan file
 
 ## Tips

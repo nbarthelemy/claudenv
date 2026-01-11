@@ -38,13 +38,52 @@ Success comes from persistent refinement, not perfect first attempts. Each itera
 
 ---
 
+## Context Modes
+
+### Fresh Context (Default)
+
+Each iteration spawns a **fresh subagent** with clean 200k-token context. This prevents quality degradation from accumulated context pollution.
+
+**How it works:**
+1. Main context acts as **coordinator**
+2. Each iteration spawns a subagent via Task tool
+3. Subagent receives packaged context:
+   - Task description and files
+   - Project context (from project-context.json)
+   - CLAUDE.md summary
+   - Relevant file contents
+4. Subagent returns structured result
+5. Coordinator collects results and decides next iteration
+
+**Benefits:**
+- Prevents "Due to context limits, I'll be more concise now" degradation
+- Each task gets full attention and capability
+- Enables precise task isolation
+- Better for long-running or complex loops
+
+### Same Context (`--same-context`)
+
+Opt-in mode for simple tasks where maintaining context between iterations is valuable.
+
+```
+/ce:loop "Fix errors" --same-context --max 5
+```
+
+**Use same-context when:**
+- Tasks are simple and fast
+- Context continuity is important
+- Running < 5 iterations
+- Debugging with incremental changes
+
+---
+
 ## Loop Modes
 
 ### 1. Standard Loop
 Execute prompt repeatedly until completion condition is met.
 
 ```
-/loop "Build a REST API with tests" --until "All tests passing"
+/ce:loop "Build a REST API with tests" --until "All tests passing"
 ```
 
 ### 2. Test-Driven Loop (TDD)
@@ -277,12 +316,12 @@ Never execute during autonomous loops:
 
 | Command | Description |
 |---------|-------------|
-| `/loop "<prompt>" [options]` | Start new loop |
-| `/loop:status` | Show current loop status |
-| `/loop:pause` | Pause active loop |
-| `/loop:resume` | Resume paused loop |
-| `/loop:cancel` | Cancel/stop active loop |
-| `/loop:history` | View past loop runs |
+| `/ce:loop "<prompt>" [options]` | Start new loop |
+| `/ce:loop:status` | Show current loop status |
+| `/ce:loop:pause` | Pause active loop |
+| `/ce:loop:resume` | Resume paused loop |
+| `/ce:loop:cancel` | Cancel/stop active loop |
+| `/ce:loop:history` | View past loop runs |
 
 ---
 
@@ -376,5 +415,5 @@ Hand off to other skills when:
 2. **Set Safety Limits**: Always use `--max` or `--max-time`
 3. **Use Verification**: `--verify` with `--until-exit` is most reliable
 4. **Start Small**: Test with `--max 3` before long runs
-5. **Check Status**: Use `/loop:status` to monitor progress
-6. **Review History**: Learn from past loops with `/loop:history`
+5. **Check Status**: Use `/ce:loop:status` to monitor progress
+6. **Review History**: Learn from past loops with `/ce:loop:history`

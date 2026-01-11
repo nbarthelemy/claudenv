@@ -3,7 +3,7 @@ description: Interactive feature workflow - pick feature, create plan, execute w
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill
 ---
 
-# /next - Interactive Feature Workflow
+# /ce:next - Interactive Feature Workflow
 
 Interactively work through features from TODO.md. Picks a feature, creates a plan if needed, and executes with user confirmation at each step.
 
@@ -27,7 +27,7 @@ Interactively work through features from TODO.md. Picks a feature, creates a pla
 
 If TODO.md missing:
 ```
-No TODO.md found. Run /spec first to create project specification
+No TODO.md found. Run /ce:spec first to create project specification
 and populate the feature list.
 ```
 
@@ -85,7 +85,7 @@ SLUG=$(echo "{feature}" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0
 
 ### Step 5: Create Plan (if needed)
 
-If no plan exists, invoke `/feature`:
+If no plan exists, invoke `/ce:feature`:
 
 ```
 Creating detailed implementation plan...
@@ -153,7 +153,7 @@ Options:
 
 ### Step 8: Execute Plan
 
-Invoke `/execute`:
+Invoke `/ce:execute`:
 
 ```
 Skill: execute
@@ -166,7 +166,7 @@ Output `EXECUTION_STARTED` marker.
 
 ### Step 9: Post-Execution
 
-After `/execute` completes:
+After `/ce:execute` completes:
 
 If successful:
 ```
@@ -205,7 +205,7 @@ See validation output above.
 
 Options:
   • Fix issues and run /validate
-  • Resume with /execute:resume
+  • Resume with /ce:execute:resume
   • Skip and move to next feature
 ```
 
@@ -222,8 +222,8 @@ Features completed: {n}
 Features remaining: {m}
 
 To continue later:
-  /next         - Resume interactive workflow
-  /autopilot    - Complete remaining autonomously
+  /ce:next         - Resume interactive workflow
+  /ce:autopilot    - Complete remaining autonomously
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -232,20 +232,20 @@ Output `NEXT_STOPPED` marker.
 
 ## Subcommands
 
-### /next --list
+### /ce:next --list
 Show all features from TODO.md without starting workflow.
 
-### /next status
+### /ce:next status
 Show progress summary:
 - Features completed
 - Features in progress
 - Features remaining
 - Current plan status
 
-### /next complete <item>
+### /ce:next complete <item>
 Manually mark a TODO item as complete with timestamp.
 
-### /next skip <item>
+### /ce:next skip <item>
 Skip a feature (mark with reason).
 
 ## Markers
@@ -265,9 +265,9 @@ Skip a feature (mark with reason).
     ↓
 /next (interactive loop)
     ├── Select feature from TODO.md
-    ├── /feature (create plan if needed)
+    ├── /ce:feature (create plan if needed)
     ├── Confirm with user
-    ├── /execute (runs /loop + /validate)
+    ├── /ce:execute (runs /ce:loop + /ce:validate)
     ├── Update TODO.md
     └── Ask: Continue? → loop or stop
 
@@ -276,7 +276,7 @@ Skip a feature (mark with reason).
 
 ## Tips
 
-- Run `/spec` first to populate TODO.md
+- Run `/ce:spec` first to populate TODO.md
 - Features are not pre-prioritized - you choose the order
 - Plans are reusable - if execution fails, fix and run again
-- Use `/autopilot` for hands-off completion of remaining features
+- Use `/ce:autopilot` for hands-off completion of remaining features

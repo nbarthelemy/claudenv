@@ -3,7 +3,7 @@ description: Orchestrate full project setup with interview, tech detection, and 
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Skill, AskUserQuestion
 ---
 
-# /spec - Project Specification Setup
+# /ce:spec - Project Specification Setup
 
 Orchestrates complete project initialization: deep interview, tech detection, CLAUDE.md refinement, and feature extraction to TODO.md.
 
@@ -82,7 +82,7 @@ Parse SPEC.md sections:
 
 Identify discrete, implementable units. Each feature should be:
 - Specific enough to plan
-- Small enough for one `/execute` cycle
+- Small enough for one `/ce:execute` cycle
 - Independent or with clear dependencies
 
 **Assign priorities** based on:
@@ -135,7 +135,7 @@ For each extracted feature:
 
 ## Implementation Phases
 
-(To be filled by /feature command)
+(To be filled by /ce:feature command)
 
 ## Validation Commands
 
@@ -154,8 +154,8 @@ Create/update `.claude/TODO.md`:
 # Development TODO
 
 > Generated from SPEC.md on {YYYY-MM-DD HH:MM}
-> Run `/next` to work through features interactively
-> Run `/autopilot` for autonomous completion
+> Run `/ce:next` to work through features interactively
+> Run `/ce:autopilot` for autonomous completion
 
 ## P0 - Foundation
 
@@ -190,7 +190,7 @@ Create/update `.claude/TODO.md`:
 
 ## Completed
 
-(Features move here after successful /execute)
+(Features move here after successful /ce:execute)
 ```
 
 **Format notes:**
@@ -203,7 +203,7 @@ Create/update `.claude/TODO.md`:
 - Features only execute when ALL dependencies are completed
 - Failed dependencies block dependent features
 - Dependency graph is parsed by `dependency-graph.sh`
-- Use `/autopilot graph` to visualize dependencies
+- Use `/ce:autopilot graph` to visualize dependencies
 
 Output `FEATURES_EXTRACTED` marker.
 
@@ -237,9 +237,9 @@ TODO.md: Populated with prioritized features
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Next Steps:
-  /next       - Pick a feature and start (interactive)
-  /autopilot  - Complete all features autonomously
-  /feature X  - Flesh out a specific plan file
+  /ce:next       - Pick a feature and start (interactive)
+  /ce:autopilot  - Complete all features autonomously
+  /ce:feature X  - Flesh out a specific plan file
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -248,13 +248,13 @@ Output `SPEC_COMPLETE` marker.
 
 ## Subcommands
 
-### /spec:status
+### /ce:spec:status
 Show current spec status without running workflow.
 
-### /spec:features
+### /ce:spec:features
 Re-extract features from SPEC.md to TODO.md.
 
-### /spec:refresh
+### /ce:spec:refresh
 Full refresh: re-run interview, detection, and extraction.
 
 ## Markers
@@ -267,8 +267,8 @@ Full refresh: re-run interview, detection, and extraction.
 
 ## Integration
 
-After `/spec` completes:
+After `/ce:spec` completes:
 - SPEC.md is the project north star
 - TODO.md contains all features to implement
-- Use `/next` for interactive feature workflow
-- Use `/autopilot` for autonomous completion
+- Use `/ce:next` for interactive feature workflow
+- Use `/ce:autopilot` for autonomous completion

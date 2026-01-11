@@ -24,7 +24,7 @@ curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/bin/install
 
 # Start Claude and bootstrap
 claude
-> /claudenv
+> /ce:init
 ```
 
 The installer:
@@ -93,8 +93,8 @@ Framework rules use a **namespaced structure with conditional loading** to minim
 - **Total Reduction:** 76% smaller than monolithic approach
 
 **Conditional loading examples:**
-- `migration.md` - Loaded by `/claudenv` before migrating files
-- `coordination.md` - Loaded by `/loop --track` for multi-agent work
+- `migration.md` - Loaded by `/ce:init` before migrating files
+- `coordination.md` - Loaded by `/ce:loop --track` for multi-agent work
 - `error-recovery/patterns.md` - Loaded when encountering unfamiliar errors
 - `triggers/reference.json` - Loaded by orchestrator for routing decisions
 
@@ -104,32 +104,32 @@ Framework rules use a **namespaced structure with conditional loading** to minim
 
 | Command | Description |
 |---------|-------------|
-| `/spec` | Full project setup: interview, tech detect, CLAUDE.md, TODO.md |
-| `/prime` | Load comprehensive project context (auto-runs at session start) |
-| `/feature <name>` | Plan a feature, save to `.claude/plans/` |
-| `/next` | Interactive feature workflow - pick, plan, execute with confirmations |
-| `/autopilot` | Fully autonomous feature completion from TODO.md |
-| `/execute <plan>` | Execute plan via `/loop --plan` + `/validate` |
-| `/validate` | Stack-aware validation: lint, type-check, test, build |
-| `/rca <issue>` | Root cause analysis for bugs |
-| `/backlog` | Send current or specified task to the backlog |
-| `/claudenv` | Bootstrap infrastructure for current project |
-| `/claudenv admin` | Admin commands: status, update, audit, export, import, mcp |
-| `/interview` | Conduct project specification interview |
-| `/loop` | Autonomous loop: start, status, pause, resume, cancel, history |
-| `/loop --plan <file>` | Execute structured plan file (phases/tasks) |
-| `/lsp` | LSP management: install, status |
-| `/health check` | Verify infrastructure integrity |
-| `/learn` | Learning system: review, implement |
-| `/reflect` | Consolidate learnings, update project knowledge |
-| `/reflect evolve` | Analyze failures and propose system improvements |
-| `/analyze-patterns` | Force pattern analysis |
-| `/triggers` | List skill and agent triggers |
-| `/backup` | Backup management: create, restore, list |
-| `/autonomy` | Autonomy control: pause, resume |
-| `/debug` | Debug tools: hooks, agent |
-| `/docs` | Documentation review and optimization |
-| `/shipit` | Release: version bump, commit, push |
+| `/ce:spec` | Full project setup: interview, tech detect, CLAUDE.md, TODO.md |
+| `/ce:prime` | Load comprehensive project context (auto-runs at session start) |
+| `/ce:feature <name>` | Plan a feature, save to `.claude/plans/` |
+| `/ce:next` | Interactive feature workflow - pick, plan, execute with confirmations |
+| `/ce:autopilot` | Fully autonomous feature completion from TODO.md |
+| `/ce:execute <plan>` | Execute plan via `/ce:loop --plan` + `/ce:validate` |
+| `/ce:validate` | Stack-aware validation: lint, type-check, test, build |
+| `/ce:rca <issue>` | Root cause analysis for bugs |
+| `/ce:backlog` | Send current or specified task to the backlog |
+| `/ce:init` | Bootstrap infrastructure for current project |
+| `/ce:admin` | Admin commands: status, update, audit, export, import, mcp |
+| `/ce:interview` | Conduct project specification interview |
+| `/ce:loop` | Autonomous loop: start, status, pause, resume, cancel, history |
+| `/ce:loop --plan <file>` | Execute structured plan file (phases/tasks) |
+| `/ce:lsp` | LSP management: install, status |
+| `/ce:health` | Verify infrastructure integrity |
+| `/ce:learn` | Learning system: review, implement |
+| `/ce:reflect` | Consolidate learnings, update project knowledge |
+| `/ce:reflect evolve` | Analyze failures and propose system improvements |
+| `/ce:patterns` | Force pattern analysis |
+| `/ce:triggers` | List skill and agent triggers |
+| `/ce:backup` | Backup management: create, restore, list |
+| `/ce:autonomy` | Autonomy control: pause, resume |
+| `/ce:debug` | Debug tools: hooks, agent |
+| `/ce:docs` | Documentation review and optimization |
+| `/ce:shipit` | Release: version bump, commit, push |
 
 ### Skills (Auto-Invoked)
 
@@ -219,12 +219,12 @@ Even at high autonomy:
 
 ## How It Works
 
-### 1. Bootstrap (`/claudenv`)
+### 1. Bootstrap (`/ce:init`)
 
-When you run `/claudenv`, the framework:
+When you run `/ce:init`, the framework:
 1. Runs tech detection script
 2. Analyzes confidence level (HIGH/MEDIUM/LOW)
-3. **Auto-runs `/interview` if confidence is LOW**
+3. **Auto-runs `/ce:interview` if confidence is LOW**
 4. Generates `project-context.json`
 5. Updates `settings.json` with tech-specific permissions
 6. Migrates existing CLAUDE.md (preserving all content)
@@ -235,7 +235,7 @@ When you run `/claudenv`, the framework:
 
 **Post-Init Validation:** The bootstrap verifies all required files, directories, and configurations exist before reporting success. Missing items are auto-created.
 
-### 2. Interview (`/interview`)
+### 2. Interview (`/ce:interview`)
 
 For new projects or unclear requirements:
 1. Silently reads all existing documentation
@@ -268,12 +268,12 @@ Facts are stored in `## Project Facts` section of CLAUDE.md, categorized by:
 - **Conventions** - Coding standards, naming conventions
 - **Architecture** - Design patterns, system structure
 
-**Session Reflection (`/reflect`):**
+**Session Reflection (`/ce:reflect`):**
 ```bash
-/reflect        # Quick reflection on current session
-/reflect deep   # Comprehensive review of all learnings
-/reflect prune  # Remove stale/obsolete entries
-/reflect facts  # Review and consolidate Project Facts
+/ce:reflect        # Quick reflection on current session
+/ce:reflect deep   # Comprehensive review of all learnings
+/ce:reflect prune  # Remove stale/obsolete entries
+/ce:reflect facts  # Review and consolidate Project Facts
 ```
 
 Core philosophy:
@@ -286,73 +286,73 @@ Core philosophy:
 A structured approach to feature development:
 
 ```
-/spec → /prime → /feature → /execute → /validate
+/ce:spec → /ce:prime → /ce:feature → /ce:execute → /ce:validate
          │                      │
-         │                      └── calls /loop --plan + /validate
+         │                      └── calls /ce:loop --plan + /ce:validate
          │
          └── auto-runs at session start
 ```
 
 **Workflow Options:**
-- **Interactive**: `/next` - Pick features, confirm each step
-- **Autonomous**: `/autopilot` - Complete all features without interaction
+- **Interactive**: `/ce:next` - Pick features, confirm each step
+- **Autonomous**: `/ce:autopilot` - Complete all features without interaction
 
-**`/spec` - Project Setup:**
+**`/ce:spec` - Project Setup:**
 ```bash
-/spec    # Full setup: interview → tech detect → CLAUDE.md → TODO.md
+/ce:spec    # Full setup: interview → tech detect → CLAUDE.md → TODO.md
 ```
 Creates prioritized TODO.md with plan file references:
 - P0 (foundation) → P1 (core) → P2 (enhancements)
 - Each feature links to `.claude/plans/{feature-slug}.md`
 
-**`/feature` - Feature Planning:**
+**`/ce:feature` - Feature Planning:**
 ```bash
-/feature "Add user authentication"
+/ce:feature "Add user authentication"
 # Creates .claude/plans/add-user-authentication.md
 ```
 
-**`/execute` - Plan Execution:**
+**`/ce:execute` - Plan Execution:**
 ```bash
-/execute .claude/plans/add-user-authentication.md
-# Runs /loop --plan + /validate, updates TODO.md
+/ce:execute .claude/plans/add-user-authentication.md
+# Runs /ce:loop --plan + /ce:validate, updates TODO.md
 ```
 
-**`/next` - Interactive Workflow:**
+**`/ce:next` - Interactive Workflow:**
 ```bash
-/next              # Pick feature, create plan, execute with confirmation
-/next --list       # Show available features
-/next status       # Show progress
+/ce:next              # Pick feature, create plan, execute with confirmation
+/ce:next --list       # Show available features
+/ce:next status       # Show progress
 ```
 
-**`/autopilot` - Fully Autonomous:**
+**`/ce:autopilot` - Fully Autonomous:**
 ```bash
-/autopilot                    # Complete all features
-/autopilot --max-features 3   # Limit to 3 features
-/autopilot --dry-run         # Show plan only
-/autopilot --pause-on-failure # Stop on first failure
+/ce:autopilot                    # Complete all features
+/ce:autopilot --max-features 3   # Limit to 3 features
+/ce:autopilot --dry-run         # Show plan only
+/ce:autopilot --pause-on-failure # Stop on first failure
 ```
 
 Safety limits: 4h max time, $50 max cost, no git push, no deploy.
 
-### 5. Autonomous Loops (`/loop`)
+### 5. Autonomous Loops (`/ce:loop`)
 
 For persistent, iterative development:
 
 ```bash
 # Basic loop - iterate until condition met
-/loop "Fix all TypeScript errors" --until "Found 0 errors" --max 10
+/ce:loop "Fix all TypeScript errors" --until "Found 0 errors" --max 10
 
 # Plan-based execution
-/loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE" --max 30
+/ce:loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE" --max 30
 
 # Test-driven development loop
-/loop "Implement user auth" --verify "npm test" --until-exit 0
+/ce:loop "Implement user auth" --verify "npm test" --until-exit 0
 ```
 
 **Plan Mode (`--plan`):**
 ```bash
-/loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE"
-/loop --plan .claude/plans/feature.md --validate-after-phase
+/ce:loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE"
+/ce:loop --plan .claude/plans/feature.md --validate-after-phase
 ```
 
 Executes structured plans with phases and tasks, outputs markers:
@@ -370,15 +370,15 @@ Executes structured plans with phases and tasks, outputs markers:
 - `--max-cost <amount>` - Maximum estimated cost
 
 **Loop Control:**
-- `/loop status` - Check progress
-- `/loop pause` - Pause with checkpoint
-- `/loop resume` - Resume from checkpoint
-- `/loop cancel` - Stop and archive
-- `/loop history` - View past loops
+- `/ce:loop status` - Check progress
+- `/ce:loop pause` - Pause with checkpoint
+- `/ce:loop resume` - Resume from checkpoint
+- `/ce:loop cancel` - Stop and archive
+- `/ce:loop history` - View past loops
 
 ### 6. LSP Code Intelligence
 
-Language servers are **automatically installed** during `/claudenv` and when new file types are detected.
+Language servers are **automatically installed** during `/ce:init` and when new file types are detected.
 
 **Installation Priority:**
 1. **Official Anthropic Plugins** (preferred) - Pre-configured for Claude Code
@@ -417,8 +417,8 @@ outgoingCalls     - Find what this function calls
 ```
 
 **Commands:**
-- `/lsp` - Manually trigger LSP detection
-- `/lsp status` - Check installed servers
+- `/ce:lsp` - Manually trigger LSP detection
+- `/ce:lsp status` - Check installed servers
 
 ### 7. MCP Server Management
 
@@ -442,9 +442,9 @@ Claudenv can detect and install MCP (Model Context Protocol) servers referenced 
 - `claude-in-chrome` - Chrome extension (install from claude.ai/chrome)
 
 **Commands:**
-- `/claudenv mcp` - Auto-detect and install missing MCPs
-- `/claudenv mcp list` - List installed and referenced MCPs
-- `/claudenv mcp install <name>` - Install a specific MCP server
+- `/ce:admin mcp` - Auto-detect and install missing MCPs
+- `/ce:admin mcp list` - List installed and referenced MCPs
+- `/ce:admin mcp install <name>` - Install a specific MCP server
 
 ### 8. Subagent Orchestration
 
@@ -462,7 +462,7 @@ Claude automatically spawns specialist subagents for complex parallel tasks:
 - **Process:** test-engineer, documentation-writer, release-manager, migration-specialist
 
 **Tech-Specific Agents:**
-During `/claudenv`, the framework automatically creates specialist agents for your detected stack:
+During `/ce:init`, the framework automatically creates specialist agents for your detected stack:
 - React → `react-specialist`
 - Django → `django-specialist`
 - AWS → `aws-architect`
@@ -576,12 +576,23 @@ cd "$PROJECT_ROOT" || exit 0
 To update an existing Claudenv installation to the latest version:
 
 ```bash
-/claudenv update
+/ce:admin update
 ```
 
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v4.0.0
+- **BREAKING:** All commands renamed to `/ce:*` namespace (e.g., `/loop` → `/ce:loop`)
+- **Added:** Fresh context execution as default for `/ce:loop` (subagents per iteration)
+- **Added:** Structured task format with `files`, `action`, `verify`, `done` fields
+- **Added:** Atomic commits with `--commit-per-task` and `--commit-per-phase` flags
+- **Added:** Codebase mapping via `/ce:map` with 6 parallel analyst agents
+- **Added:** `/ce:blocker` command to mark tasks as blocked in TODO.md
+- **Added:** Context budget tracking with quality threshold warnings
+- **Added:** `/ce:phase` command for phase management (insert/remove/move tasks)
+- **Added:** New scripts: `loop-context-packager.sh`, `map-codebase.sh`, `phase-manager.sh`, `task-commit.sh`
 
 ### v3.0.11
 - **Changed:** Deprecated old monolithic rule files in favor of split structure
@@ -630,15 +641,15 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 - **Added:** Template variable substitution for generated files
 
 ### v3.0.0
-- **Added:** Ultimate Autonomous Workflow for `/autopilot`
+- **Added:** Ultimate Autonomous Workflow for `/ce:autopilot`
 - **Added:** Incremental validation system (task/phase/feature tiers)
 - **Added:** Git feature isolation (branch per feature with automatic rollback)
 - **Added:** Dependency graph for smart feature execution order
 - **Added:** 7 new scripts: `dependency-graph.sh`, `git-isolation-manager.sh`, `incremental-validate.sh`, `get-affected-files.sh`, `validate-task.sh`, `validate-phase.sh`
 - **Added:** Comprehensive test suite (74 tests, 100% action coverage)
 - **Added:** Coverage analyzer (`tests/run-coverage.sh`)
-- **Changed:** `/autopilot` now supports `--isolate`, `--validate-after-task`, `--validate-after-phase` flags
-- **Changed:** `/loop` now supports `--validate-after-task` and `--validate-after-phase` flags
+- **Changed:** `/ce:autopilot` now supports `--isolate`, `--validate-after-task`, `--validate-after-phase` flags
+- **Changed:** `/ce:loop` now supports `--validate-after-task` and `--validate-after-phase` flags
 
 ### v2.6.4
 - **Added:** Comprehensive project analysis phase to `/docs` command
@@ -659,22 +670,22 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 - **Changed:** Standardized timestamp format to `YYYY-MM-DD HH:MM` across all generated files
 
 ### v2.6.0
-- **Added:** `/spec` command - Full project setup with prioritized TODO.md and plan file scaffolding
-- **Added:** `/autopilot` command - Fully autonomous feature completion with safety limits (4h max, $50 max)
-- **Added:** `/loop --plan` flag - Structured plan execution with phases/tasks and markers
+- **Added:** `/ce:spec` command - Full project setup with prioritized TODO.md and plan file scaffolding
+- **Added:** `/ce:autopilot` command - Fully autonomous feature completion with safety limits (4h max, $50 max)
+- **Added:** `/ce:loop --plan` flag - Structured plan execution with phases/tasks and markers
 - **Added:** `/reflect evolve` mode - Analyze failures and propose system improvements
-- **Changed:** `/execute` refactored to thin orchestrator (calls `/loop --plan` + `/validate`)
-- **Changed:** `/next` rewritten for interactive feature workflow with confirmations
+- **Changed:** `/ce:execute` refactored to thin orchestrator (calls `/ce:loop --plan` + `/ce:validate`)
+- **Changed:** `/ce:next` rewritten for interactive feature workflow with confirmations
 - **Added:** Feature prioritization (P0/P1/P2) with plan file references in TODO.md
 - **Added:** `autopilot-manager.sh` script for autopilot state management
 - **Added:** Plan state tracking in `.claude/loop/plan-state.json`
 
 ### v2.5.0
-- **Added:** PIV workflow: `/prime`, `/feature`, `/execute`, `/validate`, `/rca` commands
+- **Added:** PIV workflow: `/ce:prime`, `/ce:feature`, `/ce:execute`, `/ce:validate`, `/ce:rca` commands
 - **Added:** `.claude/reference/` for curated docs, `.claude/plans/` and `.claude/rca/` for artifacts
 
 ### v2.3.13
-- **Added:** `/next` command for task planning and parallel execution
+- **Added:** `/ce:next` command for task planning and parallel execution
 - **Added:** Subagent spawning for parallel track execution
 - **Added:** TODO.md generation with priority grouping
 
@@ -691,7 +702,7 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 - **Fixed:** `apply-update.sh` shell compatibility (zsh) and empty file handling
 
 ### v2.3.8
-- **Changed:** Consolidated subcommands into parent commands (e.g., `/loop status` instead of `/loop:status`)
+- **Changed:** Consolidated subcommands into parent commands (e.g., `/ce:loop status` instead of `/loop:status`)
 - **Added:** `triggers.json` for skills and agents auto-routing
 - **Added:** `trigger-reference.md` rule for matching user requests
 
@@ -730,17 +741,17 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 - **Added:** `orchestrator` skill - spawns subagents based on hybrid triggers
 - **Added:** `agent-creator` skill - creates tech-specific agents on demand
 - **Added:** Tech-to-agent mappings for 50+ technologies (React, Django, AWS, Shopify, etc.)
-- **Added:** `/claudenv` now creates specialist agents during bootstrap
+- **Added:** `/ce:init` now creates specialist agents during bootstrap
 - **Added:** `agents/` directory for subagent definitions
 - **Added:** `orchestration/` config for trigger rules and settings
 - **Changed:** `/learn:review` and `/learn:implement` now support agents
 - **Changed:** Pattern observer detects agent opportunities at 2 occurrences
 
 ### v2.2.0
-- **Added:** `/reflect` command for session reflection and learning consolidation
+- **Added:** `/ce:reflect` command for session reflection and learning consolidation
 - **Added:** Automatic correction capture - detects when user corrects Claude and saves to Project Facts
 - **Added:** `## Project Facts` section in CLAUDE.md for authoritative project knowledge
-- **Added:** `/reflect facts` mode to review and consolidate captured corrections
+- **Added:** `/ce:reflect facts` mode to review and consolidate captured corrections
 - **Added:** MERGE/REPLACE/DELETE operations to pattern-observer (prevents bloat)
 - **Changed:** Merged `pending-agents.md` into `pending-skills.md`
 - **Changed:** Updated observations.md format with staleness tracking

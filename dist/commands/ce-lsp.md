@@ -1,9 +1,9 @@
 ---
-description: "LSP management: /lsp [install|status]"
+description: "LSP management: /ce:lsp [install|status]"
 allowed-tools: Bash
 ---
 
-# /lsp - Language Server Management
+# /ce:lsp - Language Server Management
 
 ## Usage
 

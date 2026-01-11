@@ -3,7 +3,7 @@ description: Fully autonomous feature completion until TODO.md is empty
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 ---
 
-# /autopilot - Autonomous Development
+# /ce:autopilot - Autonomous Development
 
 Fully autonomous mode that iteratively processes features from TODO.md until complete or limits are reached. No user interaction required.
 
@@ -31,7 +31,7 @@ Fully autonomous mode that iteratively processes features from TODO.md until com
 | `--max-cost <amt>` | Maximum estimated cost | $50 |
 | `--dry-run` | Show execution plan only | false |
 | `--pause-on-failure` | Stop on first failed feature | false |
-| `--skip-validation` | Skip /validate between features | false |
+| `--skip-validation` | Skip /ce:validate between features | false |
 | `--isolate` | Create git branch per feature | true |
 | `--no-isolate` | Disable git branch isolation | - |
 | `--merge-on-success` | Auto-merge successful feature branches | false |
@@ -158,14 +158,14 @@ while features_remaining AND within_limits:
     if plan_exists(feature):
         plan = load_plan(feature)
     else:
-        invoke /feature to create plan
+        invoke /ce:feature to create plan
 
     # Mark in progress
     update TODO.md: [ ] → [~]
     update_dependency_graph(feature, "in_progress")
 
-    # Execute via /execute (includes task/phase validation if enabled)
-    result = invoke /execute with plan
+    # Execute via /ce:execute (includes task/phase validation if enabled)
+    result = invoke /ce:execute with plan
 
     # Record result
     if result.success:
@@ -310,28 +310,28 @@ Move state to `.claude/loop/history/autopilot_{id}.json`.
 
 ## Subcommands
 
-### /autopilot status
+### /ce:autopilot status
 Show current autopilot progress:
 ```bash
 bash .claude/scripts/autopilot-manager.sh status
 ```
 
-### /autopilot cancel
+### /ce:autopilot cancel
 Stop running autopilot gracefully, restore baseline if isolated:
 ```bash
 bash .claude/scripts/autopilot-manager.sh cancel
 ```
 
-### /autopilot resume
+### /ce:autopilot resume
 Resume from last checkpoint after failure:
 ```bash
 bash .claude/scripts/autopilot-manager.sh resume
 ```
 
-### /autopilot history
+### /ce:autopilot history
 Show past autopilot runs.
 
-### /autopilot graph
+### /ce:autopilot graph
 Visualize feature dependency graph:
 ```bash
 bash .claude/scripts/autopilot-manager.sh graph
@@ -355,7 +355,7 @@ Next: User auth
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### /autopilot restore
+### /ce:autopilot restore
 Restore git state to pre-autopilot baseline:
 ```bash
 bash .claude/scripts/autopilot-manager.sh restore_baseline
@@ -387,8 +387,8 @@ bash .claude/scripts/autopilot-manager.sh restore_baseline
     ↓
 /autopilot
     ├── For each feature in TODO.md:
-    │     ├── /feature (create plan if needed)
-    │     ├── /execute (runs /loop + /validate)
+    │     ├── /ce:feature (create plan if needed)
+    │     ├── /ce:execute (runs /ce:loop + /ce:validate)
     │     ├── Update TODO.md
     │     └── Record result
     ├── Check limits
@@ -422,6 +422,6 @@ vs.
 
 - Use `--dry-run` first to see what will be executed
 - Use `--pause-on-failure` when debugging
-- Monitor with `/autopilot status` in another terminal
+- Monitor with `/ce:autopilot status` in another terminal
 - Review `.claude/loop/autopilot-state.json` for detailed state
-- Use `/next` for interactive control when needed
+- Use `/ce:next` for interactive control when needed

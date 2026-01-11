@@ -3,15 +3,15 @@ description: Root Cause Analysis for bugs - investigate, document, and plan fix
 allowed-tools: Read, Write, Glob, Grep, Bash, WebFetch
 ---
 
-# /rca - Root Cause Analysis
+# /ce:rca - Root Cause Analysis
 
 Investigate a bug or issue thoroughly before implementing a fix. Creates a documented analysis that feeds into the fix implementation.
 
-**Usage:** `/rca <issue-id-or-description>`
+**Usage:** `/ce:rca <issue-id-or-description>`
 
 **Examples:**
-- `/rca #123` - Analyze GitHub issue #123
-- `/rca "Login fails after password reset"` - Analyze described bug
+- `/ce:rca #123` - Analyze GitHub issue #123
+- `/ce:rca "Login fails after password reset"` - Analyze described bug
 
 ## Process
 
@@ -232,22 +232,22 @@ Tests to Add: {n}
 Document: .claude/rca/{slug}.md
 
 Next Steps:
-  /feature "Fix: {issue_title}"  # Create implementation plan
+  /ce:feature "Fix: {issue_title}"  # Create implementation plan
   # or
-  /execute .claude/rca/{slug}.md  # If RCA includes fix plan
+  /ce:execute .claude/rca/{slug}.md  # If RCA includes fix plan
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ## Subcommands
 
-### /rca:list
+### /ce:rca:list
 List all RCA documents.
 
-### /rca:status
+### /ce:rca:status
 Show status of open RCAs.
 
-### /rca:resolve <slug>
+### /ce:rca:resolve <slug>
 Mark an RCA as resolved.
 
 ## Markers

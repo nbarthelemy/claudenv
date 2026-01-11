@@ -26,7 +26,7 @@
 
 ## Tech-Specific
 
-Auto-added during `/claudenv` based on detected stack. See `command-mappings.json`.
+Auto-added during `/ce:init` based on detected stack. See `command-mappings.json`.
 
 ## Override
 

@@ -3,17 +3,17 @@ description: "Claudenv admin: status|update|audit|export|import|mcp"
 allowed-tools: Bash, Read, Write, Edit, WebFetch, Glob
 ---
 
-# /claudenv Admin Commands
+# /ce:init Admin Commands
 
 ## Usage
 
 ```
-/claudenv status         Show infrastructure overview
-/claudenv update         Check/apply updates
-/claudenv audit          Audit permissions vs tech stack
+/ce:admin status         Show infrastructure overview
+/ce:admin update         Check/apply updates
+/ce:admin audit          Audit permissions vs tech stack
 /claudenv export         Export for sharing
 /claudenv import <path>  Import from export
-/claudenv mcp [action]   Manage MCP servers
+/ce:admin mcp [action]   Manage MCP servers
 ```
 
 ## Actions

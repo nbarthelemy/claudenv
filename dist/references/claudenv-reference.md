@@ -23,7 +23,7 @@ This file is loaded on-demand when you need detailed context. Core rules are in 
 ├── rules/              # Modular instruction sets
 ├── scripts/            # Shell scripts for hooks
 ├── templates/          # Templates for generation
-├── references/         # Curated best practices docs (read by /prime)
+├── references/         # Curated best practices docs (read by /ce:prime)
 ├── plans/              # Feature implementation plans (/feature output)
 ├── rca/                # Root cause analysis documents (/rca output)
 ├── learning/           # Pattern observations
@@ -41,17 +41,17 @@ This file is loaded on-demand when you need detailed context. Core rules are in 
 
 ```bash
 # User starts a new session
-# /prime runs automatically and loads context
+# /ce:prime runs automatically and loads context
 
 User: "Add user authentication with JWT"
 
 Claude:
-1. Runs /feature "Add user authentication with JWT"
+1. Runs /ce:feature "Add user authentication with JWT"
 2. Creates .claude/plans/add-user-authentication-with-jwt.md
 3. Presents plan for approval
-4. On approval: /execute .claude/plans/add-user-authentication-with-jwt.md
-5. This calls: /loop --plan <file>
-6. After completion: /validate runs automatically
+4. On approval: /ce:execute .claude/plans/add-user-authentication-with-jwt.md
+5. This calls: /ce:loop --plan <file>
+6. After completion: /ce:validate runs automatically
 7. Updates TODO.md to mark as complete
 ```
 
@@ -68,7 +68,7 @@ Claude:
 # User selects: Add login form
 # Creates plan if not exists
 # Confirms before execution
-# Executes with /loop --plan
+# Executes with /ce:loop --plan
 # Validates
 # Asks: "Continue to next?" → User confirms
 # Repeats for remaining features
@@ -91,7 +91,7 @@ Claude:
 
 ### Purpose
 
-Reference docs provide stack-specific guidance that `/prime` loads at session start.
+Reference docs provide stack-specific guidance that `/ce:prime` loads at session start.
 
 ### Suggested Files by Stack
 

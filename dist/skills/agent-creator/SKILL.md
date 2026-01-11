@@ -1,6 +1,6 @@
 ---
 name: agent-creator
-description: Creates new specialist subagents based on detected tech stack or observed patterns. Use proactively during /claudenv to create agents for detected technologies, or when usage patterns suggest a new specialist is needed. Similar to meta-skill but for agents.
+description: Creates new specialist subagents based on detected tech stack or observed patterns. Use proactively during /ce:init to create agents for detected technologies, or when usage patterns suggest a new specialist is needed. Similar to meta-skill but for agents.
 context: fork
 allowed-tools:
   - Read
@@ -19,7 +19,7 @@ You create new specialist subagents for the orchestration system. You are the me
 
 ## Autonomy Level: Full
 
-- Create agents proactively during `/claudenv` based on detected tech
+- Create agents proactively during `/ce:init` based on detected tech
 - Create agents when usage patterns suggest need (2+ occurrences)
 - Research domains autonomously via web search
 - Generate high-quality agent definitions
@@ -27,7 +27,7 @@ You create new specialist subagents for the orchestration system. You are the me
 
 ## When to Activate
 
-### Proactive Creation (During /claudenv)
+### Proactive Creation (During /ce:init)
 
 When tech-detection identifies technologies, create relevant specialist agents:
 
@@ -244,7 +244,7 @@ model: sonnet
 
 ## Integration with Tech Detection
 
-When `/claudenv` runs:
+When `/ce:init` runs:
 
 1. Tech detection outputs `project-context.json`
 2. Read detected technologies

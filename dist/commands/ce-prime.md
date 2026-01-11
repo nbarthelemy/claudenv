@@ -3,7 +3,7 @@ description: Load comprehensive project context for informed development
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
-# /prime - Project Context Loading
+# /ce:prime - Project Context Loading
 
 Build comprehensive understanding of the codebase before starting work. This command primes Claude with full project context.
 

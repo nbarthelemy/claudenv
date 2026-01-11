@@ -111,14 +111,14 @@ Add notes under tasks for context:
 
 ## Loop Integration
 
-The `/loop` command should:
+The `/ce:loop` command should:
 1. Register on start
 2. Check available tasks each iteration
 3. Claim before working
 4. Complete after finishing
 5. Deregister on exit
 
-The `/next` command should:
+The `/ce:next` command should:
 1. Show coordination status
 2. Highlight which tracks have active agents
 3. Warn about potential conflicts

@@ -1,9 +1,9 @@
 ---
-description: "Autonomous loop: /loop <task>, /loop status|pause|resume|cancel|history"
+description: "Autonomous loop: /ce:loop <task>, /ce:loop status|pause|resume|cancel|history"
 allowed-tools: Bash, Read, Write, Edit
 ---
 
-# /loop - Autonomous Development Loop
+# /ce:loop - Autonomous Development Loop
 
 **IMPORTANT:** If the user provides `--track` flag or mentions coordination/parallel/multiple terminals:
 ```bash
@@ -32,30 +32,42 @@ This file contains multi-agent coordination protocol for working in parallel.
 | `--verify "<cmd>"` | Run after each iteration |
 | `--max <N>` | Max iterations (default: 20) |
 | `--max-time <dur>` | Max time (default: 2h) |
+| `--same-context` | Run in same context (default: fresh subagent per iteration) |
 | `--track "<name>"` | Track name for coordination |
 | `--agent-id "<id>"` | Agent ID (auto-generated if not provided) |
 | `--plan "<file>"` | Execute structured plan file (phases/tasks) |
 | `--validate-after-task` | Run fast lint check after each task (with --plan) |
 | `--validate-after-phase` | Run types+tests after each phase (with --plan) |
 | `--validate-all` | Enable all validation tiers (with --plan) |
+| `--commit-per-task` | Auto-commit after each task completion |
+| `--commit-per-phase` | Auto-commit after each phase completion |
 
 ## Actions
 
 ### Start Loop
 1. Parse task and options from args
 2. Require completion condition (--until or --until-exit)
-3. **Coordination setup** (if --track provided):
+3. **Context mode** (default: fresh):
+   - Fresh: Main context becomes coordinator, spawns subagent per iteration
+   - Same: Run all iterations in current context (opt-in with `--same-context`)
+4. **Coordination setup** (if --track provided):
    - Generate agent ID: `agent-{hostname}-{timestamp}`
    - Register: `bash .claude/scripts/todo-coordinator.sh register "$AGENT_ID" "$TRACK"`
    - Check for active agents on same track (warn if conflict)
-4. Create `.claude/loop/state.json` with status "running"
-5. Begin iteration cycle:
+5. Create `.claude/loop/state.json` with status "running"
+6. Begin iteration cycle:
+   - **If fresh context (default)**:
+     - Package task context: `bash .claude/scripts/loop-context-packager.sh`
+     - Spawn subagent with Task tool
+     - Collect structured result
+     - Record: `bash .claude/scripts/loop-manager.sh record_subagent`
+   - **If same context**:
+     - Execute task directly in current context
    - **If coordinated**: Check available tasks, claim next unclaimed
-   - Execute task
-   - Verify completion
-   - **If coordinated**: Mark task complete, claim next
+   - Verify completion (run --verify command if set)
+   - **If --commit-per-task**: Create atomic commit
    - Check exit condition → repeat or exit
-6. **On completion**:
+7. **On completion**:
    - Deregister: `bash .claude/scripts/todo-coordinator.sh deregister "$AGENT_ID"`
    - Display summary and archive to history
 
@@ -153,7 +165,7 @@ When `--plan <file>` is provided, loop operates in structured plan mode, iterati
 
 ### Plan File Structure
 
-Plans must follow this structure (created by `/feature`):
+Plans must follow this structure (created by `/ce:feature`):
 
 ```markdown
 # Feature: {Name}
@@ -199,7 +211,7 @@ npm test
      4. Update plan file: `- [ ]` → `- [x]`
      5. Output: `TASK_COMPLETE: {task_id}`
    - After all tasks: Output `PHASE_COMPLETE: {phase_name}`
-   - If `--validate-after-phase`: Run `/validate --quick`
+   - If `--validate-after-phase`: Run `/ce:validate --quick`
 
 3. **On Plan Completion**
    - Update plan status to `completed`
@@ -272,10 +284,10 @@ If validation fails, the task/phase is NOT marked complete, and error details ar
 
 ### Integration with /execute
 
-The `/execute` command is a thin wrapper that calls `/loop --plan`:
+The `/ce:execute` command is a thin wrapper that calls `/ce:loop --plan`:
 
 ```
 /execute .claude/plans/feature.md
-  └── /loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE"
-      └── /validate (after loop completes)
+  └── /ce:loop --plan .claude/plans/feature.md --until "PLAN_COMPLETE"
+      └── /ce:validate (after loop completes)
 ```

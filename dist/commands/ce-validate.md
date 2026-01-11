@@ -3,11 +3,11 @@ description: Run comprehensive stack-aware validation (lint, type-check, test, b
 allowed-tools: Read, Bash, Glob
 ---
 
-# /validate - Stack-Aware Validation
+# /ce:validate - Stack-Aware Validation
 
 Run comprehensive validation checks appropriate for the project's tech stack. Automatically detects and runs the right commands for linting, type checking, testing, and building.
 
-**Usage:** `/validate [options]`
+**Usage:** `/ce:validate [options]`
 
 **Options:**
 - `--fix` - Auto-fix linting issues where possible
@@ -246,19 +246,19 @@ For each check type, use the first available tool:
 
 ## Subcommands
 
-### /validate:lint
+### /ce:validate:lint
 Run only linting checks.
 
-### /validate:types
+### /ce:validate:types
 Run only type checking.
 
-### /validate:test
+### /ce:validate:test
 Run only test suite.
 
-### /validate:build
+### /ce:validate:build
 Run only build step.
 
-### /validate:coverage
+### /ce:validate:coverage
 Run tests with coverage report.
 
 ## Markers
@@ -276,4 +276,4 @@ Output these markers for loop detection:
 After successful validation:
 - Ready for `/commit` if all checks pass
 - Ready for PR if on feature branch
-- Consider `/validate --pre-commit` before committing
+- Consider `/ce:validate --pre-commit` before committing

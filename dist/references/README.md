@@ -1,6 +1,6 @@
 # Reference Documentation
 
-This directory contains curated best practices and reference materials for your project's tech stack. These documents are read by Claude during `/prime` to provide informed, stack-specific guidance.
+This directory contains curated best practices and reference materials for your project's tech stack. These documents are read by Claude during `/ce:prime` to provide informed, stack-specific guidance.
 
 ## Purpose
 
@@ -107,4 +107,4 @@ Instead:
 
 ## Auto-Generation
 
-Run `/prime` to see which reference docs would be helpful for your detected stack. Claude can help generate initial reference docs based on official documentation.
+Run `/ce:prime` to see which reference docs would be helpful for your detected stack. Claude can help generate initial reference docs based on official documentation.

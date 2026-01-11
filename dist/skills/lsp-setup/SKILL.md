@@ -348,16 +348,16 @@ When user asks "what calls X" or "what does X call":
 
 | Command | Description |
 |---------|-------------|
-| `/lsp` | Auto-detect and install LSP servers |
-| `/lsp:status` | Show installed/available LSP servers |
-| `/lsp:install <server>` | Manually install a specific server |
-| `/lsp:test` | Test LSP functionality |
+| `/ce:lsp` | Auto-detect and install LSP servers |
+| `/ce:lsp:status` | Show installed/available LSP servers |
+| `/ce:lsp:install <server>` | Manually install a specific server |
+| `/ce:lsp:test` | Test LSP functionality |
 
 ---
 
 ## Integration with Tech Detection
 
-When `/claudenv` or tech-detection runs:
+When `/ce:init` or tech-detection runs:
 
 1. Receive detected languages from `project-context.json`
 2. Look up required LSP servers
@@ -420,7 +420,7 @@ Hand off to other skills when:
 
 | Issue | Solution |
 |-------|----------|
-| "Server not found" | Run `/lsp:install <server>` |
+| "Server not found" | Run `/ce:lsp:install <server>` |
 | "Connection refused" | Server may need restart |
 | "No response" | Check file is saved, server supports language |
 | "Wrong definitions" | Clear LSP cache, restart server |

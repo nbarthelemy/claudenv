@@ -3,7 +3,7 @@ description: Bootstrap Claude Code infrastructure for current project. Detects t
 allowed-tools: Bash, Write, Edit, Read, Glob, Grep, WebSearch, WebFetch
 ---
 
-# /claudenv - Infrastructure Bootstrap
+# /ce:init - Infrastructure Bootstrap
 
 You are initializing the Claudenv infrastructure for this project.
 
@@ -262,8 +262,8 @@ Output a summary:
 
 📚 Available Commands:
    /interview    - Clarify requirements
-   /loop         - Autonomous development
-   /lsp:status   - Check language servers
+   /ce:loop         - Autonomous development
+   /ce:lsp:status   - Check language servers
    /health:check - Verify integrity
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

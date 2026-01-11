@@ -1,15 +1,15 @@
 ---
-description: Execute an implementation plan via /loop with automatic validation
+description: Execute an implementation plan via /ce:loop with automatic validation
 allowed-tools: Read, Write, Edit, Bash, Skill
 ---
 
-# /execute - Plan Execution Orchestrator
+# /ce:execute - Plan Execution Orchestrator
 
-Thin orchestrator that delegates plan execution to `/loop --plan` and runs final validation via `/validate`.
+Thin orchestrator that delegates plan execution to `/ce:loop --plan` and runs final validation via `/ce:validate`.
 
-**Usage:** `/execute <plan-path>`
+**Usage:** `/ce:execute <plan-path>`
 
-**Example:** `/execute .claude/plans/user-authentication.md`
+**Example:** `/ce:execute .claude/plans/user-authentication.md`
 
 ## Process
 
@@ -36,7 +36,7 @@ Output `EXECUTE_STARTED` marker.
 
 ### Step 3: Delegate to Loop
 
-Invoke `/loop` with plan mode:
+Invoke `/ce:loop` with plan mode:
 
 ```
 Skill: loop
@@ -53,7 +53,7 @@ Wait for `PLAN_COMPLETE` marker.
 
 ### Step 4: Run Final Validation
 
-After loop completes, invoke `/validate`:
+After loop completes, invoke `/ce:validate`:
 
 ```
 Skill: validate
@@ -157,13 +157,13 @@ Output `EXECUTE_COMPLETE` or `EXECUTE_FAILED` marker.
 
 ## Subcommands
 
-### /execute:status
+### /ce:execute:status
 Show execution status of current or specified plan.
 
-### /execute:resume <plan>
+### /ce:execute:resume <plan>
 Resume execution from last incomplete task.
 
-### /execute:list
+### /ce:execute:list
 List all plans and their execution status.
 
 ## Markers
@@ -176,9 +176,9 @@ List all plans and their execution status.
 
 ## Error Handling
 
-If `/loop` fails or is interrupted:
+If `/ce:loop` fails or is interrupted:
 1. Plan state is preserved in `.claude/loop/plan-state.json`
-2. Use `/execute:resume` to continue from last checkpoint
+2. Use `/ce:execute:resume` to continue from last checkpoint
 3. Manual intervention may be needed for blocked tasks
 
 ## Integration
@@ -187,7 +187,7 @@ If `/loop` fails or is interrupted:
 /feature "Add auth" → Creates .claude/plans/add-auth.md
     ↓
 /execute .claude/plans/add-auth.md
-    ├── /loop --plan .claude/plans/add-auth.md
+    ├── /ce:loop --plan .claude/plans/add-auth.md
     │     ├── Task 1.1 → TASK_COMPLETE
     │     ├── Task 1.2 → TASK_COMPLETE
     │     └── ... → PLAN_COMPLETE

@@ -3,17 +3,19 @@ description: Send current or specified task to the backlog
 allowed-tools: Read, Edit, Grep
 ---
 
-# /backlog - Send Task to Backlog
+# /ce:backlog - Send Task to Backlog
 
 Move the current in-progress task or a specified task to the Backlog section of TODO.md.
+
+> For advanced operations (insert, remove, move, reorder), see `/ce:phase`
 
 ## Usage
 
 ```
-/backlog                              Move current task ([~]) to backlog
-/backlog --reason "<why>"             Current task with deferral reason
-/backlog "<task-text>"                Move specific task by name
-/backlog "<task-text>" --reason "..." Specific task with reason
+/ce:backlog                              Move current task ([~]) to backlog
+/ce:backlog --reason "<why>"             Current task with deferral reason
+/ce:backlog "<task-text>"                Move specific task by name
+/ce:backlog "<task-text>" --reason "..." Specific task with reason
 ```
 
 ## Process
@@ -26,7 +28,7 @@ Move the current in-progress task or a specified task to the Backlog section of 
 
 If not found:
 ```
-No TODO.md found. Create one with /spec or manually.
+No TODO.md found. Create one with /ce:spec or manually.
 ```
 
 ### Step 2: Identify Task
@@ -38,7 +40,7 @@ Find the in-progress task:
 grep -n "^\- \[~\]" {todo_file}
 ```
 
-- If none found: "No task currently in progress. Specify a task: `/backlog \"task name\"`"
+- If none found: "No task currently in progress. Specify a task: `/ce:backlog \"task name\"`"
 - If multiple found: List them and ask which one to backlog
 
 **Task text provided:**
@@ -48,7 +50,7 @@ Search for matching task (case-insensitive):
 grep -in "{task_text}" {todo_file} | grep "^\- \["
 ```
 
-- If no match: "No task matching '{text}' found. Check spelling or use `/backlog` to move current task."
+- If no match: "No task matching '{text}' found. Check spelling or use `/ce:backlog` to move current task."
 - If multiple matches: Show numbered list and ask user to be more specific
 
 ### Step 3: Identify Source Section

@@ -22,7 +22,7 @@ You are a tech stack detection specialist. Your role is to analyze projects and 
 - Project analysis requested
 - Stack detection needed
 - Permissions need updating based on tech
-- New project bootstrap (`/claudenv`)
+- New project bootstrap (`/ce:init`)
 - Cloud platform configuration
 
 ## Detection Process

@@ -6,27 +6,27 @@
 
 | Command | Purpose |
 |---------|---------|
-| `/spec` | Full setup: interview + tech + TODO.md |
-| `/prime` | Load context (auto at start) |
-| `/feature` | Plan → `.claude/plans/` |
-| `/next` | Interactive: pick, plan, execute |
-| `/autopilot` | Autonomous: all TODO.md features |
-| `/execute` | Run plan via `/loop` + `/validate` |
-| `/validate` | Lint, type-check, test, build |
-| `/rca` | Root cause analysis |
-| `/loop` | Autonomous iterations |
-| `/lsp` | LSP server setup |
+| `/ce:spec` | Full setup: interview + tech + TODO.md |
+| `/ce:prime` | Load context (auto at start) |
+| `/ce:feature` | Plan → `.claude/plans/` |
+| `/ce:next` | Interactive: pick, plan, execute |
+| `/ce:autopilot` | Autonomous: all TODO.md features |
+| `/ce:execute` | Run plan via `/ce:loop` + `/ce:validate` |
+| `/ce:validate` | Lint, type-check, test, build |
+| `/ce:rca` | Root cause analysis |
+| `/ce:loop` | Autonomous iterations |
+| `/ce:lsp` | LSP server setup |
 
 **Conventions:** Timestamps `YYYY-MM-DD HH:MM`, files kebab-case
 
 ## PIV Workflow
 
 ```
-/spec → /prime → /feature → /execute → /validate
+/ce:spec → /ce:prime → /ce:feature → /ce:execute → /ce:validate
 ```
 
-- `/next` - Interactive with confirmations
-- `/autopilot` - Fully autonomous (4h/$50 limit)
+- `/ce:next` - Interactive with confirmations
+- `/ce:autopilot` - Fully autonomous (4h/$50 limit)
 
 ## Orchestration
 
@@ -39,13 +39,13 @@
 ## Loop
 
 ```bash
-/loop "task" --until "done" --max 20
-/loop status|pause|resume|cancel
+/ce:loop "task" --until "done" --max 20
+/ce:loop status|pause|resume|cancel
 ```
 
 ## Reference Docs
 
-Store in `.claude/references/` - loaded by `/prime`
+Store in `.claude/references/` - loaded by `/ce:prime`
 
 ## Workflow
 
