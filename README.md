@@ -61,14 +61,42 @@ claudenv/
 └── dist/              # Distributable content → user's .claude/
     ├── settings.json
     ├── version.json
-    ├── rules/claudenv.md   # Framework instructions
-    ├── commands/           # 24 slash commands
-    ├── skills/             # 10 auto-invoked skills
-    ├── scripts/            # Automation scripts
+    ├── rules/
+    │   ├── claudenv/
+    │   │   ├── core.md       # Core framework rules (always loaded)
+    │   │   └── reference.md  # Detailed examples (on-demand)
+    │   ├── permissions/
+    │   │   └── core.md       # Permission matrix
+    │   ├── error-recovery/
+    │   │   ├── core.md       # Recovery protocol
+    │   │   └── patterns.md   # Error patterns (on-demand)
+    │   ├── triggers/
+    │   │   └── reference.json # Skill/agent triggers
+    │   ├── autonomy.md
+    │   ├── coordination.md    # Multi-agent coordination
+    │   ├── migration.md       # CLAUDE.md migration rules
+    │   └── documentation.md
+    ├── commands/              # 24 slash commands
+    ├── skills/                # 10 auto-invoked skills
+    ├── scripts/               # Automation scripts
     └── ...
 ```
 
 When you install claudenv, the contents of `dist/` are copied to your project's `.claude/` directory.
+
+### Token-Optimized Architecture
+
+Framework rules use a **namespaced structure with conditional loading** to minimize context pollution:
+
+- **Core Rules (~2.8k tokens):** Always loaded, essential for all operations
+- **Conditional Rules (~5.1k tokens):** Loaded only when explicitly needed
+- **Total Reduction:** 76% smaller than monolithic approach
+
+**Conditional loading examples:**
+- `migration.md` - Loaded by `/claudenv` before migrating files
+- `coordination.md` - Loaded by `/loop --track` for multi-agent work
+- `error-recovery/patterns.md` - Loaded when encountering unfamiliar errors
+- `triggers/reference.json` - Loaded by orchestrator for routing decisions
 
 ## What You Get
 
@@ -505,6 +533,44 @@ allowed-tools: Read, Write
 Instructions for this command...
 ```
 
+### Writing Hook Scripts
+
+Hook scripts must be able to run from any subdirectory. Use this pattern for all hook scripts:
+
+```bash
+#!/bin/bash
+# Your Hook Script
+
+# Find project root by looking for .claude directory
+find_project_root() {
+    local dir="$PWD"
+    while [ "$dir" != "/" ]; do
+        if [ -d "$dir/.claude" ]; then
+            echo "$dir"
+            return 0
+        fi
+        dir=$(dirname "$dir")
+    done
+    return 1
+}
+
+# Change to project root or exit gracefully
+PROJECT_ROOT=$(find_project_root)
+if [ -z "$PROJECT_ROOT" ]; then
+    exit 0
+fi
+cd "$PROJECT_ROOT" || exit 0
+
+# Your script logic here...
+```
+
+**Why this is needed:** Hooks run from Claude Code's current working directory, which may be a subdirectory. This pattern ensures your script can always find `.claude/` regardless of where it's run from.
+
+**Built-in scripts using this pattern:**
+- `session-start.sh`
+- `session-end.sh`
+- `learning-observer.sh`
+
 ## Updating
 
 To update an existing Claudenv installation to the latest version:
@@ -516,6 +582,16 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v3.0.9
+- **Changed:** Refactored rules to namespaced directory structure for better organization
+- **Optimized:** 76% token reduction (11.6k → 2.8k core) via conditional loading architecture
+- **Changed:** Split `claudenv.md` → `claudenv/core.md` + `claudenv/reference.md`
+- **Changed:** Split `permissions.md` → `permissions/core.md` (removed redundant examples)
+- **Changed:** Split `error-recovery.md` → `error-recovery/core.md` + `error-recovery/patterns.md`
+- **Changed:** Converted `trigger-reference.md` → `triggers/reference.json` (loaded by orchestrator only)
+- **Fixed:** Hook scripts now auto-locate project root (works from any subdirectory)
+- **Fixed:** Session-end.sh, session-start.sh, learning-observer.sh working directory issues
 
 ### v3.0.8
 - **Added:** `rules/documentation.md` - automatic doc updates with code changes

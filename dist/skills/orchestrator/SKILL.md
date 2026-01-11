@@ -82,6 +82,13 @@ Read `.claude/agents/` to see all available specialist agents. Core agents inclu
 
 ## Orchestration Process
 
+**IMPORTANT:** Before starting, load trigger configuration:
+```bash
+Read .claude/rules/triggers/reference.json
+```
+
+This file contains all skill and agent trigger patterns (keywords, phrases, file patterns).
+
 ### Step 1: Analyze Task
 
 Parse the incoming task and determine:

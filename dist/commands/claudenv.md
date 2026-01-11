@@ -7,6 +7,13 @@ allowed-tools: Bash, Write, Edit, Read, Glob, Grep, WebSearch, WebFetch
 
 You are initializing the Claudenv infrastructure for this project.
 
+**IMPORTANT:** Before starting, load migration rules:
+```bash
+Read .claude/rules/migration.md
+```
+
+This file contains critical rules for preserving existing CLAUDE.md content during migration.
+
 ## Bootstrap Process
 
 Execute these steps in order. After each step, validate success before proceeding.

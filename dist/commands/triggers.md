@@ -25,5 +25,5 @@ Shows all agents with keywords, phrases, and file patterns from `.claude/agents/
 
 ### regenerate
 Run: `bash .claude/scripts/generate-trigger-reference.sh`
-Rebuilds `.claude/rules/trigger-reference.md` from triggers.json files
+Rebuilds `.claude/rules/triggers/reference.json` from triggers.json files
 Run after editing trigger configs

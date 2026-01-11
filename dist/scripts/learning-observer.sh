@@ -3,8 +3,25 @@
 # Triggered after file modifications to capture and track patterns
 # Automatically detects when thresholds are reached for skill/agent creation
 
-# Exit gracefully if not in project root
-[ ! -d ".claude" ] && exit 0
+# Find project root by looking for .claude directory
+find_project_root() {
+    local dir="$PWD"
+    while [ "$dir" != "/" ]; do
+        if [ -d "$dir/.claude" ]; then
+            echo "$dir"
+            return 0
+        fi
+        dir=$(dirname "$dir")
+    done
+    return 1
+}
+
+# Change to project root or exit gracefully
+PROJECT_ROOT=$(find_project_root)
+if [ -z "$PROJECT_ROOT" ]; then
+    exit 0
+fi
+cd "$PROJECT_ROOT" || exit 0
 
 LEARNING_DIR=".claude/learning"
 PATTERNS_FILE="$LEARNING_DIR/patterns.json"

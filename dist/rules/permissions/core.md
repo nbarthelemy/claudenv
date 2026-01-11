@@ -2,16 +2,16 @@
 
 ## Wildcard Bash Permissions (Claude Code 2.1+)
 
-Bash permissions now support wildcards at any position:
+Bash permissions support wildcards at any position:
 
 ```json
 {
   "permissions": {
     "allow": [
-      "Bash(npm *)",        // Matches: npm install, npm run build, etc.
-      "Bash(git *)",        // Matches: git status, git commit, etc.
-      "Bash(* --help)",     // Matches: any command with --help flag
-      "Bash(docker compose *)"  // Matches: docker compose up, etc.
+      "Bash(npm *)",        // npm followed by anything
+      "Bash(git *)",        // git followed by anything
+      "Bash(* --help)",     // any command with --help
+      "Bash(docker compose *)"  // docker compose followed by anything
     ]
   }
 }
@@ -21,8 +21,6 @@ Bash permissions now support wildcards at any position:
 - `Bash(npm *)` - npm followed by anything
 - `Bash(* install)` - Any command ending with install
 - `Bash(docker * build)` - docker, anything, then build
-
-**Note:** The old colon syntax (`Bash(npm:*)`) is deprecated. Use space-based wildcards.
 
 ---
 
@@ -113,23 +111,9 @@ pub publish, hex publish
 
 ## Tech-Specific Permissions
 
-Permissions are dynamically added based on detected tech stack.
-See `skills/tech-detection/command-mappings.json` for the full mapping.
+Permissions are dynamically added based on detected tech stack during `/claudenv`.
 
-### Example: Node.js Project
-
-When `package.json` is detected:
-```
-npm *, npx *, node *
-```
-
-### Example: Python Project
-
-When `requirements.txt` or `pyproject.toml` detected:
-```
-pip *, pip3 *, python *, python3 *
-pytest *, black *, ruff *
-```
+**Reference:** See `skills/tech-detection/assets/command-mappings.json` for full mapping of technologies to commands.
 
 ## Customization
 

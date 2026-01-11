@@ -5,6 +5,13 @@ allowed-tools: Bash, Read, Write, Edit
 
 # /loop - Autonomous Development Loop
 
+**IMPORTANT:** If the user provides `--track` flag or mentions coordination/parallel/multiple terminals:
+```bash
+Read .claude/rules/coordination.md
+```
+
+This file contains multi-agent coordination protocol for working in parallel.
+
 ## Usage
 
 ```

@@ -142,7 +142,10 @@ mkdir /tmp/test-project && cd /tmp/test-project
 
 | File | Purpose |
 |------|---------|
-| `dist/rules/claudenv.md` | Main framework instructions |
+| `dist/rules/claudenv/core.md` | Core framework instructions (always loaded) |
+| `dist/rules/claudenv/reference.md` | Detailed examples and edge cases (loaded on-demand) |
+| `dist/rules/triggers/reference.json` | Skill/agent trigger patterns (loaded by orchestrator) |
+| `dist/rules/claudenv.md` | DEPRECATED - split into core + reference |
 | `dist/settings.json` | Default permissions matrix |
 | `dist/scripts/detect-stack.sh` | Tech detection (50+ technologies) |
 | `install.sh` | Smart installer |
@@ -187,4 +190,6 @@ mkdir /tmp/test-project && cd /tmp/test-project
 
 ## Claudenv Framework
 
-@rules/claudenv.md
+@rules/claudenv/core.md
+
+> Detailed reference: @rules/claudenv/reference.md (load on-demand)

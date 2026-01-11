@@ -136,13 +136,15 @@ Before optimization, add documentation for any undocumented components:
 Only process these when running from the claudenv repository itself:
 
 1. `dist/rules/autonomy.md`
-2. `dist/rules/permissions.md`
-3. `dist/rules/error-recovery.md`
-4. `dist/rules/coordination.md`
-5. `dist/rules/migration.md`
-6. `dist/rules/trigger-reference.md` (regenerate from triggers.json)
-7. `dist/rules/claudenv.md`
-8. `README.md`
+2. `dist/rules/permissions/core.md`
+3. `dist/rules/error-recovery/core.md`
+4. `dist/rules/error-recovery/patterns.md`
+5. `dist/rules/coordination.md`
+6. `dist/rules/migration.md`
+7. `dist/rules/triggers/reference.json` (regenerate from triggers.json)
+8. `dist/rules/claudenv/core.md`
+9. `dist/rules/claudenv/reference.md`
+10. `README.md`
 
 ### Project Files (user projects)
 
