@@ -517,6 +517,9 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.4
+- **Added:** Manifest validation tests (10 tests) to catch missing files in distribution
+
 ### v3.0.3
 - **Added:** `.gitignore` for installed projects to ignore runtime state files
 - **Fixed:** Added v3.0.0 scripts to manifest.json for proper installation

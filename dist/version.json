@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "3.0.3",
+  "infrastructureVersion": "3.0.4",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
-  "lastUpdated": "2026-01-11T17:30:00Z",
+  "lastUpdated": "2026-01-11T18:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "3.0.4": "Add manifest validation tests (10 tests) to catch missing files in distribution",
     "3.0.3": "Add .gitignore for installed projects to ignore runtime state, add v3.0.0 scripts to manifest",
     "3.0.2": "Fix manifest.json path reference/README.md to references/README.md",
     "3.0.1": "Extract workspace package to standalone repo, add template variable substitution for generated files",

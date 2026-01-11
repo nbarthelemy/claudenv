@@ -1,6 +1,6 @@
 {
   "description": "Framework files managed by claudenv. Used during updates to remove deleted files without affecting user-created content.",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "files": [
     ".gitignore",
     "agents/accessibility-checker.md",
