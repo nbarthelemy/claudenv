@@ -517,6 +517,9 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.8
+- **Added:** `rules/documentation.md` - automatic doc updates with code changes
+
 ### v3.0.7
 - **Added:** `bin/test` runner
 

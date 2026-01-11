@@ -498,3 +498,4 @@ Never ask permission to consult documentation.
 @rules/migration.md
 @rules/trigger-reference.md
 @rules/coordination.md
+@rules/documentation.md
