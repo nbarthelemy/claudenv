@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "3.0.11",
+  "infrastructureVersion": "3.0.12",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
-  "lastUpdated": "2026-01-11T19:25:00Z",
+  "lastUpdated": "2026-01-11T19:45:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "3.0.12": "Major context optimization: Move reference.md/migration.md/coordination.md to references/ for on-demand loading. Semantic compression of all rules (50%+ reduction). Estimated total savings: ~8k tokens.",
     "3.0.11": "Deprecate old monolithic rule files (claudenv.md, error-recovery.md, permissions.md, trigger-reference.md) in favor of split structure. Reduces memory file context by ~10k tokens.",
     "3.0.10": "Fix duplicate framework files in monorepo/workspace setups. Installer now detects parent .claude/ and skips framework directories (skills, commands, rules, scripts, templates, agents, orchestration) for subprojects. Add cleanup-duplicate-skills.sh for existing installations.",
     "3.0.9": "Token optimization (76% reduction) via namespaced rules structure with conditional loading. Fix hook scripts to auto-locate project root.",
