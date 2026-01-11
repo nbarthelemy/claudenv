@@ -583,6 +583,16 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.11
+- **Changed:** Deprecated old monolithic rule files in favor of split structure
+- **Removed:** `claudenv.md`, `error-recovery.md`, `permissions.md`, `trigger-reference.md` from memory files
+- **Optimized:** Reduces memory file context by ~10k tokens
+
+### v3.0.10
+- **Fixed:** Duplicate framework files in monorepo/workspace setups
+- **Changed:** Installer now detects parent `.claude/` and skips framework directories for subprojects
+- **Added:** `cleanup-duplicate-skills.sh` script for cleaning existing installations
+
 ### v3.0.9
 - **Changed:** Refactored rules to namespaced directory structure for better organization
 - **Optimized:** 76% token reduction (11.6k → 2.8k core) via conditional loading architecture
