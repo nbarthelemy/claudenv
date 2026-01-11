@@ -1,5 +1,7 @@
 # Autonomy Rules
 
+> Full details: `.claude/references/autonomy-guide.md`
+
 ## Levels
 
 **High (Default):** Full file/command/git access, install dev deps, self-recover 3x

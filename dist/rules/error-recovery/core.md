@@ -1,5 +1,7 @@
 # Error Recovery
 
+> Full details: `.claude/references/error-recovery-guide.md`
+
 ## Protocol
 
 1. **Try** alt approach or different tool

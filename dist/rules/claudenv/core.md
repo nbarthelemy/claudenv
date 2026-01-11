@@ -1,5 +1,7 @@
 # Claudenv Core
 
+> Full details: `.claude/references/claudenv-reference.md`
+
 ## Commands
 
 | Command | Purpose |

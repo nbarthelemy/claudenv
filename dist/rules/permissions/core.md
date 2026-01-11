@@ -1,5 +1,7 @@
 # Permission Matrix
 
+> Full details: `.claude/references/permissions-guide.md`
+
 ## Bash Wildcards
 
 `Bash(npm *)` - npm + anything | `Bash(* --help)` - any cmd + --help
