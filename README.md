@@ -517,6 +517,9 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.2
+- **Fixed:** manifest.json path reference/README.md to references/README.md
+
 ### v3.0.1
 - **Added:** Extract workspace package to standalone repo
 - **Added:** Template variable substitution for generated files

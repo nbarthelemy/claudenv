@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "3.0.1",
+  "infrastructureVersion": "3.0.2",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
-  "lastUpdated": "2026-01-10T23:30:00Z",
+  "lastUpdated": "2026-01-11T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "3.0.2": "Fix manifest.json path reference/README.md to references/README.md",
     "3.0.1": "Extract workspace package to standalone repo, add template variable substitution for generated files",
     "3.0.0": "Ultimate Autonomous Workflow: Add incremental validation (task/phase/feature tiers), git feature isolation (branch per feature with rollback), dependency graph (smart execution order), comprehensive test suite (74 tests, 100% action coverage)",
     "2.6.4": "Add comprehensive project analysis to /docs command, distinguish framework vs project files using manifest",
