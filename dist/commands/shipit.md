@@ -25,7 +25,16 @@ git diff --stat
 
 If no changes to commit, stop and inform user.
 
-### 2. Determine Version Bump
+### 2. Run Tests
+
+Run the test suite to ensure everything passes before release:
+```bash
+bash tests/run-tests.sh
+```
+
+If tests fail, stop and inform user. Do NOT proceed with release until tests pass.
+
+### 3. Determine Version Bump
 
 Read current version from `dist/version.json` (field: `infrastructureVersion`).
 
@@ -33,19 +42,19 @@ Parse the version (e.g., `2.6.1` → major=2, minor=6, patch=1).
 
 Bump the patch version by 1 (e.g., `2.6.1` → `2.6.2`).
 
-### 3. Update version.json
+### 4. Update version.json
 
 Edit `dist/version.json`:
 - Update `infrastructureVersion` to new version
 - Update `lastUpdated` to today's date (format: `YYYY-MM-DDTHH:MM:SSZ`)
 - Add new entry to `changelog` object with the user's description
 
-### 4. Update manifest.json
+### 5. Update manifest.json
 
 Edit `dist/manifest.json`:
 - Update `version` to match new version
 
-### 5. Update README.md Changelog
+### 6. Update README.md Changelog
 
 Add new version entry at the top of the Changelog section:
 
@@ -54,7 +63,7 @@ Add new version entry at the top of the Changelog section:
 - **Changed:** {user's description}
 ```
 
-### 6. Commit
+### 7. Commit
 
 ```bash
 git add -A
@@ -63,13 +72,13 @@ git commit -m "{description} (vX.Y.Z)
 Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
 ```
 
-### 7. Push
+### 8. Push
 
 ```bash
 git push origin main
 ```
 
-### 8. Report
+### 9. Report
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -517,6 +517,9 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.5
+- **Changed:** `/shipit` now runs tests before committing - tests must pass before release
+
 ### v3.0.4
 - **Added:** Manifest validation tests (10 tests) to catch missing files in distribution
 
