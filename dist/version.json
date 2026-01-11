@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "3.0.6",
+  "infrastructureVersion": "3.0.7",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-11T18:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "3.0.7": "Add bin/test runner",
     "3.0.6": "Move installer to bin/install, remove install.sh",
     "3.0.5": "Add test step to /shipit command - tests must pass before release",
     "3.0.4": "Add manifest validation tests (10 tests) to catch missing files in distribution",

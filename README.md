@@ -517,6 +517,9 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.7
+- **Added:** `bin/test` runner
+
 ### v3.0.6
 - **Changed:** Move installer to `bin/install`, remove `install.sh`
 
