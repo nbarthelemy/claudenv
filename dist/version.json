@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "3.0.9",
+  "infrastructureVersion": "3.0.10",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-11T19:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "3.0.10": "Fix duplicate framework files in monorepo/workspace setups. Installer now detects parent .claude/ and skips framework directories (skills, commands, rules, scripts, templates, agents, orchestration) for subprojects. Add cleanup-duplicate-skills.sh for existing installations.",
     "3.0.9": "Token optimization (76% reduction) via namespaced rules structure with conditional loading. Fix hook scripts to auto-locate project root.",
     "3.0.8": "Add documentation.md rule - automatic doc updates with code changes",
     "3.0.7": "Add bin/test runner",

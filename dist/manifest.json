@@ -1,6 +1,6 @@
 {
   "description": "Framework files managed by claudenv. Used during updates to remove deleted files without affecting user-created content.",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "files": [
     ".gitignore",
     "agents/accessibility-checker.md",
@@ -62,6 +62,7 @@
     "scripts/apply-update.sh",
     "scripts/audit.sh",
     "scripts/bootstrap.sh",
+    "scripts/cleanup-duplicate-skills.sh",
     "scripts/check-readme-update.sh",
     "scripts/check-update.sh",
     "scripts/claudenv-status.sh",

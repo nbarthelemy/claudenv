@@ -9,6 +9,20 @@ REPO_URL="https://github.com/nbarthelemy/claudenv"
 BRANCH="main"
 TARGET=".claude"
 
+# Check for workspace setup (parent .claude with claudenv)
+WORKSPACE_ROOT=""
+IS_SUBPROJECT=false
+check_dir="$PWD"
+while [ "$check_dir" != "/" ]; do
+    parent_dir=$(dirname "$check_dir")
+    if [ -f "$parent_dir/.claude/version.json" ]; then
+        WORKSPACE_ROOT="$parent_dir/.claude"
+        IS_SUBPROJECT=true
+        break
+    fi
+    check_dir="$parent_dir"
+done
+
 # Check if running from local repo
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
 if [ -d "$SCRIPT_DIR/../dist" ]; then
@@ -21,6 +35,13 @@ fi
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Claudenv Installer"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Report workspace detection
+if [ "$IS_SUBPROJECT" = true ]; then
+    echo ""
+    echo "📁 Workspace detected: $WORKSPACE_ROOT"
+    echo "   Installing subproject config (inherits core skills from workspace)"
+fi
 
 # Check for existing .claude directory
 EXISTING_CLAUDE_MD=""
@@ -98,11 +119,27 @@ if [ "$IS_UPDATE" = true ] && [ -f "$TARGET/manifest.json" ]; then
     fi
 fi
 
+# Framework directories that should only exist at workspace root (not in subprojects)
+FRAMEWORK_DIRS="skills commands rules scripts templates agents orchestration"
+
 # Copy framework files using manifest (preserves custom content)
 if command -v jq &> /dev/null; then
     # Use manifest-based copy (preferred)
     while IFS= read -r file; do
         if [ -f "$DIST/$file" ]; then
+            # Skip framework directories for subprojects (they inherit from workspace root)
+            if [ "$IS_SUBPROJECT" = true ]; then
+                skip=false
+                for dir in $FRAMEWORK_DIRS; do
+                    if [[ "$file" == ${dir}/* ]]; then
+                        skip=true
+                        break
+                    fi
+                done
+                if [ "$skip" = true ]; then
+                    continue
+                fi
+            fi
             mkdir -p "$TARGET/$(dirname "$file")"
             cp "$DIST/$file" "$TARGET/$file"
         fi
@@ -111,6 +148,19 @@ else
     # Fallback: copy all files but merge directories (don't delete)
     echo "  Note: Install jq for better custom content preservation"
     for dir in commands skills rules scripts templates learning agents orchestration; do
+        # Skip framework dirs for subprojects
+        if [ "$IS_SUBPROJECT" = true ]; then
+            skip=false
+            for fdir in $FRAMEWORK_DIRS; do
+                if [ "$dir" = "$fdir" ]; then
+                    skip=true
+                    break
+                fi
+            done
+            if [ "$skip" = true ]; then
+                continue
+            fi
+        fi
         if [ -d "$DIST/$dir" ]; then
             mkdir -p "$TARGET/$dir"
             cp -r "$DIST/$dir"/* "$TARGET/$dir"/ 2>/dev/null || true
@@ -185,7 +235,7 @@ if [ ! -f "$TARGET/TODO.md" ] && [ ! -f "./TODO.md" ]; then
 fi
 
 # Count what was installed
-SKILLS=$(find "$TARGET/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+LOCAL_SKILLS=$(find "$TARGET/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
 COMMANDS=$(find "$TARGET/commands" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 AGENTS=$(find "$TARGET/agents" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 
@@ -194,7 +244,14 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "  Claudenv Installed!"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "  $SKILLS skills"
+if [ "$IS_SUBPROJECT" = true ]; then
+    WORKSPACE_SKILLS=$(find "$WORKSPACE_ROOT/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+    echo "  📁 Subproject config installed"
+    echo "  Inherits $WORKSPACE_SKILLS skills from workspace root"
+    echo "  $LOCAL_SKILLS local skills"
+else
+    echo "  $LOCAL_SKILLS skills"
+fi
 echo "  $COMMANDS commands"
 echo "  $AGENTS agents"
 echo ""
