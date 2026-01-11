@@ -517,6 +517,10 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v3.0.3
+- **Added:** `.gitignore` for installed projects to ignore runtime state files
+- **Fixed:** Added v3.0.0 scripts to manifest.json for proper installation
+
 ### v3.0.2
 - **Fixed:** manifest.json path reference/README.md to references/README.md
 

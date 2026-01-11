@@ -1,0 +1,17 @@
+# Runtime state (not tracked)
+loop/*.json
+loop/failures/
+logs/*
+backups/*
+learning/*.log
+
+# Keep directory structure
+!loop/.gitkeep
+!logs/.gitkeep
+!backups/.gitkeep
+
+# User-specific (generated per-project)
+settings.local.json
+project-context.json
+lsp-config.json
+SPEC.md

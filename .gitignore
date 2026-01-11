@@ -2,6 +2,7 @@
 .claude/logs/*
 .claude/backups/*
 .claude/loop/*
+.claude/loop/*.json
 .claude/learning/*.log
 !.claude/logs/.gitkeep
 !.claude/backups/.gitkeep
