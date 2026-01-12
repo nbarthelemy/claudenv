@@ -13,11 +13,12 @@ This file is loaded on-demand when you need detailed context. Core rules are in 
 ├── CLAUDE.md           # Project instructions + @rules/claudenv.md
 ├── settings.json       # Permissions & hooks
 ├── SPEC.md             # Project specification (generated)
-├── project-context.json # Detected tech stack
+├── project-context.json # Detected tech stack (structured)
 ├── commands/           # Slash commands
 ├── skills/             # Auto-invoked capabilities
 │   └── triggers.json   # Skill trigger configuration
 ├── agents/             # Specialist subagents for orchestration
+│   ├── index.json      # Agent tier system (core vs on-demand)
 │   └── triggers.json   # Agent trigger configuration
 ├── orchestration/      # Orchestration config (triggers, limits)
 ├── rules/              # Modular instruction sets
@@ -26,7 +27,8 @@ This file is loaded on-demand when you need detailed context. Core rules are in 
 ├── references/         # Curated best practices docs (read by /ce:prime)
 ├── plans/              # Feature implementation plans (/feature output)
 ├── rca/                # Root cause analysis documents (/rca output)
-├── learning/           # Pattern observations
+├── learning/           # Pattern observations (structured)
+├── memory/             # Freeform knowledge files (markdown)
 ├── loop/               # Autonomous loop state & history
 ├── lsp-config.json     # Installed LSP servers (generated)
 ├── logs/               # Execution logs
@@ -296,3 +298,70 @@ Corrections saved to `## Project Facts` in CLAUDE.md:
 - Use LSP for code navigation (definitions, references, implementations)
 - Use grep for text search (comments, strings, patterns)
 - LSP understands code semantically; grep is text-based
+
+---
+
+## Progressive Disclosure & Token Optimization
+
+### The Pattern
+
+Instead of loading all tools/context upfront, discover and load on-demand:
+
+| Approach | Token Cost | Accuracy |
+|----------|-----------|----------|
+| All tools in context | 50-100K | Lower (context noise) |
+| Progressive disclosure | 5-10K | Higher (focused context) |
+
+**Industry validation**: Cloudflare (98.7% reduction), Anthropic (85% reduction), Cursor (46.9% reduction)
+
+### Implementation in Claudenv
+
+1. **Skill Frontmatter**: ~30 words with triggers (not full documentation)
+2. **Agent Tiers**: Core 4 agents always available, 14 others on-demand
+3. **Lazy Trigger Loading**: `triggers/reference.json` loaded only by orchestrator
+4. **Tool Search Skill**: Discovers capabilities without loading all schemas
+
+### MCP Tool Search (Experimental)
+
+Claude Code has experimental MCP tool search capability:
+
+```bash
+# Enable MCP tool search (reduces MCP context by ~85%)
+claude --mcp-experimental-cli
+```
+
+**How it works:**
+- Instead of loading all MCP tool schemas into context
+- A "tool search" tool discovers available tools on-demand
+- Only loads schemas for tools actually needed
+
+**When to use:**
+- Projects with many MCP servers configured
+- Long-running sessions where token budget matters
+- Complex workflows touching multiple capabilities
+
+**Note:** This flag is experimental and may change. Check Claude Code docs for current status.
+
+### Memory as Files
+
+Claudenv uses simple files for memory, not embeddings:
+
+| File | Purpose |
+|------|---------|
+| `project-context.json` | Detected tech stack (structured) |
+| `.claude/memory/` | Freeform knowledge files (markdown) |
+| `CLAUDE.md` | Project instructions |
+| `.claude/learning/` | Observed patterns |
+
+The agent reads/writes/searches these naturally via Bash + Read + Write tools.
+
+### Token Budget Guidelines
+
+| Context Type | Target | Location |
+|--------------|--------|----------|
+| System prompt | <30K | Base context |
+| Per-skill overhead | <100 words | Frontmatter |
+| Reference docs | On-demand | `.claude/references/` |
+| Agent descriptions | Tiered | `.claude/agents/index.json` |
+
+**Goal**: Keep working context under 50K tokens for optimal model performance.

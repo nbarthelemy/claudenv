@@ -1,6 +1,7 @@
 {
   "version": "1.0.0",
   "generated": "Auto-generated - DO NOT EDIT MANUALLY",
+  "_note": "LAZY LOADED: This file is NOT in base context. Loaded on-demand by orchestrator skill when matching triggers to agents/skills.",
   "skills": {
     "frontend-design": {
       "keywords": ["UI", "UX", "CSS", "SCSS", "styling", "Tailwind", "layout", "animation", "typography", "colors", "themes", "dark mode", "light mode", "responsive", "mobile-first"],
@@ -41,6 +42,10 @@
     "agent-creator": {
       "keywords": [],
       "phrases": ["create an agent", "new specialist agent", "specialist for this tech", "need an expert for"]
+    },
+    "tool-search": {
+      "keywords": ["MCP", "tools", "capabilities"],
+      "phrases": ["what tools", "find tool", "available MCP", "tool for", "capability search", "what can you do", "is there a tool"]
     },
     "spec-workflow": {
       "keywords": ["spec", "specification", "setup", "bootstrap"],
