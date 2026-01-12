@@ -1,5 +1,7 @@
 # Parallel Execution Rules
 
+**On every prompt, evaluate opportunities to process tasks in parallel.**
+
 ## Prefer Subagents for Independent Work
 
 When facing tasks that can be parallelized, **launch up to 15 subagents** using the Task tool to work concurrently. This maximizes throughput and keeps the main context focused.
