@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "4.1.2",
+  "infrastructureVersion": "4.2.0",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-12T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "4.2.0": "Progressive disclosure infrastructure: Add agent tiering (4 core, 14 on-demand in agents/index.json), tool-search skill for capability discovery, memory/ directory for file-based persistence, MCP experimental CLI flag documentation.",
     "4.1.2": "Evaluate parallel opportunities on every prompt",
     "4.1.1": "Add parallel-execution.md rule: prefer subagents for independent work, launch up to 15 agents concurrently for parallelizable tasks.",
     "4.1.0": "Add skill namespacing: skills moved to skills/claudenv/ (ce: namespace). Workspace skills go in skills/workspace/ (ws: namespace). Optional namespace prefix for invocation (ce:skill-name or ws:skill-name). Hook commands now auto-find project root from subdirectories.",
