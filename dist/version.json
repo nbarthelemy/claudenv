@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "4.1.0",
+  "infrastructureVersion": "4.1.1",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
-  "lastUpdated": "2026-01-11T23:55:00Z",
+  "lastUpdated": "2026-01-12T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "4.1.1": "Add parallel-execution.md rule: prefer subagents for independent work, launch up to 15 agents concurrently for parallelizable tasks.",
     "4.1.0": "Add skill namespacing: skills moved to skills/claudenv/ (ce: namespace). Workspace skills go in skills/workspace/ (ws: namespace). Optional namespace prefix for invocation (ce:skill-name or ws:skill-name). Hook commands now auto-find project root from subdirectories.",
     "4.0.0": "BREAKING: Rename all commands to /ce:* namespace. Add GSD-inspired features: fresh context execution (default for /ce:loop), structured task format (files/action/verify/done), atomic commits (--commit-per-task), codebase mapping (/ce:map with 6 analyst agents), enhanced state tracking (/ce:blocker), context budget tracking, phase management (/ce:phase). New scripts: loop-context-packager.sh, map-codebase.sh, phase-manager.sh, task-commit.sh.",
     "3.0.13": "Tiered documentation: Add full reference versions (autonomy-guide.md, permissions-guide.md, error-recovery-guide.md) alongside compressed rules. Compressed rules now link to full references for on-demand detail access.",

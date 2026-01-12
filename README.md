@@ -583,6 +583,14 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 
 ## Changelog
 
+### v4.1.1
+- **Added:** `parallel-execution.md` rule - prefer subagents for independent work, launch up to 15 agents concurrently
+
+### v4.1.0
+- **Added:** Skill namespacing - skills moved to `skills/claudenv/` (ce: namespace)
+- **Added:** Workspace skills support via `skills/workspace/` (ws: namespace)
+- **Changed:** Hook commands now auto-find project root from subdirectories
+
 ### v4.0.0
 - **BREAKING:** All commands renamed to `/ce:*` namespace (e.g., `/loop` → `/ce:loop`)
 - **Added:** Fresh context execution as default for `/ce:loop` (subagents per iteration)
