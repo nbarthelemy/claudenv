@@ -79,6 +79,12 @@ Use WebSearch to find:
 - Performance comparisons
 - Migration paths
 
+**Source Verification (Required):**
+- Cross-reference at least 2 sources before recommending approaches
+- Prefer official docs and well-maintained community resources
+- Check publication dates (prefer 2024+)
+- Note conflicting information when sources disagree
+
 ### Challenge Gently
 
 If user makes a choice that seems problematic:

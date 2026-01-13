@@ -16,6 +16,7 @@
 | `/ce:rca` | Root cause analysis |
 | `/ce:loop` | Autonomous iterations |
 | `/ce:lsp` | LSP server setup |
+| `/ce:verbose` | Toggle detailed explanations on/off |
 
 **Conventions:** Timestamps `YYYY-MM-DD HH:MM`, files kebab-case
 
@@ -64,6 +65,19 @@ UNFETTERED. Search docs, scrape pages, create skills. Never ask permission.
 - **Multi-agent** → `.claude/references/coordination-guide.md`
 - **Error patterns** → `@rules/error-recovery/patterns.md`
 - **Examples** → `.claude/references/claudenv-reference.md`
+
+## Critical Practices
+
+**Read Before Modify:** Never assume file contents. Always read files before editing or making decisions based on them. Speculation about code structure leads to broken implementations.
+
+**Source Verification:** When researching solutions, verify findings against multiple sources before implementing. A single doc page may be outdated or incomplete.
+
+**Verbosity Mode:** Check for `.claude/verbose-mode` marker. When present:
+- Explain reasoning behind decisions
+- Summarize changes after tool calls
+- Note trade-offs considered
+- Provide educational context
+Toggle with `/ce:verbose on|off`.
 
 ## Core Rules
 

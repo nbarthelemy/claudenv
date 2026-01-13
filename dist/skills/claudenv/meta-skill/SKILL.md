@@ -47,6 +47,12 @@ Gather:
 - Best practices
 - Common pitfalls
 
+**Source Verification (Required):**
+- Cross-reference at least 2 sources for key patterns
+- Prefer official docs over blog posts
+- Check publication dates (prefer 2024+)
+- If sources conflict, note the discrepancy and prefer official stance
+
 ### Step 2: Analyze Requirements
 
 Determine:
