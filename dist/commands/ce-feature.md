@@ -7,9 +7,17 @@ allowed-tools: Read, Write, Glob, Grep, Bash, WebFetch, WebSearch, AskUserQuesti
 
 Transform a feature request into a detailed, executable implementation plan. Plans are saved to `.claude/plans/` for persistence and can be executed with `/ce:execute`.
 
-**Usage:** `/ce:feature <feature-description>`
+**Usage:**
+```
+/ce:feature <feature-description>
+/ce:feature <feature> --output prompts    # Build prompts for external tools
+/ce:feature <feature> --output design     # Design handoff spec
+/ce:feature <feature> --target stitch     # Optimize prompts for Stitch
+/ce:feature <feature> --target v0         # Optimize prompts for v0
+/ce:feature <feature> --skip-ux           # Skip UX analysis (infrastructure features)
+```
 
-**Example:** `/ce:feature Add user authentication with OAuth`
+**Example:** `/ce:feature Add workflow builder with drag-drop canvas`
 
 ## Philosophy
 
@@ -17,7 +25,123 @@ Transform a feature request into a detailed, executable implementation plan. Pla
 
 A good plan enables any developer (human or AI) to implement the feature without additional research or clarification.
 
+**UX Philosophy:** Every user-facing feature gets UX analysis BEFORE implementation planning. UX decisions made upfront prevent "game time" decisions that lead to inconsistent experiences.
+
 ## Process
+
+### Phase 0: Interface Classification
+
+First, determine what type of interface this feature involves:
+
+| Interface Type | Indicators | UX Passes |
+|----------------|------------|-----------|
+| `visual` | UI, component, page, screen, dashboard | All 6 passes |
+| `api` | Endpoint, service, REST, GraphQL | mental-model, info-arch, state-design |
+| `cli` | Command, flag, terminal, shell | mental-model, affordances, state-design, flow-integrity |
+| `none` | Database, config, infrastructure | Skip UX analysis |
+
+If `--skip-ux` flag is provided, skip to Phase 2.
+
+### Phase 0.5: UX Analysis (for user-facing features)
+
+Run the relevant UX passes based on interface type. This is the **most important phase** - it prevents generic, inconsistent UIs.
+
+#### Pass 1: Mental Model (all interface types)
+- What does the user think this feature does?
+- What prior experience do they bring?
+- What misconceptions are likely?
+
+**Required output:**
+```markdown
+## Pass 1: Mental Model
+
+**Primary user intent:** [One sentence]
+**Prior experience:** [What they know]
+**Misconceptions to address:**
+- [Misconception] → Addressed by: [UX decision]
+```
+
+#### Pass 2: Information Architecture (all interface types)
+- What concepts will users encounter?
+- How should they be grouped?
+- What's primary vs secondary vs hidden?
+
+**Required output:**
+```markdown
+## Pass 2: Information Architecture
+
+**Concepts:**
+| Concept | Description | Visibility |
+|---------|-------------|------------|
+| [Name] | [What it is] | Primary/Secondary/Hidden |
+
+**Grouping rationale:** [Why organized this way]
+```
+
+#### Pass 3: Affordances (visual, cli)
+- What actions are available?
+- How does user discover them?
+- What looks clickable/editable/actionable?
+
+**Required output:**
+```markdown
+## Pass 3: Affordances
+
+| Action | Signal | Discovery |
+|--------|--------|-----------|
+| [Action] | [Visual cue] | [How user finds it] |
+```
+
+#### Pass 4: Cognitive Load (visual, cli)
+- Where will users hesitate?
+- What decisions can we eliminate?
+- What smart defaults can we provide?
+
+**Required output:**
+```markdown
+## Pass 4: Cognitive Load
+
+**Friction points:**
+| Moment | Simplification |
+|--------|----------------|
+| [Where user hesitates] | [How we help] |
+
+**Defaults:** [What we pre-fill and why]
+```
+
+#### Pass 5: State Design (all interface types)
+- What states can the system be in?
+- How is each state communicated?
+- What can users do in each state?
+
+**Required output:**
+```markdown
+## Pass 5: State Design
+
+| State | User Sees | User Understands | User Can Do |
+|-------|-----------|------------------|-------------|
+| Empty | | | |
+| Loading | | | |
+| Success | | | |
+| Partial | | | |
+| Error | | | |
+```
+
+#### Pass 6: Flow Integrity (visual, cli)
+- Where could users get lost?
+- Where could first-time users fail?
+- What guardrails are needed?
+
+**Required output:**
+```markdown
+## Pass 6: Flow Integrity
+
+| Risk | Location | Mitigation |
+|------|----------|------------|
+| [What could go wrong] | [Where] | [How we prevent it] |
+```
+
+**CRITICAL:** Do NOT proceed to implementation phases until all relevant UX passes are complete.
 
 ### Phase 1: Feature Understanding
 
@@ -84,6 +208,8 @@ Create the plan document at `.claude/plans/{kebab-case-name}.md`:
 
 > Created: {YYYY-MM-DD HH:MM}
 > Status: draft | ready | in_progress | completed
+> Interface: visual | api | cli | none
+> Output Target: claude | stitch | v0 | polymet | figma
 > Estimated Tasks: {n}
 
 ## Overview
@@ -94,6 +220,28 @@ Create the plan document at `.claude/plans/{kebab-case-name}.md`:
 
 - As a {user}, I want to {action} so that {benefit}
 - ...
+
+## UX Analysis
+
+> This section captures UX decisions from Phase 0.5. These decisions MUST inform implementation.
+
+### Pass 1: Mental Model
+{Output from UX analysis}
+
+### Pass 2: Information Architecture
+{Output from UX analysis}
+
+### Pass 3: Affordances
+{Output from UX analysis - if applicable}
+
+### Pass 4: Cognitive Load
+{Output from UX analysis - if applicable}
+
+### Pass 5: State Design
+{Output from UX analysis}
+
+### Pass 6: Flow Integrity
+{Output from UX analysis - if applicable}
 
 ## Implementation Phases
 
@@ -189,6 +337,8 @@ After creating the plan:
 
 Feature: {name}
 Location: .claude/plans/{filename}.md
+Interface: {visual | api | cli | none}
+UX Passes: {completed passes}
 
 Phases: {n}
 Tasks: {total_tasks}
@@ -201,6 +351,51 @@ Ready to implement? Run:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+## Output Formats
+
+### --output claude (default)
+
+Standard implementation plan with UX analysis embedded. Ready for `/ce:execute`.
+
+### --output prompts
+
+Generates self-contained build-order prompts for external design AI tools. Creates:
+- `.claude/plans/{name}.md` - Standard plan
+- `.claude/plans/{name}-prompts.md` - Build prompts
+
+**Build prompt structure:**
+1. Foundation (design tokens, base styles)
+2. Layout Shell (navigation, structure)
+3. Core Components (primary UI elements)
+4. Interactions (user actions, feedback)
+5. States & Feedback (empty, loading, error, success)
+6. Polish (animations, responsive, edge cases)
+
+Each prompt is **self-contained** - doesn't reference other prompts.
+
+### --output design
+
+Design handoff document for human designers or Figma. Includes UX analysis formatted for design review.
+
+## Target Tool Profiles
+
+When using `--output prompts`, the `--target` flag optimizes prompts for specific tools:
+
+| Target | Style | Best Practices |
+|--------|-------|----------------|
+| `stitch` | Very vague OR very specific | Mid-detail fails; go extremes |
+| `v0` | Component-focused | Single components work best |
+| `polymet` | Functional prototypes | Good for interactions |
+| `bolt` | Full-page context | Handles larger prompts |
+| `figma` | Design tokens + specs | For designer handoff |
+
+**Example:**
+```
+/ce:feature "Add workflow builder" --output prompts --target stitch
+```
+
+Produces prompts optimized for Google Stitch's characteristics.
 
 ## Subcommands
 

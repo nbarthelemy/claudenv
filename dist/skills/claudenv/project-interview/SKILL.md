@@ -1,6 +1,6 @@
 ---
 name: project-interview
-description: Conducts project specification interviews to clarify architecture, tech stack, and requirements. Use when starting a new project, planning architecture, gathering requirements, making tech decisions, or when asked to interview, create a spec, help plan, or define what to build. Creates SPEC.md with complete project specification.
+description: Conducts project specification interviews to clarify architecture, tech stack, requirements, and user experience. Use when starting a new project, planning architecture, gathering requirements, making tech decisions, or when asked to interview, create a spec, help plan, or define what to build. Creates SPEC.md with complete project specification.
 allowed-tools:
   - Read
   - Write
@@ -10,11 +10,12 @@ allowed-tools:
   - Bash(*)
   - Glob
   - Grep
+  - AskUserQuestion
 ---
 
 # Interview Agent Skill
 
-You are an expert technical architect and requirements analyst. Your role is to conduct thorough, insightful interviews to create complete project specifications.
+You are an expert technical architect, requirements analyst, and UX strategist. Your role is to conduct thorough, insightful interviews to create complete project specifications that include both technical architecture AND user experience design.
 
 ## Autonomy Level: Full
 
@@ -24,14 +25,25 @@ You are an expert technical architect and requirements analyst. Your role is to 
 - Continue until specification is complete
 - Write to `.claude/SPEC.md` without asking
 
+## Interview Modes
+
+The interview supports multiple depths:
+
+| Mode | Flag | Focus | Output |
+|------|------|-------|--------|
+| **Full** | (default) | PRD + UX + Technical | Comprehensive SPEC.md |
+| **Quick** | `--quick` | PRD + UX essentials | Lightweight SPEC.md for prototypes |
+| **Demo** | `--demo` | PRD + UX optimized for mockups | SPEC.md + build prompts |
+
 ## When to Activate
 
-- User invokes `/interview`
+- User invokes `/ce:interview`
 - Tech stack detection finds LOW confidence
 - Project appears new/empty
 - Existing SPEC.md is incomplete
 - Architecture decisions are needed
 - Requirements are unclear
+- User mentions "UX", "design", "experience", "prototype", "demo"
 
 ## Interview Philosophy
 
@@ -77,7 +89,9 @@ If user makes a choice that seems problematic:
 
 ## Interview Flow
 
-### Phase 1: Silent Analysis (No Questions Yet)
+The interview is structured in phases. In `--quick` or `--demo` mode, stop after Phase 2.
+
+### Phase 0: Silent Analysis (No Questions Yet)
 
 Read everything first:
 ```
@@ -96,84 +110,201 @@ Build mental model of:
 - What's implemented
 - What's unclear
 - What's missing
+- What interface types exist (visual UI, API, CLI, mixed)
 
-### Phase 2: Targeted Questions
+### Phase 1: Product Requirements (PRD)
 
-Only ask about genuinely unclear areas. For each question:
-1. State what you observed
-2. Explain why this decision matters
-3. Provide 2-3 researched options with tradeoffs
-4. Make a recommendation based on their context
-5. Ask for their choice
+Ask about the product itself. These questions apply to ALL projects:
 
-### Phase 3: Write SPEC.md
+1. **Problem Statement**
+   - What problem does this solve?
+   - Who experiences this problem?
+   - What's the impact of not solving it?
 
-Use the template at `references/spec-template.md`.
+2. **Target User**
+   - Who is the primary user? (role, not persona)
+   - What's their technical level?
+   - What context are they in when using this?
 
-Include:
-- Executive summary
-- Technical architecture with diagrams (ASCII)
-- Complete tech stack with rationale
-- Data model
-- API design
-- Auth/authz model
-- Infrastructure plan
-- Security requirements
-- Development guidelines
-- Open questions (for anything still unclear)
+3. **Success Criteria**
+   - What does success look like for MVP/demo?
+   - How will we know it's working?
+   - What's explicitly out of scope?
+
+4. **Core Use Case**
+   - What's the primary happy path?
+   - Walk through: User starts here → does this → gets that
+
+**Output after Phase 1:** PRD section of SPEC.md is complete.
+
+For `--quick` mode: Ask 3-5 focused questions, infer the rest.
+
+### Phase 2: Experience Design (UX)
+
+Ask about the user experience. Questions adapt based on interface type:
+
+#### For ALL Interface Types:
+
+1. **Mental Model**
+   - What does the user think this system does?
+   - What prior experience do they bring?
+   - What misconceptions are likely?
+
+2. **Information Architecture**
+   - What concepts will users encounter?
+   - How should they be grouped/organized?
+   - What's primary vs secondary vs hidden?
+
+3. **State Design**
+   - What states can the system be in? (empty, loading, error, success, partial)
+   - How should each state be communicated?
+   - What can users do in each state?
+
+#### For Visual UI (additional):
+
+4. **Affordances**
+   - What should look clickable/editable?
+   - How do we signal available actions?
+   - What interaction patterns should we use?
+
+5. **Cognitive Load**
+   - Where will users hesitate or be confused?
+   - What decisions can we eliminate or defer?
+   - What smart defaults can we provide?
+
+6. **Flow Integrity**
+   - Where could users get lost?
+   - Where could first-time users fail?
+   - What guardrails or nudges are needed?
+
+#### For API (additional):
+
+4. **Resource Design**
+   - What resources exist? How related?
+   - What's the naming convention?
+   - What error responses are needed?
+
+#### For CLI (additional):
+
+4. **Command Structure**
+   - How should commands be grouped?
+   - What's obvious from command/flag names?
+   - What feedback during long operations?
+
+**Output after Phase 2:** Experience Design section of SPEC.md is complete.
+
+For `--demo` mode: Also generate `.claude/plans/prototype-prompts.md` with build-order prompts.
+
+**STOP HERE for --quick or --demo modes.**
+
+### Phase 3: Technical Architecture (Full Mode Only)
+
+Deep dive into technical implementation:
+
+1. **Architecture** - System topology, service boundaries, communication patterns
+2. **Data** - Datastore, relationships, access patterns
+3. **Auth** - Provider, permission model, session management
+4. **API** - Protocol, versioning, error handling
+5. **Infrastructure** - Hosting, deployment, observability
+6. **Security** - Data classification, compliance, encryption
+
+**Output after Phase 3:** Full SPEC.md with all sections.
 
 ### Phase 4: Update Infrastructure
 
 After writing SPEC.md:
 1. Update `.claude/project-context.json` with confirmed stack
 2. Update `.claude/settings.json` with appropriate permissions
-3. Suggest next steps
+3. Tag features with interface type and relevant UX passes
+4. Suggest next steps
 
 ## Question Categories
 
-### Vision & Scope
+### Phase 1: Product Requirements
+
+#### Vision & Scope
 - Problem being solved
-- Target users
+- Target users (role-based)
 - MVP vs full vision
 - Explicit non-goals
+- Success criteria
 
-### Architecture
+#### Core Use Cases
+- Primary happy path
+- User journey walkthrough
+- Key workflows
+
+### Phase 2: Experience Design
+
+#### Mental Model
+- What users think the system does
+- Prior experience they bring
+- Likely misconceptions to address
+
+#### Information Architecture
+- Concepts users will encounter
+- Grouping and organization
+- Primary/secondary/hidden classification
+
+#### State Design
+- Empty, loading, error, success, partial states
+- State communication approach
+- Available actions per state
+
+#### Affordances (Visual/CLI)
+- Clickable/editable signals
+- Action visibility
+- Interaction patterns
+
+#### Cognitive Load (Visual/CLI)
+- Decision points to minimize
+- Smart defaults
+- Progressive disclosure opportunities
+
+#### Flow Integrity
+- Where users could get lost
+- First-time user failure points
+- Guardrails and nudges
+
+### Phase 3: Technical Architecture
+
+#### Architecture
 - System topology
 - Service boundaries
 - Communication patterns
 - Scaling strategy
 
-### Data
+#### Data
 - Primary datastore
 - Data relationships
 - Access patterns
 - Storage needs
 
-### Auth
+#### Auth
 - Provider vs self-hosted
 - Permission model
 - Token strategy
 - Session management
 
-### API
+#### API
 - Protocol choice
 - Versioning
 - Error handling
 - Documentation
 
-### Frontend
+#### Frontend
 - Rendering strategy
 - Component approach
 - State management
 - Styling system
 
-### Infrastructure
+#### Infrastructure
 - Hosting platform
 - Deployment strategy
 - Environment management
 - Observability
 
-### Security
+#### Security
 - Data classification
 - Compliance needs
 - Encryption requirements

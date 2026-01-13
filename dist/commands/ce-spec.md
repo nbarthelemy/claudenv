@@ -72,12 +72,13 @@ Should I:
 4. Help me review what to keep
 ```
 
-### Step 5: Extract and Prioritize Features from SPEC.md
+### Step 5: Extract and Classify Features from SPEC.md
 
 Parse SPEC.md sections:
 - `## Goals` - High-level objectives
 - `## Features` - Specific features
 - `## MVP Scope` or `## In Scope` - What to build
+- `## Experience Design` - UX decisions that inform features
 - `## Open Questions` - Things to resolve
 
 Identify discrete, implementable units. Each feature should be:
@@ -89,6 +90,28 @@ Identify discrete, implementable units. Each feature should be:
 - `P0` - Foundation/blocking (required for other features)
 - `P1` - Core MVP features
 - `P2` - Enhancement/nice-to-have
+
+**Classify interface type** for each feature:
+- `visual` - User interface components
+- `api` - Backend endpoints/services
+- `cli` - Command-line interface
+- `none` - Infrastructure, config, non-user-facing
+
+**Determine relevant UX passes** based on interface type:
+
+| Interface Type | UX Passes Required |
+|----------------|-------------------|
+| `visual` | all 6 passes (mental-model, info-arch, affordances, cognitive-load, state-design, flow-integrity) |
+| `api` | mental-model, info-arch, state-design |
+| `cli` | mental-model, affordances, state-design, flow-integrity |
+| `none` | skip UX analysis |
+
+**Set output target** (default: claude):
+- `claude` - Direct implementation via /ce:execute
+- `stitch` - Build prompts optimized for Google Stitch
+- `v0` - Build prompts optimized for v0
+- `polymet` - Build prompts for Polymet
+- `figma` - Design handoff for Figma
 
 **Infer dependencies** by analyzing:
 - Explicit mentions: "requires X", "after Y is complete", "depends on Z"
@@ -103,16 +126,19 @@ Common dependency patterns:
 | Integrations | Core features they extend |
 | Tests | Features they test |
 
-Use AskUserQuestion if priority or dependencies are unclear:
+Use AskUserQuestion if classification is unclear:
 
 ```
-I've identified {n} features. Help me prioritize:
+I've identified {n} features. Help me classify:
 
 {Feature Name}
-- Seems like: P1 (core feature)
+- Priority: P1 (core feature)
+- Interface: visual
+- UX Passes: all
+- Output Target: claude (default)
 - Dependencies: {Database schema, User auth}
 
-Are these dependencies correct?
+Is this classification correct?
 ```
 
 ### Step 6: Create Feature Plan Files
@@ -161,25 +187,34 @@ Create/update `.claude/TODO.md`:
 
 - [ ] **Database schema**: Set up data models
   → [plan](.claude/plans/database-schema.md)
+  → interface: none
 
 - [ ] **User auth**: JWT authentication
   → [plan](.claude/plans/user-auth.md)
+  → interface: api
+  → ux: mental-model, info-arch, state-design
   → depends: Database schema
 
 ## P1 - Core Features
 
 - [ ] **API endpoints**: REST API for core entities
   → [plan](.claude/plans/api-endpoints.md)
+  → interface: api
+  → ux: mental-model, info-arch, state-design
   → depends: Database schema, User auth
 
-- [ ] **Frontend pages**: Main application UI
-  → [plan](.claude/plans/frontend-pages.md)
+- [ ] **Workflow builder**: Drag-drop canvas with nodes
+  → [plan](.claude/plans/workflow-builder.md)
+  → interface: visual
+  → ux: all
+  → target: claude
   → depends: API endpoints, User auth
 
 ## P2 - Enhancements
 
 - [ ] **Email notifications**: Send alerts to users
   → [plan](.claude/plans/email-notifications.md)
+  → interface: none
   → depends: User auth
 
 ## Setup Tasks
@@ -195,6 +230,9 @@ Create/update `.claude/TODO.md`:
 
 **Format notes:**
 - Features link to their plan files with `→ [plan](path)`
+- Interface type declared with `→ interface: visual | api | cli | none`
+- UX passes declared with `→ ux: all` or `→ ux: mental-model, state-design, ...`
+- Output target declared with `→ target: claude | stitch | v0 | polymet | figma`
 - Dependencies declared with `→ depends: Feature A, Feature B`
 - P0 features are implicitly dependencies of P1 features
 - Use checkboxes: `[ ]` pending, `[~]` in progress, `[x]` complete, `[!]` blocked
