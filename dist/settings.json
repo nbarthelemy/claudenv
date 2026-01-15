@@ -145,6 +145,17 @@
         ]
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/tdd-enforce.sh && exit 0; d=$(dirname \"$d\"); done'"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit",

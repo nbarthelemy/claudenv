@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "4.4.0",
+  "infrastructureVersion": "4.5.0",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
-  "lastUpdated": "2026-01-13T00:00:00Z",
+  "lastUpdated": "2026-01-15T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "4.5.0": "Add TDD enforcement: PreToolUse hook blocks writes to implementation files unless corresponding test exists. New /ce:tdd command (enable/disable/status). New tdd skill for red-green-refactor workflow guidance. TDD rule explains file mapping and enforcement. Enable per-project with .claude/tdd-enabled marker.",
     "4.4.0": "Add critical practices to core rules: read-before-modify (prevent speculation), source verification (cross-reference 2+ sources). Add /ce:verbose command for verbosity toggle (on/off/status) to enable detailed explanations for learning. Update meta-skill and project-interview with source verification requirements.",
     "4.3.0": "Holistic UX integration: Embed 6-pass UX analysis into development pipeline. /ce:interview now has --quick/--demo modes with PRD+UX phases. /ce:spec classifies features by interface type and required UX passes. /ce:feature includes Phase 0.5 for UX analysis with --output prompts/design and --target stitch/v0/polymet options. SPEC.md template adds Experience Design section. frontend-design skill requires UX analysis before visuals. Add references/ux-analysis-guide.md.",
     "4.2.0": "Progressive disclosure infrastructure: Add agent tiering (4 core, 14 on-demand in agents/index.json), tool-search skill for capability discovery, memory/ directory for file-based persistence, MCP experimental CLI flag documentation.",
