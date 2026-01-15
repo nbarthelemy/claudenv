@@ -5,22 +5,48 @@
 ## The TDD Cycle
 
 ```
-RED → GREEN → REFACTOR
- │      │         │
- │      │         └── Improve code quality (tests still pass)
- │      └── Write minimal code to make test pass
- └── Write a failing test first
+CLARIFY → RED → GREEN → REFACTOR
+    │      │      │         │
+    │      │      │         └── Improve code quality (tests still pass)
+    │      │      └── Write minimal code to make test pass
+    │      └── Write a failing test first
+    └── Interview user until requirements are crystal clear
 ```
 
 ## Mandatory Workflow
 
-**Before writing ANY implementation code:**
+**Before writing ANY test or implementation code:**
+
+0. **CLARIFY first** - Interview the user until you have complete clarity:
+   - What are ALL the inputs? (types, formats, ranges)
+   - What are ALL the outputs? (exact values, formats)
+   - What are ALL the edge cases? (boundaries, empty, null)
+   - What are ALL the error conditions? (invalid input, failures)
+   - What are the acceptance criteria?
+
+   **If you cannot list every test case with confidence, ask more questions.**
 
 1. **Write the test first** - Describe expected behavior in test form
 2. **Run the test** - Verify it fails (red)
 3. **Write minimal implementation** - Just enough to pass
 4. **Run the test** - Verify it passes (green)
 5. **Refactor** - Clean up while tests stay green
+
+## Interview Before Testing
+
+When a user requests a feature, **do not start coding**. First ask:
+
+```
+I need clarity before writing tests:
+
+1. [Question about inputs]
+2. [Question about outputs]
+3. [Question about edge cases]
+4. [Question about errors]
+...
+```
+
+Keep asking until you can enumerate ALL test cases.
 
 ## File Mapping
 

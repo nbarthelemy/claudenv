@@ -40,9 +40,39 @@ This skill activates when:
 
 ## Workflow
 
+### Phase 0: CLARIFY (Interview Until Clear)
+
+Before writing ANY test, you MUST have complete clarity. If unclear on ANY of the following, **stop and interview the user**:
+
+**Required Clarity:**
+- What is the expected input? (types, formats, ranges, edge cases)
+- What is the expected output? (exact format, structure, values)
+- What are the error conditions? (invalid input, edge cases, failures)
+- What are the business rules? (validation, constraints, logic)
+- What are the acceptance criteria? (how do we know it's correct?)
+
+**Interview Pattern:**
+```
+I need more clarity before I can write comprehensive tests.
+
+1. [Specific question about inputs]
+2. [Specific question about outputs]
+3. [Specific question about edge cases]
+4. [Specific question about error handling]
+...
+```
+
+**Keep asking until you can write tests that cover:**
+- Happy path (normal successful case)
+- Edge cases (boundaries, empty, null, max values)
+- Error cases (invalid input, failures, exceptions)
+- Business rules (all validation and logic)
+
+**Rule: If you cannot articulate ALL test cases with confidence, you don't have enough clarity. Ask more questions.**
+
 ### Phase 1: RED (Write Failing Test)
 
-1. **Understand the requirement** - What behavior are we testing?
+1. **Confirm clarity** - Can you list all test cases? If not, return to Phase 0.
 2. **Create test file** - Name it `*.test.ts` or `*.spec.ts`
 3. **Write the test**:
    ```typescript
@@ -127,9 +157,43 @@ User: Add a function to validate email addresses
 
 Claude: Starting TDD workflow for email validation.
 
+## Phase 0: CLARIFY
+
+I need more clarity before I can write comprehensive tests.
+
+1. Should we validate the email format only, or also check if the domain exists?
+2. What should happen with emails containing plus signs (user+tag@example.com)?
+3. Should we support international domains (user@例え.jp)?
+4. What's the maximum length we should accept?
+5. Should we trim whitespace, or reject emails with leading/trailing spaces?
+6. What should the return type be - boolean, or an object with error details?
+
+User: Just format validation, support plus signs, ASCII domains only,
+max 254 chars, trim whitespace, return boolean.
+
+Claude: Perfect, now I have clarity. Here are the test cases I'll cover:
+
+**Happy path:**
+- Standard email (user@example.com) → true
+- Email with plus (user+tag@example.com) → true
+- Email with dots in local part (first.last@example.com) → true
+
+**Edge cases:**
+- Exactly 254 characters → true
+- 255 characters → false
+- Leading/trailing whitespace → trimmed, then validated
+
+**Error cases:**
+- Empty string → false
+- No @ symbol → false
+- No domain → false
+- No local part → false
+- Multiple @ symbols → false
+- International domain → false
+
 ## Phase 1: RED
 
-Creating test file first...
+Creating test file with comprehensive coverage...
 
 [Creates src/utils/validate-email.test.ts]
 
@@ -137,16 +201,53 @@ Creating test file first...
 import { validateEmail } from './validate-email';
 
 describe('validateEmail', () => {
-  it('returns true for valid email', () => {
+  // Happy path
+  it('returns true for standard email', () => {
     expect(validateEmail('user@example.com')).toBe(true);
+  });
+
+  it('returns true for email with plus sign', () => {
+    expect(validateEmail('user+tag@example.com')).toBe(true);
+  });
+
+  it('returns true for email with dots in local part', () => {
+    expect(validateEmail('first.last@example.com')).toBe(true);
+  });
+
+  // Edge cases
+  it('returns true for email at max length (254)', () => {
+    const email = 'a'.repeat(243) + '@example.com'; // 254 total
+    expect(validateEmail(email)).toBe(true);
+  });
+
+  it('returns false for email over max length', () => {
+    const email = 'a'.repeat(244) + '@example.com'; // 255 total
+    expect(validateEmail(email)).toBe(false);
+  });
+
+  it('trims whitespace before validating', () => {
+    expect(validateEmail('  user@example.com  ')).toBe(true);
+  });
+
+  // Error cases
+  it('returns false for empty string', () => {
+    expect(validateEmail('')).toBe(false);
   });
 
   it('returns false for email without @', () => {
     expect(validateEmail('userexample.com')).toBe(false);
   });
 
-  it('returns false for empty string', () => {
-    expect(validateEmail('')).toBe(false);
+  it('returns false for email without domain', () => {
+    expect(validateEmail('user@')).toBe(false);
+  });
+
+  it('returns false for email without local part', () => {
+    expect(validateEmail('@example.com')).toBe(false);
+  });
+
+  it('returns false for email with multiple @', () => {
+    expect(validateEmail('user@@example.com')).toBe(false);
   });
 });
 ```
@@ -160,9 +261,13 @@ Now implementing the function...
 [Creates src/utils/validate-email.ts]
 
 ```typescript
+const MAX_EMAIL_LENGTH = 254;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[a-zA-Z]+$/;
+
 export function validateEmail(email: string): boolean {
-  if (!email) return false;
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const trimmed = email.trim();
+  if (!trimmed || trimmed.length > MAX_EMAIL_LENGTH) return false;
+  return EMAIL_REGEX.test(trimmed);
 }
 ```
 
@@ -170,7 +275,7 @@ Running tests... ✅ PASSED
 
 ## Phase 3: REFACTOR
 
-Code is simple enough, no refactoring needed.
+Code is clean and readable. No refactoring needed.
 
 ✅ TDD cycle complete for validateEmail
 ```
