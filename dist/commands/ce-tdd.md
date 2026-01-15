@@ -12,25 +12,27 @@ Test-Driven Development workflow enforcement and guidance.
 
 ```bash
 /ce:tdd                    # Show TDD status
-/ce:tdd enable             # Enable TDD enforcement
 /ce:tdd disable            # Disable TDD enforcement
+/ce:tdd enable             # Re-enable TDD enforcement
 /ce:tdd <feature>          # Start TDD workflow for feature
 ```
 
 ## Examples
 
 ```bash
-/ce:tdd enable                      # Turn on hook blocking
+/ce:tdd                             # Check if TDD is active
 /ce:tdd "user authentication"       # Start TDD for auth feature
-/ce:tdd disable                     # Turn off hook blocking
+/ce:tdd disable                     # Turn off enforcement (creates marker)
 ```
 
 ## What It Does
 
-- **enable**: Creates `.claude/tdd-enabled` marker, activating PreToolUse hook
-- **disable**: Removes marker, allowing writes without test requirement
-- **status**: Shows if TDD is enabled and test coverage
+- **status** (default): Shows if TDD is enabled and test coverage
+- **disable**: Creates `.claude/tdd-disabled` marker, bypassing PreToolUse hook
+- **enable**: Removes disable marker, re-activating enforcement
 - **<feature>**: Guides you through red-green-refactor cycle
+
+**Note:** TDD is enabled by default in all claudenv projects.
 
 ## TDD Workflow
 

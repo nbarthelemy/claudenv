@@ -31,10 +31,12 @@ This skill activates when:
 
 | Command | Action |
 |---------|--------|
-| `/tdd enable` | Enable TDD enforcement for this project |
-| `/tdd disable` | Disable TDD enforcement |
-| `/tdd status` | Show TDD status and coverage |
-| `/tdd <feature>` | Start TDD workflow for a feature |
+| `/ce:tdd` | Show TDD status |
+| `/ce:tdd disable` | Disable TDD enforcement for this project |
+| `/ce:tdd enable` | Re-enable TDD enforcement |
+| `/ce:tdd <feature>` | Start TDD workflow for a feature |
+
+**Note:** TDD is enabled by default. Use `disable` only when necessary.
 
 ## Workflow
 
@@ -81,12 +83,16 @@ Before marking a feature complete:
 - [ ] No console.logs or debug code
 - [ ] Code is refactored and clean
 
-## Enable TDD Enforcement
+## TDD is Enabled by Default
 
-To enable the PreToolUse hook that blocks implementation without tests:
+The PreToolUse hook automatically enforces TDD in all claudenv projects.
+
+## Disable TDD (Use Sparingly)
+
+For projects where TDD doesn't apply:
 
 ```bash
-touch .claude/tdd-enabled
+touch .claude/tdd-disabled
 ```
 
 Or in `.claude/settings.local.json`:
@@ -94,17 +100,15 @@ Or in `.claude/settings.local.json`:
 ```json
 {
   "tdd": {
-    "enabled": true
+    "enabled": false
   }
 }
 ```
 
-## Disable TDD Temporarily
-
-For quick fixes or non-testable code:
+## Re-enable TDD
 
 ```bash
-rm .claude/tdd-enabled
+rm .claude/tdd-disabled
 ```
 
 ## Test File Patterns

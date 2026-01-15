@@ -33,7 +33,7 @@ RED → GREEN → REFACTOR
 | `*.py` | `test_*.py` OR `*_test.py` |
 | `*.go` | `*_test.go` |
 
-## Enforcement
+## Enforcement (Enabled by Default)
 
 A PreToolUse hook blocks writes to implementation files unless:
 - A corresponding test file already exists, OR
@@ -46,9 +46,22 @@ A PreToolUse hook blocks writes to implementation files unless:
 3. Now you can edit implementation (e.g., user-service.ts)
 ```
 
-## Bypass (Use Sparingly)
+## Disable TDD (Use Sparingly)
 
-For non-testable files (configs, types, constants), the hook allows:
+To disable TDD enforcement for a project:
+
+```bash
+touch .claude/tdd-disabled
+```
+
+Or in `.claude/settings.local.json`:
+```json
+{ "tdd": { "enabled": false } }
+```
+
+## Auto-Exempt Files
+
+The hook automatically allows non-testable files:
 - `*.config.*`, `*.d.ts`, `types.ts`, `constants.ts`
 - Files in: `config/`, `types/`, `public/`, `assets/`
 

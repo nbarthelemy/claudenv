@@ -27,7 +27,7 @@ fi
 file_path=$(cd "$(dirname "$file_path")" 2>/dev/null && pwd)/$(basename "$file_path") 2>/dev/null || echo "$file_path"
 
 #=============================================================================
-# CHECK: Is TDD enabled for this project?
+# CHECK: Is TDD disabled for this project?
 #=============================================================================
 
 # Find project root
@@ -39,18 +39,18 @@ while [ "$project_root" != "/" ]; do
   project_root=$(dirname "$project_root")
 done
 
-# Check if TDD is enabled (marker file or setting)
-tdd_enabled=false
-if [ -f "$project_root/.claude/tdd-enabled" ]; then
-  tdd_enabled=true
+# TDD is ENABLED by default. Check if explicitly disabled.
+tdd_disabled=false
+if [ -f "$project_root/.claude/tdd-disabled" ]; then
+  tdd_disabled=true
 elif [ -f "$project_root/.claude/settings.local.json" ]; then
-  if jq -e '.tdd.enabled // false' "$project_root/.claude/settings.local.json" 2>/dev/null | grep -q true; then
-    tdd_enabled=true
+  if jq -e '.tdd.enabled == false' "$project_root/.claude/settings.local.json" 2>/dev/null | grep -q true; then
+    tdd_disabled=true
   fi
 fi
 
-# If TDD not enabled, allow all operations
-if [ "$tdd_enabled" != "true" ]; then
+# If TDD is disabled, allow all operations
+if [ "$tdd_disabled" = "true" ]; then
   exit 0
 fi
 
