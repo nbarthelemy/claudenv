@@ -154,6 +154,15 @@
             "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/tdd-enforce.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -d \"$d/.claude\" ]; then cd \"$d\" && bash .claude/scripts/block-no-verify.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
+          }
+        ]
       }
     ],
     "PostToolUse": [

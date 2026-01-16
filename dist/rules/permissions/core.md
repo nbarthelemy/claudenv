@@ -23,6 +23,17 @@
 - System: `sudo *`, `shutdown`, `reboot`, `killall`
 - Remote exec: `curl|sh`, `wget|bash`, `eval`
 - Publish: `npm publish`, `cargo publish`, `twine upload`
+- Hook bypass: `--no-verify`, `git commit -n`, `--no-gpg-sign`
+
+## Git Hook Enforcement
+
+**NEVER bypass git hooks.** When a pre-commit hook fails:
+1. Read the error message
+2. Fix the underlying issue (lint, format, types, tests)
+3. Stage the fixes
+4. Commit again WITHOUT `--no-verify`
+
+The `--no-verify` flag is blocked by a PreToolUse hook. Fix issues, don't bypass them.
 
 ## Tech-Specific
 

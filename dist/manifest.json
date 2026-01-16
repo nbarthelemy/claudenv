@@ -74,6 +74,7 @@
     "scripts/apply-update.sh",
     "scripts/audit.sh",
     "scripts/autopilot-manager.sh",
+    "scripts/block-no-verify.sh",
     "scripts/bootstrap.sh",
     "scripts/check-readme-update.sh",
     "scripts/check-update.sh",
