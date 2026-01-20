@@ -129,7 +129,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/session-start.sh && exit 0; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/session-start.sh\" ] && cd \"$d\" && bash .claude/scripts/session-start.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }
@@ -140,7 +140,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/session-end.sh && exit 0; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/session-end.sh\" ] && cd \"$d\" && bash .claude/scripts/session-end.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }
@@ -151,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/code-gate.sh && exit 0; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/code-gate.sh\" ] && cd \"$d\" && bash .claude/scripts/code-gate.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       },
@@ -160,7 +160,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -d \"$d/.claude\" ]; then cd \"$d\" && bash .claude/scripts/focus-enforce.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -f \"$d/.claude/scripts/focus-enforce.sh\" ]; then cd \"$d\" && bash .claude/scripts/focus-enforce.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
           }
         ]
       },
@@ -169,7 +169,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -d \"$d/.claude\" ]; then cd \"$d\" && bash .claude/scripts/block-no-verify.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -f \"$d/.claude/scripts/block-no-verify.sh\" ]; then cd \"$d\" && bash .claude/scripts/block-no-verify.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
           }
         ]
       }
@@ -180,7 +180,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/learning-observer.sh && exit 0; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/learning-observer.sh\" ] && cd \"$d\" && bash .claude/scripts/learning-observer.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       },
