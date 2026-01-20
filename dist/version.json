@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "4.6.0",
+  "infrastructureVersion": "4.7.0",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
   "lastUpdated": "2026-01-20T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "4.7.0": "Add session state management: New /ce:focus command to set, lock, and clear work focus. Session state persists in .claude/state/session-state.json tracking focus (active plan, files in scope), decisions, blockers, and handoff notes. Session-start hook displays current focus and handoff from previous session. Session-end hook reminds to capture handoff. Focus lock enforcement blocks edits outside scope when locked. State-manager.sh handles all state operations.",
     "4.6.0": "Add plan enforcement system: Unified code-gate.sh combines TDD + plan checks with single clear message. New /ce:quick-plan for lightweight 30-60 min tasks (starts in_progress immediately). New /ce:plans to list plans by status. New /ce:complete to mark plans done. Small file exemption (<50 lines skip plan requirement). Smart file matching using explicit files: fields in plans. plan-sync.sh for TODO.md status sync.",
     "4.5.0": "Add TDD enforcement (ENABLED BY DEFAULT): PreToolUse hook blocks writes to implementation files unless corresponding test exists. New /ce:tdd command (disable/enable/status). New tdd skill for red-green-refactor workflow guidance. TDD rule explains file mapping and enforcement. Disable per-project with .claude/tdd-disabled marker.",
     "4.4.0": "Add critical practices to core rules: read-before-modify (prevent speculation), source verification (cross-reference 2+ sources). Add /ce:verbose command for verbosity toggle (on/off/status) to enable detailed explanations for learning. Update meta-skill and project-interview with source verification requirements.",

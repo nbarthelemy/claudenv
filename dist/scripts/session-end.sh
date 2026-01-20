@@ -26,6 +26,41 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "📊 Session Summary"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
+# Check session state and remind about handoff
+if [ -f ".claude/state/session-state.json" ] && command -v jq &> /dev/null; then
+    STATE_FILE=".claude/state/session-state.json"
+
+    # Get current focus
+    CURRENT_TASK=$(jq -r '.focus.currentTask // empty' "$STATE_FILE")
+    HANDOFF_NOTES=$(jq -r '.handoff.notes // empty' "$STATE_FILE")
+    DECISION_COUNT=$(jq -r '.decisions | length' "$STATE_FILE")
+
+    # Show active focus warning
+    if [ -n "$CURRENT_TASK" ]; then
+        echo ""
+        echo "🎯 Active focus: $CURRENT_TASK"
+        echo "   (Will resume in next session)"
+    fi
+
+    # Show decisions made this session
+    if [ "$DECISION_COUNT" -gt 0 ]; then
+        echo ""
+        echo "📝 Decisions recorded: $DECISION_COUNT"
+    fi
+
+    # Remind about handoff if not captured
+    if [ -z "$HANDOFF_NOTES" ]; then
+        echo ""
+        echo "💡 Tip: Run /ce:focus handoff before ending"
+        echo "   to capture notes for the next session"
+    fi
+
+    # Update session timestamp
+    NOW=$(date -Iseconds)
+    TMP=$(mktemp)
+    jq --arg ts "$NOW" '.handoff.lastSession = $ts | .metadata.sessionCount += 1' "$STATE_FILE" > "$TMP" && mv "$TMP" "$STATE_FILE"
+fi
+
 # Git stats (if in a git repo)
 if git rev-parse --git-dir > /dev/null 2>&1; then
     # Count commits since session start (approximate - last hour)

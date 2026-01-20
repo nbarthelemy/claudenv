@@ -20,6 +20,7 @@
 | `/ce:plans` | List all plans by status |
 | `/ce:quick-plan` | Lightweight plan for small changes |
 | `/ce:complete` | Mark plan as completed |
+| `/ce:focus` | Manage session focus and state |
 
 **Conventions:** Timestamps `YYYY-MM-DD HH:MM`, files kebab-case
 
@@ -89,3 +90,4 @@ Toggle with `/ce:verbose on|off`.
 @rules/error-recovery/core.md
 @rules/documentation.md
 @rules/claudenv/plans.md
+@rules/claudenv/focus.md

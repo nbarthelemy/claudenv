@@ -26,6 +26,57 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "🚀 Session Started"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
+# Load session state if available
+if [ -f ".claude/state/session-state.json" ] && command -v jq &> /dev/null; then
+    STATE_FILE=".claude/state/session-state.json"
+
+    # Get focus info
+    ACTIVE_PLAN=$(jq -r '.focus.activePlan // empty' "$STATE_FILE")
+    CURRENT_TASK=$(jq -r '.focus.currentTask // empty' "$STATE_FILE")
+    FOCUS_LOCKED=$(jq -r '.focus.locked' "$STATE_FILE")
+
+    # Get handoff info
+    HANDOFF_NOTES=$(jq -r '.handoff.notes // empty' "$STATE_FILE")
+    NEXT_STEPS=$(jq -r '.handoff.nextSteps | length' "$STATE_FILE")
+
+    # Get blockers
+    BLOCKER_COUNT=$(jq -r '.blockers | length' "$STATE_FILE")
+
+    # Display focus if active
+    if [ -n "$CURRENT_TASK" ]; then
+        echo ""
+        echo "🎯 Current Focus:"
+        echo "   Task: $CURRENT_TASK"
+        [ -n "$ACTIVE_PLAN" ] && echo "   Plan: $ACTIVE_PLAN"
+        [ "$FOCUS_LOCKED" = "true" ] && echo "   Status: 🔒 Locked"
+    fi
+
+    # Display handoff notes from last session
+    if [ -n "$HANDOFF_NOTES" ]; then
+        echo ""
+        echo "📋 From last session:"
+        echo "   $HANDOFF_NOTES"
+    fi
+
+    # Display next steps if any
+    if [ "$NEXT_STEPS" -gt 0 ]; then
+        echo ""
+        echo "📝 Next steps ($NEXT_STEPS):"
+        jq -r '.handoff.nextSteps[:3][] | "   • " + .' "$STATE_FILE"
+        [ "$NEXT_STEPS" -gt 3 ] && echo "   ... and $((NEXT_STEPS - 3)) more"
+    fi
+
+    # Display blockers if any
+    if [ "$BLOCKER_COUNT" -gt 0 ]; then
+        echo ""
+        echo "🚧 Blockers ($BLOCKER_COUNT):"
+        jq -r '.blockers[:3][] | "   • " + .issue + " (since " + .since + ")"' "$STATE_FILE"
+    fi
+
+    # Increment session count
+    bash .claude/scripts/state-manager.sh init > /dev/null 2>&1 || true
+fi
+
 # Check for claudenv updates (non-blocking, 2s timeout)
 if [ -f ".claude/version.json" ]; then
     LOCAL_VERSION=$(cat .claude/version.json | jq -r '.infrastructureVersion' 2>/dev/null)

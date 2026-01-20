@@ -1,6 +1,6 @@
 {
   "description": "Framework files managed by claudenv. Used during updates to remove deleted files without affecting user-created content.",
-  "version": "4.6.0",
+  "version": "4.7.0",
   "files": [
     ".gitignore",
     "agents/accessibility-checker.md",
@@ -34,6 +34,7 @@
     "commands/ce-docs.md",
     "commands/ce-execute.md",
     "commands/ce-feature.md",
+    "commands/ce-focus.md",
     "commands/ce-health.md",
     "commands/ce-init.md",
     "commands/ce-interview.md",
@@ -66,6 +67,7 @@
     "orchestration/triggers.json",
     "rules/autonomy.md",
     "rules/claudenv/core.md",
+    "rules/claudenv/focus.md",
     "rules/claudenv/plans.md",
     "rules/claudenv/tdd.md",
     "rules/error-recovery/core.md",
@@ -89,6 +91,7 @@
     "scripts/debug-hooks.sh",
     "scripts/dependency-graph.sh",
     "scripts/detect-stack.sh",
+    "scripts/focus-enforce.sh",
     "scripts/generate-trigger-reference.sh",
     "scripts/get-affected-files.sh",
     "scripts/git-isolation-manager.sh",
@@ -117,6 +120,7 @@
     "scripts/session-end.sh",
     "scripts/session-start.sh",
     "scripts/skills-triggers.sh",
+    "scripts/state-manager.sh",
     "scripts/task-commit.sh",
     "scripts/tdd-enforce.sh",
     "scripts/todo-coordinator.sh",
@@ -165,6 +169,7 @@
     "templates/project-context.json.template",
     "templates/project-facts.md.template",
     "templates/rca/rca-template.md",
+    "templates/session-state.json.template",
     "templates/skill.md.template"
   ],
   "deprecated": [
