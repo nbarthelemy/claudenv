@@ -2,12 +2,24 @@
 # Claudenv Installer
 # Usage: curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/bin/install | bash
 #   or:  /path/to/claudenv/bin/install
+#   or:  /path/to/claudenv/bin/install --workspace  (init as git workspace)
 
 set -e
 
 REPO_URL="https://github.com/nbarthelemy/claudenv"
 BRANCH="main"
 TARGET=".claude"
+
+# Parse arguments
+INIT_WORKSPACE=false
+for arg in "$@"; do
+    case $arg in
+        --workspace)
+            INIT_WORKSPACE=true
+            shift
+            ;;
+    esac
+done
 
 # Check for workspace setup (parent .claude with claudenv)
 WORKSPACE_ROOT=""
@@ -254,6 +266,44 @@ else
 fi
 echo "  $COMMANDS commands"
 echo "  $AGENTS agents"
+echo ""
+# Initialize as git workspace if requested
+if [ "$INIT_WORKSPACE" = true ] && [ "$IS_SUBPROJECT" = false ]; then
+    if [ ! -d ".git" ]; then
+        echo "  - Initializing git workspace..."
+        git init --quiet
+
+        # Create workspace .gitignore (auto-ignores child repos)
+        cat > .gitignore << 'GITIGNORE'
+# Workspace .gitignore
+# Auto-ignores all child project repos, tracks only shared infrastructure
+
+# Ignore all top-level items
+/*
+
+# Track shared claudenv infrastructure
+!/.claude/
+!/.gitignore
+
+# Ignore runtime files inside .claude
+.claude/logs/
+.claude/loop/
+.claude/backups/*.tar.gz
+.claude/memory/*.json
+GITIGNORE
+
+        # Initial commit
+        git add .gitignore .claude
+        git commit --quiet -m "Initialize workspace with claudenv
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+
+        echo "  - Git workspace initialized with auto-ignore pattern"
+    else
+        echo "  - Git repo already exists, skipping init"
+    fi
+fi
+
 echo ""
 echo "Next steps:"
 echo "  1. Start Claude Code: claude"
