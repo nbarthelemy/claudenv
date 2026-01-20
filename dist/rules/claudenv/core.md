@@ -17,6 +17,9 @@
 | `/ce:loop` | Autonomous iterations |
 | `/ce:lsp` | LSP server setup |
 | `/ce:verbose` | Toggle detailed explanations on/off |
+| `/ce:plans` | List all plans by status |
+| `/ce:quick-plan` | Lightweight plan for small changes |
+| `/ce:complete` | Mark plan as completed |
 
 **Conventions:** Timestamps `YYYY-MM-DD HH:MM`, files kebab-case
 
@@ -85,3 +88,4 @@ Toggle with `/ce:verbose on|off`.
 @rules/permissions/core.md
 @rules/error-recovery/core.md
 @rules/documentation.md
+@rules/claudenv/plans.md

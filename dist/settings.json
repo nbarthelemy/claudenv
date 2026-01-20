@@ -151,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/tdd-enforce.sh && exit 0; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/code-gate.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       },
@@ -172,6 +172,15 @@
           {
             "type": "command",
             "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && cd \"$d\" && bash .claude/scripts/learning-observer.sh && exit 0; d=$(dirname \"$d\"); done'"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && [ -f \"$d/.claude/quick-fix\" ] && rm -f \"$d/.claude/quick-fix\" && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }
