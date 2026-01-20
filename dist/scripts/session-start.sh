@@ -26,6 +26,26 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "🚀 Session Started"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
+# Check for missed handoff from previous session
+if [ -f ".claude/state/.needs-handoff" ]; then
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "⚠️  PREVIOUS SESSION ENDED WITHOUT HANDOFF"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "Context from the previous session may be lost."
+    echo "Review the session state and update if needed:"
+    echo ""
+    echo "   /ce:focus                # View current state"
+    echo "   /ce:focus set \"task\"     # Set current focus"
+    echo "   /ce:focus decision \"...\" # Record a decision"
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    # Clear the marker so we only warn once
+    rm -f ".claude/state/.needs-handoff"
+fi
+
 # Load session state if available
 if [ -f ".claude/state/session-state.json" ] && command -v jq &> /dev/null; then
     STATE_FILE=".claude/state/session-state.json"

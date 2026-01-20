@@ -1,6 +1,6 @@
 {
   "description": "Framework files managed by claudenv. Used during updates to remove deleted files without affecting user-created content.",
-  "version": "4.7.0",
+  "version": "4.8.0",
   "files": [
     ".gitignore",
     "agents/accessibility-checker.md",
@@ -89,6 +89,7 @@
     "scripts/code-gate.sh",
     "scripts/debug-agent.sh",
     "scripts/debug-hooks.sh",
+    "scripts/decision-reminder.sh",
     "scripts/dependency-graph.sh",
     "scripts/detect-stack.sh",
     "scripts/focus-enforce.sh",
@@ -117,6 +118,8 @@
     "scripts/pre-commit.sh",
     "scripts/propose-agent.sh",
     "scripts/propose-skill.sh",
+    "scripts/read-before-write.sh",
+    "scripts/read-tracker.sh",
     "scripts/session-end.sh",
     "scripts/session-start.sh",
     "scripts/skills-triggers.sh",
@@ -124,6 +127,7 @@
     "scripts/task-commit.sh",
     "scripts/tdd-enforce.sh",
     "scripts/todo-coordinator.sh",
+    "scripts/track-read.sh",
     "scripts/validate-phase.sh",
     "scripts/validate-task.sh",
     "scripts/validate.sh",

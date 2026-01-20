@@ -24,7 +24,24 @@ If plan not found, list available plans:
 ls -la .claude/plans/*.md 2>/dev/null
 ```
 
-### Step 2: Update Plan Status
+### Step 2: Auto-Focus from Plan
+
+Extract files from the plan's "Files to Create/Modify" table and set focus:
+
+```bash
+# Extract file paths from plan
+files=$(grep -E '^\|.*\|.*\|' "{plan_path}" | grep -v '^| File' | grep -v '^|---' | awk -F'|' '{print $2}' | tr -d ' \`' | grep -v '^$')
+
+# Set focus with plan files
+bash .claude/scripts/state-manager.sh set-focus "{plan_name}" "${files[@]}"
+
+# Lock focus during execution
+bash .claude/scripts/state-manager.sh lock-focus
+```
+
+This ensures edits stay within the plan's scope during execution.
+
+### Step 3: Update Plan Status
 
 Read the plan file and update status from `ready` to `in_progress`:
 
@@ -34,7 +51,7 @@ Read the plan file and update status from `ready` to `in_progress`:
 
 Output `EXECUTE_STARTED` marker.
 
-### Step 3: Delegate to Loop
+### Step 4: Delegate to Loop
 
 Invoke `/ce:loop` with plan mode:
 
@@ -51,7 +68,7 @@ This handles:
 
 Wait for `PLAN_COMPLETE` marker.
 
-### Step 4: Run Final Validation
+### Step 5: Run Final Validation
 
 After loop completes, invoke `/ce:validate`:
 
@@ -63,7 +80,15 @@ Run full validation suite (lint, types, tests, build).
 
 Record validation results.
 
-### Step 5: Update TODO.md
+### Step 6: Unlock Focus and Update TODO.md
+
+Release the focus lock after execution:
+
+```bash
+bash .claude/scripts/state-manager.sh unlock-focus
+```
+
+Update TODO.md:
 
 If validation passes, find and mark the related TODO item complete:
 
@@ -75,7 +100,7 @@ If validation passes, find and mark the related TODO item complete:
 - [x] {Feature name} (completed {YYYY-MM-DD HH:MM})
 ```
 
-### Step 6: Soft Context Suggestion
+### Step 7: Soft Context Suggestion
 
 If significant work was done (5+ files modified or 10+ tasks completed):
 
@@ -99,7 +124,7 @@ Or continue in this session.
 
 **Note**: This is a SUGGESTION only, not enforced.
 
-### Step 7: Summary Report
+### Step 8: Summary Report
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

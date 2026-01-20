@@ -26,20 +26,29 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "📊 Session Summary"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Check session state and remind about handoff
+# Check session state and enforce handoff
+NEEDS_HANDOFF=false
+HANDOFF_REASONS=""
+
 if [ -f ".claude/state/session-state.json" ] && command -v jq &> /dev/null; then
     STATE_FILE=".claude/state/session-state.json"
 
-    # Get current focus
+    # Get current state
     CURRENT_TASK=$(jq -r '.focus.currentTask // empty' "$STATE_FILE")
     HANDOFF_NOTES=$(jq -r '.handoff.notes // empty' "$STATE_FILE")
+    NEXT_STEPS_COUNT=$(jq -r '.handoff.nextSteps | length' "$STATE_FILE")
     DECISION_COUNT=$(jq -r '.decisions | length' "$STATE_FILE")
+    BLOCKER_COUNT=$(jq -r '.blockers | length' "$STATE_FILE")
 
-    # Show active focus warning
+    # Determine if handoff is needed
     if [ -n "$CURRENT_TASK" ]; then
-        echo ""
-        echo "🎯 Active focus: $CURRENT_TASK"
-        echo "   (Will resume in next session)"
+        NEEDS_HANDOFF=true
+        HANDOFF_REASONS="${HANDOFF_REASONS}   • Active focus: $CURRENT_TASK\n"
+    fi
+
+    if [ "$BLOCKER_COUNT" -gt 0 ]; then
+        NEEDS_HANDOFF=true
+        HANDOFF_REASONS="${HANDOFF_REASONS}   • $BLOCKER_COUNT active blockers\n"
     fi
 
     # Show decisions made this session
@@ -47,31 +56,71 @@ if [ -f ".claude/state/session-state.json" ] && command -v jq &> /dev/null; then
         echo ""
         echo "📝 Decisions recorded: $DECISION_COUNT"
     fi
-
-    # Remind about handoff if not captured
-    if [ -z "$HANDOFF_NOTES" ]; then
-        echo ""
-        echo "💡 Tip: Run /ce:focus handoff before ending"
-        echo "   to capture notes for the next session"
-    fi
-
-    # Update session timestamp
-    NOW=$(date -Iseconds)
-    TMP=$(mktemp)
-    jq --arg ts "$NOW" '.handoff.lastSession = $ts | .metadata.sessionCount += 1' "$STATE_FILE" > "$TMP" && mv "$TMP" "$STATE_FILE"
 fi
 
 # Git stats (if in a git repo)
 if git rev-parse --git-dir > /dev/null 2>&1; then
     # Count commits since session start (approximate - last hour)
     RECENT_COMMITS=$(git rev-list --count --since="1 hour ago" HEAD 2>/dev/null || echo "0")
-    echo "📝 Recent commits: $RECENT_COMMITS"
 
     # Files with uncommitted changes
     CHANGED=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
     if [ "$CHANGED" -gt 0 ]; then
+        NEEDS_HANDOFF=true
+        HANDOFF_REASONS="${HANDOFF_REASONS}   • $CHANGED uncommitted files\n"
+        echo ""
         echo "📁 Uncommitted changes: $CHANGED files"
     fi
+
+    [ "$RECENT_COMMITS" -gt 0 ] && echo "📝 Recent commits: $RECENT_COMMITS"
+fi
+
+# Show handoff status
+if [ "$NEEDS_HANDOFF" = true ]; then
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    if [ -z "$HANDOFF_NOTES" ] && [ "$NEXT_STEPS_COUNT" -eq 0 ]; then
+        echo "⚠️  HANDOFF REQUIRED"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        echo "Work in progress detected:"
+        echo -e "$HANDOFF_REASONS"
+        echo ""
+        echo "Please run before ending session:"
+        echo "   /ce:focus handoff \"summary of progress\""
+        echo ""
+        echo "Or acknowledge incomplete state:"
+        echo "   /ce:focus clear"
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+        # Create marker for next session to detect missing handoff
+        mkdir -p ".claude/state"
+        echo "{\"reason\": \"no handoff notes\", \"timestamp\": \"$(date -Iseconds)\"}" > ".claude/state/.needs-handoff"
+    else
+        echo "✅ Handoff captured"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        if [ -n "$HANDOFF_NOTES" ]; then
+            echo "Notes: $HANDOFF_NOTES"
+        fi
+        if [ "$NEXT_STEPS_COUNT" -gt 0 ]; then
+            echo "Next steps: $NEXT_STEPS_COUNT pending"
+        fi
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+        # Remove marker if it exists
+        rm -f ".claude/state/.needs-handoff"
+    fi
+fi
+
+# Update session timestamp
+if [ -f "$STATE_FILE" ]; then
+    NOW=$(date -Iseconds)
+    TMP=$(mktemp)
+    jq --arg ts "$NOW" '.handoff.lastSession = $ts | .metadata.sessionCount += 1' "$STATE_FILE" > "$TMP" && mv "$TMP" "$STATE_FILE"
 fi
 
 # Check for patterns that reached threshold and propose skills

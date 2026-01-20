@@ -165,6 +165,15 @@
         ]
       },
       {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -f \"$d/.claude/scripts/read-before-write.sh\" ]; then cd \"$d\" && bash .claude/scripts/read-before-write.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -176,11 +185,29 @@
     ],
     "PostToolUse": [
       {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/track-read.sh\" ] && cd \"$d\" && bash .claude/scripts/track-read.sh && exit 0; d=$(dirname \"$d\"); done'"
+          }
+        ]
+      },
+      {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
             "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/learning-observer.sh\" ] && cd \"$d\" && bash .claude/scripts/learning-observer.sh && exit 0; d=$(dirname \"$d\"); done'"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/decision-reminder.sh\" ] && cd \"$d\" && bash .claude/scripts/decision-reminder.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       },
