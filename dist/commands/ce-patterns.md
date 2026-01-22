@@ -14,7 +14,7 @@ Trigger a comprehensive analysis of development patterns in the current project.
 Read and analyze:
 - `.claude/project-context.json` - Tech stack
 - `.claude/SPEC.md` - Project specification
-- `.claude/learning/observations.md` - Existing patterns
+- `.claude/learning/working/observations.md` - Existing patterns
 
 ### Step 2: Analyze Git History
 

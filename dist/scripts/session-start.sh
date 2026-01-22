@@ -180,7 +180,7 @@ if [ "$REFS" -gt 0 ]; then
 fi
 
 # Check for pending learnings
-PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null | tr -d ' \n' || echo "0")
+PENDING_SKILLS=$(grep -c "^### " .claude/learning/working/pending-skills.md 2>/dev/null | tr -d ' \n' || echo "0")
 
 if [ "$PENDING_SKILLS" -gt 0 ]; then
     echo "💡 $PENDING_SKILLS pending proposals (/learn:review)"

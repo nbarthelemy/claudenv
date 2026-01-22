@@ -185,20 +185,20 @@ echo ""
 echo "## Learning Files"
 
 warn "observations.md exists" \
-    "[ -f '.claude/learning/observations.md' ]" \
-    "echo '# Development Pattern Observations\n\n> Maintained by learning-agent skill.\n\n---\n\n## Session Log\n' > .claude/learning/observations.md"
+    "[ -f '.claude/learning/working/observations.md' ]" \
+    "echo '# Development Pattern Observations\n\n> Maintained by learning-agent skill.\n\n---\n\n## Session Log\n' > .claude/learning/working/observations.md"
 
 warn "pending-skills.md exists" \
-    "[ -f '.claude/learning/pending-skills.md' ]" \
-    "touch .claude/learning/pending-skills.md"
+    "[ -f '.claude/learning/working/pending-skills.md' ]" \
+    "touch .claude/learning/working/pending-skills.md"
 
 warn "pending-commands.md exists" \
-    "[ -f '.claude/learning/pending-commands.md' ]" \
-    "touch .claude/learning/pending-commands.md"
+    "[ -f '.claude/learning/working/pending-commands.md' ]" \
+    "touch .claude/learning/working/pending-commands.md"
 
 warn "pending-hooks.md exists" \
-    "[ -f '.claude/learning/pending-hooks.md' ]" \
-    "touch .claude/learning/pending-hooks.md"
+    "[ -f '.claude/learning/working/pending-hooks.md' ]" \
+    "touch .claude/learning/working/pending-hooks.md"
 
 echo ""
 echo "## Project Context"

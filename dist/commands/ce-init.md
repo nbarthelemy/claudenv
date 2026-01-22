@@ -32,7 +32,7 @@ This creates required directories and initializes learning files.
 - `.claude/logs/` directory
 - `.claude/backups/` directory
 - `.claude/learning/` directory
-- `.claude/learning/observations.md`
+- `.claude/learning/working/observations.md`
 
 If any are missing, create them.
 
@@ -216,11 +216,11 @@ bash .claude/scripts/validate.sh
 - ✅ `.claude/backups/`
 
 **Learning files:**
-- ✅ `.claude/learning/observations.md`
-- ✅ `.claude/learning/pending-skills.md`
-- ✅ `.claude/learning/pending-agents.md`
-- ✅ `.claude/learning/pending-commands.md`
-- ✅ `.claude/learning/pending-hooks.md`
+- ✅ `.claude/learning/working/observations.md`
+- ✅ `.claude/learning/working/pending-skills.md`
+- ✅ `.claude/learning/working/pending-agents.md`
+- ✅ `.claude/learning/working/pending-commands.md`
+- ✅ `.claude/learning/working/pending-hooks.md`
 
 **Trigger reference:**
 - ✅ `.claude/rules/trigger-reference.md` exists

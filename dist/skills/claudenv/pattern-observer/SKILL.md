@@ -149,7 +149,7 @@ When adding a fact:
 1. **Read Project Context**
    - Load `.claude/project-context.json`
    - Load `.claude/SPEC.md` if exists
-   - Load `.claude/learning/observations.md`
+   - Load `.claude/learning/working/observations.md`
    - Understand detected tech stack
    - Know what patterns already exist
 
@@ -183,7 +183,7 @@ When adding a fact:
 
 5. **Update Observation**
 
-   Use this format in `.claude/learning/observations.md`:
+   Use this format in `.claude/learning/working/observations.md`:
 
    ```markdown
    ### [Pattern Name]
@@ -283,17 +283,17 @@ Detect when tasks would benefit from specialist subagents:
 ## Files Managed
 
 ### Input (Read)
-- `.claude/learning/observations.md` - Pattern history
+- `.claude/learning/working/observations.md` - Pattern history
 - `.claude/project-context.json` - Tech context
 - `.claude/SPEC.md` - Project specification
 - `.claude/CLAUDE.md` - Existing project facts
 
 ### Output (Write)
-- `.claude/learning/observations.md` - New patterns
-- `.claude/learning/pending-skills.md` - Skill proposals (includes technology skills)
-- `.claude/learning/pending-agents.md` - Agent proposals for orchestration
-- `.claude/learning/pending-commands.md` - Command proposals
-- `.claude/learning/pending-hooks.md` - Hook proposals
+- `.claude/learning/working/observations.md` - New patterns
+- `.claude/learning/working/pending-skills.md` - Skill proposals (includes technology skills)
+- `.claude/learning/working/pending-agents.md` - Agent proposals for orchestration
+- `.claude/learning/working/pending-commands.md` - Command proposals
+- `.claude/learning/working/pending-hooks.md` - Hook proposals
 - `.claude/CLAUDE.md` - Project facts from corrections (## Project Facts section)
 
 ### Auto-Created

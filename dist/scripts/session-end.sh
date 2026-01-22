@@ -131,17 +131,17 @@ if [ -f ".claude/learning/.thresholds_reached" ] && [ -s ".claude/learning/.thre
 fi
 
 # Check for extension patterns and propose agents
-if [ -f ".claude/learning/patterns.json" ]; then
+if [ -f ".claude/learning/working/patterns.json" ]; then
     if [ -x ".claude/scripts/propose-agent.sh" ]; then
         bash .claude/scripts/propose-agent.sh
     fi
 fi
 
 # Check for pending proposals
-PENDING_SKILLS=$(grep -c "^### " .claude/learning/pending-skills.md 2>/dev/null) || PENDING_SKILLS=0
-PENDING_AGENTS=$(grep -c "^### " .claude/learning/pending-agents.md 2>/dev/null) || PENDING_AGENTS=0
-PENDING_COMMANDS=$(grep -c "^### " .claude/learning/pending-commands.md 2>/dev/null) || PENDING_COMMANDS=0
-PENDING_HOOKS=$(grep -c "^### " .claude/learning/pending-hooks.md 2>/dev/null) || PENDING_HOOKS=0
+PENDING_SKILLS=$(grep -c "^### " .claude/learning/working/pending-skills.md 2>/dev/null) || PENDING_SKILLS=0
+PENDING_AGENTS=$(grep -c "^### " .claude/learning/working/pending-agents.md 2>/dev/null) || PENDING_AGENTS=0
+PENDING_COMMANDS=$(grep -c "^### " .claude/learning/working/pending-commands.md 2>/dev/null) || PENDING_COMMANDS=0
+PENDING_HOOKS=$(grep -c "^### " .claude/learning/working/pending-hooks.md 2>/dev/null) || PENDING_HOOKS=0
 
 TOTAL_PENDING=$((PENDING_SKILLS + PENDING_AGENTS + PENDING_COMMANDS + PENDING_HOOKS))
 

@@ -28,10 +28,10 @@ Analyze the current session and consolidate learnings into project knowledge.
 Read these files to understand current state:
 
 ```
-.claude/learning/observations.md
-.claude/learning/pending-skills.md
-.claude/learning/pending-commands.md
-.claude/learning/pending-hooks.md
+.claude/learning/working/observations.md
+.claude/learning/working/pending-skills.md
+.claude/learning/working/pending-commands.md
+.claude/learning/working/pending-hooks.md
 .claude/project-context.json
 .claude/CLAUDE.md
 ```

@@ -48,8 +48,8 @@ mkdir -p .claude/{logs,backups,learning,plans,rca,reference}
 # Initialize learning files if missing
 echo "📚 Initializing learning files..."
 
-if [ ! -f ".claude/learning/observations.md" ]; then
-    cat > .claude/learning/observations.md << 'EOF'
+if [ ! -f ".claude/learning/working/observations.md" ]; then
+    cat > .claude/learning/working/observations.md << 'EOF'
 # Development Pattern Observations
 
 > Maintained by learning-agent skill. Auto-updated after tasks.

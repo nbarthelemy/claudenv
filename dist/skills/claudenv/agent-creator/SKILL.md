@@ -141,7 +141,7 @@ Before saving, verify:
 Write to .claude/agents/{name}.md
 
 # Remove from pending if applicable
-Edit .claude/learning/pending-agents.md
+Edit .claude/learning/working/pending-agents.md
 ```
 
 Notify user:

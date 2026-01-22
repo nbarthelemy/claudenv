@@ -1,14 +1,17 @@
 # Runtime state (not tracked)
+state/*
 loop/*.json
 loop/failures/
 logs/*
 backups/*
-learning/*.log
+learning/working/*
 
 # Keep directory structure
+!state/.gitkeep
 !loop/.gitkeep
 !logs/.gitkeep
 !backups/.gitkeep
+!learning/working/.gitkeep
 
 # User-specific (generated per-project)
 settings.local.json
