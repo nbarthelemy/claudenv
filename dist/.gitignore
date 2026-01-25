@@ -4,6 +4,11 @@ loop/failures/
 logs/*
 backups/*
 learning/*.log
+learning/working/*
+!learning/working/.gitkeep
+state/.*
+memory/daily/*
+!memory/daily/.gitkeep
 
 # Keep directory structure
 !loop/.gitkeep
