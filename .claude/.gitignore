@@ -5,6 +5,13 @@ loop/failures/
 logs/*
 backups/*
 learning/working/*
+learning/patterns.json
+learning/pending-*.md
+learning/observations.md
+memory/daily/*
+memory/decisions.md
+memory/patterns.md
+memory/preferences.md
 
 # Keep directory structure
 !state/.gitkeep
