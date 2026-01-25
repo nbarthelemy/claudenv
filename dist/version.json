@@ -1,11 +1,12 @@
 {
-  "infrastructureVersion": "4.9.0",
+  "infrastructureVersion": "4.10.0",
   "schemaVersion": "1.0.0",
   "createdAt": "2026-01-03T00:00:00Z",
-  "lastUpdated": "2026-01-22T00:00:00Z",
+  "lastUpdated": "2026-01-25T00:00:00Z",
   "migratedFrom": null,
   "generatedBy": "claudenv-init",
   "changelog": {
+    "4.10.0": "ClawdBot-inspired improvements: (1) Add /ce:think command for runtime thinking depth control (off/low/medium/high/max), persisted in session state. (2) Memory improvements: daily session logs in memory/daily/, decisions auto-populate memory/decisions.md, new memory templates. (3) New /ce:hooks command for hook management (list/info/toggle). (4) New /ce:usage command for token usage tracking and cost estimates.",
     "4.9.0": "Restructure learning directory: Move ephemeral files (observations.md, pending-*.md, proposals.md, patterns.json) to learning/working/ subdirectory. Root learning/ now contains only tracked files (README.md, implemented.md). Update gitignore to ignore learning/working/* with .gitkeep. Update 12+ scripts/skills with new paths.",
     "4.8.0": "Enhanced session state enforcement: (1) Read-before-write enforcement - blocks edits to files not read in session via track-read.sh + read-before-write.sh hooks, (2) Auto-focus integration - /ce:execute auto-extracts plan files and locks focus during execution, (3) Mandatory handoff - session-end.sh creates .needs-handoff marker when work incomplete, session-start.sh warns about missed handoff, (4) Decision prompts - decision-reminder.sh shows reminders after 5+ file edits or critical file changes (package.json, configs, etc).",
     "4.7.0": "Add session state management: New /ce:focus command to set, lock, and clear work focus. Session state persists in .claude/state/session-state.json tracking focus (active plan, files in scope), decisions, blockers, and handoff notes. Session-start hook displays current focus and handoff from previous session. Session-end hook reminds to capture handoff. Focus lock enforcement blocks edits outside scope when locked. State-manager.sh handles all state operations.",

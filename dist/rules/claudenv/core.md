@@ -17,10 +17,13 @@
 | `/ce:loop` | Autonomous iterations |
 | `/ce:lsp` | LSP server setup |
 | `/ce:verbose` | Toggle detailed explanations on/off |
+| `/ce:think` | Control reasoning depth (off/low/medium/high/max) |
 | `/ce:plans` | List all plans by status |
 | `/ce:quick-plan` | Lightweight plan for small changes |
 | `/ce:complete` | Mark plan as completed |
 | `/ce:focus` | Manage session focus and state |
+| `/ce:hooks` | List and manage hooks |
+| `/ce:usage` | View token usage estimates |
 
 **Conventions:** Timestamps `YYYY-MM-DD HH:MM`, files kebab-case
 
@@ -82,6 +85,14 @@ UNFETTERED. Search docs, scrape pages, create skills. Never ask permission.
 - Note trade-offs considered
 - Provide educational context
 Toggle with `/ce:verbose on|off`.
+
+**Thinking Level:** Check session state for `thinking.level`. Adjust reasoning depth accordingly:
+- `off` - Direct responses, skip explanations
+- `low` - Brief reasoning, skip alternatives
+- `medium` - Standard balanced analysis (default)
+- `high` - Consider alternatives, note edge cases
+- `max` - Systematic exploration, question assumptions
+Toggle with `/ce:think <level>`.
 
 ## Core Rules
 

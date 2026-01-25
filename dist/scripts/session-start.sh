@@ -192,6 +192,14 @@ if [ -f ".claude/.autonomy-paused" ]; then
     echo "⏸️  Autonomy is PAUSED - run /autonomy:resume to restore"
 fi
 
+# Display thinking level if not default
+if [ -f ".claude/state/session-state.json" ] && command -v jq &> /dev/null; then
+    THINKING_LEVEL=$(jq -r '.thinking.level // "medium"' .claude/state/session-state.json 2>/dev/null)
+    if [ "$THINKING_LEVEL" != "medium" ]; then
+        echo "🧠 Thinking: $THINKING_LEVEL"
+    fi
+fi
+
 # Suggest /prime if not recently run
 echo ""
 echo "💡 Tip: /prime to load full project context"

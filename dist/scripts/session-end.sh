@@ -157,5 +157,10 @@ fi
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
+# Generate daily log entry
+if [ -x ".claude/scripts/daily-log.sh" ]; then
+    bash .claude/scripts/daily-log.sh > /dev/null 2>&1 || true
+fi
+
 # Log session end
 echo "[$(date -Iseconds)] Session ended" >> .claude/logs/sessions.log 2>/dev/null || true

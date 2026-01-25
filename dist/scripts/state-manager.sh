@@ -14,6 +14,8 @@
 #   clear-blocker <id>  - Remove a blocker by index
 #   set-handoff         - Set handoff notes (reads JSON from stdin)
 #   init                - Initialize state file if missing
+#   set-thinking        - Set thinking level (reads JSON from stdin)
+#   get-thinking        - Get current thinking level
 
 set -e
 
@@ -57,6 +59,10 @@ init_state() {
     "nextSteps": [],
     "notes": null
   },
+  "thinking": {
+    "level": "medium",
+    "setAt": null
+  },
   "metadata": {
     "createdAt": null,
     "lastUpdated": null,
@@ -88,7 +94,7 @@ cmd_get() {
     init_state
     local field="$1"
     case "$field" in
-        focus|decisions|blockers|handoff|metadata)
+        focus|decisions|blockers|handoff|metadata|thinking)
             jq ".$field" "$STATE_FILE"
             ;;
         *)
@@ -206,6 +212,36 @@ cmd_add_decision() {
     ' "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
 
     update_timestamp
+
+    # Also append to memory/decisions.md for persistent storage
+    local MEMORY_DIR="$PROJECT_ROOT/.claude/memory"
+    mkdir -p "$MEMORY_DIR"
+    local DECISIONS_FILE="$MEMORY_DIR/decisions.md"
+
+    # Initialize file if missing
+    if [ ! -f "$DECISIONS_FILE" ]; then
+        cat > "$DECISIONS_FILE" << 'DECEOF'
+# Architectural Decisions
+
+Project decisions captured via `/ce:focus decision`. Auto-populated.
+
+---
+
+DECEOF
+    fi
+
+    # Extract decision text and reason
+    local decision_text=$(echo "$decision_json" | jq -r '.decision')
+    local reason_text=$(echo "$decision_json" | jq -r '.reason // "No reason provided"')
+
+    # Append to decisions file
+    echo "## $now: $decision_text" >> "$DECISIONS_FILE"
+    echo "" >> "$DECISIONS_FILE"
+    echo "**Reason:** $reason_text" >> "$DECISIONS_FILE"
+    echo "" >> "$DECISIONS_FILE"
+    echo "---" >> "$DECISIONS_FILE"
+    echo "" >> "$DECISIONS_FILE"
+
     echo '{"error": false, "message": "Decision recorded"}'
 }
 
@@ -275,6 +311,44 @@ cmd_set_handoff() {
 cmd_init() {
     init_state
     echo '{"error": false, "message": "State initialized", "path": "'"$STATE_FILE"'"}'
+}
+
+cmd_set_thinking() {
+    init_state
+    local thinking_data=$(cat)
+    local now=$(date -Iseconds)
+
+    # Validate level
+    local level=$(echo "$thinking_data" | jq -r '.level')
+    case "$level" in
+        off|low|medium|high|max)
+            ;;
+        *)
+            echo '{"error": true, "message": "Invalid thinking level. Use: off, low, medium, high, max"}'
+            exit 1
+            ;;
+    esac
+
+    local tmp=$(mktemp)
+    jq --arg level "$level" --arg ts "$now" '
+        .thinking.level = $level |
+        .thinking.setAt = $ts |
+        .metadata.lastUpdated = $ts
+    ' "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
+
+    echo '{"error": false, "message": "Thinking level set to '"$level"'"}'
+}
+
+cmd_get_thinking() {
+    init_state
+    local level=$(jq -r '.thinking.level // "medium"' "$STATE_FILE")
+    local setAt=$(jq -r '.thinking.setAt // empty' "$STATE_FILE")
+
+    if [ -n "$setAt" ]; then
+        echo '{"level": "'"$level"'", "setAt": "'"$setAt"'"}'
+    else
+        echo '{"level": "'"$level"'", "setAt": null}'
+    fi
 }
 
 cmd_check_focus() {
@@ -354,6 +428,12 @@ case "${1:-status}" in
         ;;
     init)
         cmd_init
+        ;;
+    set-thinking)
+        cmd_set_thinking
+        ;;
+    get-thinking)
+        cmd_get_thinking
         ;;
     check-focus)
         cmd_check_focus "$2"
