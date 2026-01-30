@@ -36,13 +36,10 @@ get_hook_desc() {
     case "$1" in
         session-start.sh) echo "Runs when a new Claude session begins" ;;
         session-end.sh) echo "Runs when Claude session ends" ;;
-        code-gate.sh) echo "Plan enforcement for Write/Edit operations" ;;
-        focus-enforce.sh) echo "Enforces focus lock restrictions" ;;
-        read-before-write.sh) echo "Ensures files are read before modification" ;;
+        unified-gate.sh) echo "Plan, TDD, focus lock, and read-before-write enforcement" ;;
         block-no-verify.sh) echo "Prevents git commits with --no-verify" ;;
-        learning-observer.sh) echo "Tracks file modification patterns" ;;
         track-read.sh) echo "Tracks file read operations" ;;
-        decision-reminder.sh) echo "Reminds about recording decisions" ;;
+        post-write.sh) echo "Learning observer, decision reminders, quick-fix cleanup" ;;
         *) echo "Unknown hook" ;;
     esac
 }
@@ -52,13 +49,10 @@ get_hook_trigger() {
     case "$1" in
         session-start.sh) echo "SessionStart" ;;
         session-end.sh) echo "Stop" ;;
-        code-gate.sh) echo "PreToolUse:Write|Edit" ;;
-        focus-enforce.sh) echo "PreToolUse:Write|Edit" ;;
-        read-before-write.sh) echo "PreToolUse:Write|Edit" ;;
+        unified-gate.sh) echo "PreToolUse:Write|Edit|MultiEdit" ;;
         block-no-verify.sh) echo "PreToolUse:Bash" ;;
-        learning-observer.sh) echo "PostToolUse:Write|Edit" ;;
         track-read.sh) echo "PostToolUse:Read" ;;
-        decision-reminder.sh) echo "PostToolUse:Write|Edit" ;;
+        post-write.sh) echo "PostToolUse:Write|Edit|MultiEdit" ;;
         *) echo "Unknown" ;;
     esac
 }
@@ -78,7 +72,7 @@ is_hook() {
             return 1 ;;
         post-commit.sh|pre-commit.sh|read-tracker.sh|skills-triggers.sh|agents-triggers.sh)
             return 1 ;;
-        task-commit.sh|tdd-enforce.sh|todo-coordinator.sh|validate*.sh|autopilot-manager.sh|bootstrap.sh)
+        task-commit.sh|task-bridge.sh|validate*.sh|autopilot-manager.sh|bootstrap.sh)
             return 1 ;;
         *)
             return 0 ;;

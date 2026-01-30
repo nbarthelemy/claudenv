@@ -6,25 +6,6 @@
 
 `Bash(npm *)` - npm + anything | `Bash(* --help)` - any cmd + --help
 
-## Always Allowed
-
-**Files:** cat, ls, find, grep, head, tail, wc, sort, uniq, sed, awk, mkdir, rm, cp, mv, touch, chmod
-**Navigation:** pwd, cd, which, type, file, stat, du, df, tree
-**Tools:** bat, rg, fd, diff, tar, zip, unzip, curl, wget, jq, yq
-**Git (local):** add, commit, checkout, branch, stash, status, log, diff, fetch, pull, merge, rebase
-
-## Requires Approval
-
-`git push` (any remote)
-
-## Always Denied
-
-- Destructive: `rm -rf /`, fork bombs, disk writes (`dd`, `mkfs`)
-- System: `sudo *`, `shutdown`, `reboot`, `killall`
-- Remote exec: `curl|sh`, `wget|bash`, `eval`
-- Publish: `npm publish`, `cargo publish`, `twine upload`
-- Hook bypass: `--no-verify`, `git commit -n`, `--no-gpg-sign`
-
 ## Git Hook Enforcement
 
 **NEVER bypass git hooks.** When a pre-commit hook fails:

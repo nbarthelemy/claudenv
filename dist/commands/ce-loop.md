@@ -52,7 +52,7 @@ This file contains multi-agent coordination protocol for working in parallel.
    - Same: Run all iterations in current context (opt-in with `--same-context`)
 4. **Coordination setup** (if --track provided):
    - Generate agent ID: `agent-{hostname}-{timestamp}`
-   - Register: `bash .claude/scripts/todo-coordinator.sh register "$AGENT_ID" "$TRACK"`
+   - Register: Use native TaskCreate to register tasks for tracking
    - Check for active agents on same track (warn if conflict)
 5. Create `.claude/loop/state.json` with status "running"
 6. Begin iteration cycle:
@@ -68,7 +68,7 @@ This file contains multi-agent coordination protocol for working in parallel.
    - **If --commit-per-task**: Create atomic commit
    - Check exit condition → repeat or exit
 7. **On completion**:
-   - Deregister: `bash .claude/scripts/todo-coordinator.sh deregister "$AGENT_ID"`
+   - Deregister: Use TaskUpdate to mark tasks completed
    - Display summary and archive to history
 
 ### Status
@@ -131,9 +131,7 @@ When using `--track`, loops coordinate with other agents via shared state.
 
 ### Check Coordination Status
 
-```bash
-bash .claude/scripts/todo-coordinator.sh status
-```
+Use native TaskList to check coordination status.
 
 Output:
 ```json

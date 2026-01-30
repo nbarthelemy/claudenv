@@ -4,89 +4,34 @@ When multiple Claude instances work on the same project in parallel terminals, t
 
 ## Coordination Protocol
 
+Uses Claude Code's native task system (TaskCreate, TaskUpdate, TaskList) for coordination.
+TODO.md sync is handled by `task-bridge.sh`.
+
 ### On Session Start
 
-1. Generate a unique agent ID: `agent-{terminal}-{timestamp}`
-2. Register with coordinator:
+1. Import tasks from TODO.md:
    ```bash
-   bash .claude/scripts/todo-coordinator.sh register "$AGENT_ID" "$TRACK_NAME"
+   bash .claude/scripts/task-bridge.sh import
    ```
-3. Check coordination status to see other active agents
+2. Create native tasks using TaskCreate for each pending item
+3. Use `addBlockedBy` to set up dependencies between tasks
 
 ### Before Starting a Task
 
-1. Check available tasks:
-   ```bash
-   bash .claude/scripts/todo-coordinator.sh available "$TRACK_NAME"
-   ```
-2. Claim the task before working:
-   ```bash
-   bash .claude/scripts/todo-coordinator.sh claim "$AGENT_ID" "$TASK_ID"
-   ```
-3. If claim fails (already taken), pick another task
-
-### During Work
-
-1. Send heartbeats every few iterations:
-   ```bash
-   bash .claude/scripts/todo-coordinator.sh heartbeat "$AGENT_ID"
-   ```
-2. Check status periodically to see other agents' progress:
-   ```bash
-   bash .claude/scripts/todo-coordinator.sh status
-   ```
+1. Use TaskList to see available (pending, unblocked) tasks
+2. Use TaskUpdate to set status to `in_progress`
 
 ### On Task Completion
 
-1. Mark task complete:
-   ```bash
-   bash .claude/scripts/todo-coordinator.sh complete "$AGENT_ID" "$TASK_ID"
-   ```
-2. Update TODO.md (coordinator does this automatically)
-3. Claim next available task
+1. Use TaskUpdate to mark task as `completed`
+2. TaskList to pick next available task
 
 ### On Session End
 
-1. Deregister to release any incomplete tasks:
+1. Export task state back to TODO.md:
    ```bash
-   bash .claude/scripts/todo-coordinator.sh deregister "$AGENT_ID"
+   bash .claude/scripts/task-bridge.sh export
    ```
-
-## Shared State Files
-
-```
-.claude/loop/
-├── coordination.json    # Shared state (agents, tasks, claims)
-└── .coordination.lock   # Lock file for atomic updates
-```
-
-### coordination.json Structure
-
-```json
-{
-  "version": 1,
-  "agents": {
-    "agent-term1-1704567890": {
-      "track": "Track A",
-      "status": "active",
-      "startedAt": "2026-01-06T12:00:00Z",
-      "lastHeartbeat": "2026-01-06T12:05:00Z"
-    }
-  },
-  "tasks": {
-    "implement-login-form": {
-      "claimedBy": "agent-term1-1704567890",
-      "status": "in_progress",
-      "claimedAt": "2026-01-06T12:01:00Z"
-    },
-    "add-validation": {
-      "claimedBy": null,
-      "status": "available"
-    }
-  },
-  "lastUpdate": "2026-01-06T12:05:00Z"
-}
-```
 
 ## Conflict Prevention
 

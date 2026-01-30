@@ -70,7 +70,7 @@ UNFETTERED. Search docs, scrape pages, create skills. Never ask permission.
 
 - **Migration** → `.claude/references/migration-guide.md`
 - **Multi-agent** → `.claude/references/coordination-guide.md`
-- **Error patterns** → `@rules/error-recovery/patterns.md`
+- **Error patterns** → `.claude/rules/error-recovery/patterns.md`
 - **Examples** → `.claude/references/claudenv-reference.md`
 
 ## Critical Practices
@@ -98,7 +98,5 @@ Toggle with `/ce:think <level>`.
 
 @rules/autonomy.md
 @rules/permissions/core.md
-@rules/error-recovery/core.md
-@rules/documentation.md
 @rules/claudenv/plans.md
 @rules/claudenv/focus.md

@@ -157,6 +157,11 @@ fi
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
+# Sync task state back to TODO.md via task-bridge
+if [ -x ".claude/scripts/task-bridge.sh" ]; then
+    bash .claude/scripts/task-bridge.sh summary > /dev/null 2>&1 || true
+fi
+
 # Generate daily log entry
 if [ -x ".claude/scripts/daily-log.sh" ]; then
     bash .claude/scripts/daily-log.sh > /dev/null 2>&1 || true

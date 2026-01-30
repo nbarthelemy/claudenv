@@ -200,6 +200,21 @@ if [ -f ".claude/state/session-state.json" ] && command -v jq &> /dev/null; then
     fi
 fi
 
+# Check TODO.md status via task-bridge
+if [ -x ".claude/scripts/task-bridge.sh" ]; then
+  TODO_JSON=$(bash .claude/scripts/task-bridge.sh summary 2>/dev/null)
+  HAS_TODO=$(echo "$TODO_JSON" | jq -r '.hasTodo' 2>/dev/null)
+  if [ "$HAS_TODO" = "true" ]; then
+    TODO_PENDING=$(echo "$TODO_JSON" | jq -r '.pending' 2>/dev/null)
+    TODO_PROGRESS=$(echo "$TODO_JSON" | jq -r '.progress' 2>/dev/null)
+    TODO_TOTAL=$(echo "$TODO_JSON" | jq -r '.total' 2>/dev/null)
+    if [ "$TODO_PENDING" -gt 0 ] 2>/dev/null; then
+      echo ""
+      echo "📋 TODO: $TODO_PENDING pending of $TODO_TOTAL tasks ($TODO_PROGRESS% done)"
+    fi
+  fi
+fi
+
 # Suggest /prime if not recently run
 echo ""
 echo "💡 Tip: /prime to load full project context"

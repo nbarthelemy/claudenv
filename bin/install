@@ -190,6 +190,25 @@ mkdir -p "$TARGET/references"
 # Make scripts executable
 chmod +x "$TARGET/scripts/"*.sh 2>/dev/null || true
 
+# Migration: v4.x → v5.x (unified hooks)
+if [ "$IS_UPDATE" = true ]; then
+    # Detect old 3-hook settings pattern and clean up deprecated scripts
+    if [ -f "$TARGET/scripts/code-gate.sh" ] && [ -f "$TARGET/scripts/unified-gate.sh" ]; then
+        echo "  - Migrating hooks: 3-hook → unified-gate"
+        rm -f "$TARGET/scripts/code-gate.sh"
+        rm -f "$TARGET/scripts/focus-enforce.sh"
+        rm -f "$TARGET/scripts/read-before-write.sh"
+        rm -f "$TARGET/scripts/tdd-enforce.sh"
+        rm -f "$TARGET/scripts/todo-coordinator.sh"
+        rm -f "$TARGET/scripts/decision-reminder.sh"
+        rm -f "$TARGET/scripts/learning-observer.sh"
+    fi
+    # Clean up deleted rule files
+    rm -f "$TARGET/rules/parallel-execution.md"
+    rm -f "$TARGET/rules/error-recovery/core.md"
+    rm -f "$TARGET/rules/documentation.md"
+fi
+
 # Handle CLAUDE.md - preserve user content, add claudenv import
 if [ -n "$EXISTING_CLAUDE_MD" ]; then
     # Check if already has claudenv import

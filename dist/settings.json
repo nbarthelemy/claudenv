@@ -122,6 +122,17 @@
     ]
   },
   "hooks": {
+    "Setup": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/bootstrap.sh\" ] && cd \"$d\" && bash .claude/scripts/bootstrap.sh && exit 0; d=$(dirname \"$d\"); done'"
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "",
@@ -151,25 +162,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/code-gate.sh\" ] && cd \"$d\" && bash .claude/scripts/code-gate.sh && exit 0; d=$(dirname \"$d\"); done'"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -f \"$d/.claude/scripts/focus-enforce.sh\" ]; then cd \"$d\" && bash .claude/scripts/focus-enforce.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do if [ -f \"$d/.claude/scripts/read-before-write.sh\" ]; then cd \"$d\" && bash .claude/scripts/read-before-write.sh; exit $?; fi; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/unified-gate.sh\" ] && cd \"$d\" && bash .claude/scripts/unified-gate.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       },
@@ -198,25 +191,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/learning-observer.sh\" ] && cd \"$d\" && bash .claude/scripts/learning-observer.sh && exit 0; d=$(dirname \"$d\"); done'"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/decision-reminder.sh\" ] && cd \"$d\" && bash .claude/scripts/decision-reminder.sh && exit 0; d=$(dirname \"$d\"); done'"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -d \"$d/.claude\" ] && [ -f \"$d/.claude/quick-fix\" ] && rm -f \"$d/.claude/quick-fix\" && exit 0; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/post-write.sh\" ] && cd \"$d\" && bash .claude/scripts/post-write.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }

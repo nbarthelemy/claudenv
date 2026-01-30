@@ -24,7 +24,21 @@ If plan not found, list available plans:
 ls -la .claude/plans/*.md 2>/dev/null
 ```
 
-### Step 2: Auto-Focus from Plan
+### Step 2: Create Native Tasks
+
+Parse the plan's phases and tasks, then create native Claude Code tasks for tracking:
+
+1. Run `bash .claude/scripts/task-bridge.sh import` to check current TODO.md state
+2. For each task in the plan, use TaskCreate with:
+   - `subject`: The task description from the plan
+   - `description`: Files to modify, verification criteria
+   - `activeForm`: Present-continuous form of the task
+3. Set up dependencies using `addBlockedBy` for tasks that depend on earlier phases
+4. Use TaskUpdate to mark tasks as `in_progress` when starting and `completed` when done
+
+This provides real-time task tracking visible via TaskList during execution.
+
+### Step 3: Auto-Focus from Plan (unchanged)
 
 Extract files from the plan's "Files to Create/Modify" table and set focus:
 

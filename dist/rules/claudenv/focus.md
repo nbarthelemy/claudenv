@@ -95,7 +95,7 @@ This becomes the starting point for the next session.
 
 ## Enforcement
 
-When focus is locked, the `focus-enforce.sh` hook:
+When focus is locked, the `unified-gate.sh` hook:
 1. Checks if file being edited is in `filesInScope`
 2. Blocks edits outside scope with helpful message
 3. Suggests: unlock, add file to scope, or complete current task

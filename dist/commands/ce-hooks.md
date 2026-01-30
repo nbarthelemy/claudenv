@@ -32,8 +32,8 @@ Run `bash .claude/scripts/hooks-manager.sh list` to get all hooks as JSON.
   Hook                    Status    Trigger
   ────────────────────────────────────────────
   session-start.sh        ✅        SessionStart
-  code-gate.sh            ✅        PreToolUse
-  focus-enforce.sh        ❌        PreToolUse
+  unified-gate.sh         ✅        PreToolUse
+  post-write.sh           ✅        PostToolUse
   ...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -78,10 +78,10 @@ Confirm the result: "Hook {name} is now {enabled/disabled}."
 
 | Hook | Purpose |
 |------|---------|
-| `code-gate.sh` | Enforces plan-first development |
-| `focus-enforce.sh` | Restricts edits when focus is locked |
+| `unified-gate.sh` | Plan, TDD, focus lock, and read-before-write enforcement |
+| `post-write.sh` | Learning observer, decision reminders, quick-fix cleanup |
 | `block-no-verify.sh` | Prevents bypassing git hooks |
-| `learning-observer.sh` | Tracks patterns for skill proposals |
+| `track-read.sh` | Tracks file read operations |
 
 ## Notes
 
