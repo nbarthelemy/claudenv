@@ -186,9 +186,12 @@ mkdir -p "$TARGET/loop"
 mkdir -p "$TARGET/plans"
 mkdir -p "$TARGET/rca"
 mkdir -p "$TARGET/references"
+mkdir -p "$TARGET/memory"
+mkdir -p "$TARGET/state"
 
 # Make scripts executable
 chmod +x "$TARGET/scripts/"*.sh 2>/dev/null || true
+chmod +x "$TARGET/scripts/"*.js 2>/dev/null || true
 
 # Migration: v4.x → v5.x (unified hooks)
 if [ "$IS_UPDATE" = true ]; then
@@ -212,7 +215,7 @@ fi
 # Handle CLAUDE.md - preserve user content, add claudenv import
 if [ -n "$EXISTING_CLAUDE_MD" ]; then
     # Check if already has claudenv import
-    if echo "$EXISTING_CLAUDE_MD" | grep -q "@rules/claudenv.md"; then
+    if echo "$EXISTING_CLAUDE_MD" | grep -qE "@rules/claudenv(.md|/core.md)"; then
         # Already has import, just restore the file
         echo "$EXISTING_CLAUDE_MD" > "$TARGET/CLAUDE.md"
     else
@@ -222,7 +225,7 @@ $EXISTING_CLAUDE_MD
 
 ## Claudenv Framework
 
-@rules/claudenv.md
+@rules/claudenv/core.md
 EOF
     fi
     echo "  - Preserved your CLAUDE.md, added framework import"
@@ -235,7 +238,7 @@ else
 
 ## Claudenv Framework
 
-@rules/claudenv.md
+@rules/claudenv/core.md
 EOF
     echo "  - Created CLAUDE.md with framework import"
 fi
@@ -269,6 +272,32 @@ echo "  $AGENTS agents"
 echo ""
 echo "Next steps:"
 echo "  1. Start Claude Code: claude"
-echo "  2. Run bootstrap: /claudenv"
+echo "  2. Run bootstrap: /ce:init"
+echo ""
+
+# Check for optional dependencies
+echo "Optional dependencies:"
+
+# Check for sqlite-vss
+VSS_AVAILABLE=false
+for path in /opt/homebrew/lib/vss0.dylib /usr/local/lib/vss0.dylib /usr/lib/sqlite3/vss0.so; do
+    if [ -f "$path" ]; then
+        VSS_AVAILABLE=true
+        break
+    fi
+done
+if [ "$VSS_AVAILABLE" = true ]; then
+    echo "  ✓ sqlite-vss (semantic search)"
+else
+    echo "  ○ sqlite-vss (semantic search) - brew install sqlite-vss"
+fi
+
+# Check for transformers.js
+if npm list @xenova/transformers &>/dev/null 2>&1 || [ -d "node_modules/@xenova/transformers" ]; then
+    echo "  ✓ @xenova/transformers (embeddings)"
+else
+    echo "  ○ @xenova/transformers (embeddings) - npm i @xenova/transformers"
+fi
+
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
