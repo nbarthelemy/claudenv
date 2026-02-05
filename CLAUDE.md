@@ -21,9 +21,15 @@ claudenv/
     ├── version.json
     ├── commands/
     ├── skills/
+    │   └── claudenv/
+    │       └── memory/     # Memory processing skill
     ├── rules/
-    │   └── claudenv.md    # Framework instructions (users import this)
+    │   └── claudenv/       # Framework instructions
     ├── scripts/
+    │   ├── memory-*.sh     # Memory system scripts
+    │   └── memory-embed.js # Embedding generation (Node.js)
+    ├── references/
+    │   └── memory-guide.md # Memory system documentation
     └── ...
 ```
 

@@ -5,11 +5,14 @@
 Claudenv is a cloneable framework that bootstraps comprehensive Claude Code infrastructure for any project. It provides:
 
 - **Autonomous operation** with configurable permission levels
-- **Autonomous loops** for persistent, iterative development (like Ralph Wiggum)
+- **Autonomous loops** for persistent, iterative development
+- **Persistent memory** with hybrid FTS5 + semantic search across sessions
 - **Tech stack detection** for 50+ languages, frameworks, and cloud platforms
 - **Project specification interviews** to clarify architecture and requirements
 - **Learning system** that observes patterns and suggests automations
 - **Frontend design expertise** with anti-AI-slop design principles
+- **SEO/GEO optimization** for search engines and AI/generative engines
+- **TDD enforcement** with red-green-refactor workflow
 - **Auto-LSP setup** with official Anthropic plugins + 25+ language servers
 - **Self-extending** via meta-agent that creates new skills for unfamiliar tech
 - **Subagent orchestration** for automatic parallel task execution with specialist agents
@@ -46,7 +49,7 @@ cp -r /tmp/claudenv/dist/* .claude/
 rm -rf /tmp/claudenv
 
 # Add framework import to your CLAUDE.md
-echo -e "\n@rules/claudenv.md" >> .claude/CLAUDE.md
+echo -e "\n@rules/claudenv/core.md" >> .claude/CLAUDE.md
 ```
 
 ## Repository Structure
@@ -61,24 +64,31 @@ claudenv/
 └── dist/              # Distributable content → user's .claude/
     ├── settings.json
     ├── version.json
+    ├── manifest.json
     ├── rules/
     │   ├── claudenv/
     │   │   ├── core.md       # Core framework rules (always loaded)
-    │   │   └── reference.md  # Detailed examples (on-demand)
+    │   │   ├── plans.md      # Plan-first development rules
+    │   │   ├── focus.md      # Session focus management
+    │   │   └── tdd.md        # TDD enforcement rules
     │   ├── permissions/
     │   │   └── core.md       # Permission matrix
     │   ├── error-recovery/
-    │   │   ├── core.md       # Recovery protocol
     │   │   └── patterns.md   # Error patterns (on-demand)
     │   ├── triggers/
     │   │   └── reference.json # Skill/agent triggers
-    │   ├── autonomy.md
-    │   ├── coordination.md    # Multi-agent coordination
-    │   ├── migration.md       # CLAUDE.md migration rules
-    │   └── documentation.md
-    ├── commands/              # 24 slash commands
-    ├── skills/                # 10 auto-invoked skills
-    ├── scripts/               # Automation scripts
+    │   └── autonomy.md
+    ├── commands/              # 39 slash commands
+    ├── skills/                # 14 auto-invoked skills
+    │   └── claudenv/          # Framework skills (ce: namespace)
+    ├── scripts/               # 67 automation scripts
+    │   ├── memory-*.sh        # Memory system scripts
+    │   ├── memory-embed.js    # Embedding generation (Node.js)
+    │   ├── unified-gate.sh    # Consolidated PreToolUse gate
+    │   ├── post-write.sh      # Consolidated PostToolUse handler
+    │   └── ...
+    ├── references/            # 9 reference docs (on-demand)
+    ├── memory/                # Memory system (SQLite + embeddings)
     └── ...
 ```
 
@@ -88,59 +98,82 @@ When you install claudenv, the contents of `dist/` are copied to your project's 
 
 Framework rules use a **namespaced structure with conditional loading** to minimize context pollution:
 
-- **Core Rules (~2.8k tokens):** Always loaded, essential for all operations
-- **Conditional Rules (~5.1k tokens):** Loaded only when explicitly needed
-- **Total Reduction:** 76% smaller than monolithic approach
+- **Core Rules:** Always loaded (`core.md`, `plans.md`, `focus.md`, `tdd.md`, `autonomy.md`, `permissions/core.md`)
+- **On-Demand Rules:** Loaded only when explicitly needed
+- **References:** 9 detailed guides loaded by commands that need them
 
 **Conditional loading examples:**
-- `migration.md` - Loaded by `/ce:init` before migrating files
-- `coordination.md` - Loaded by `/ce:loop --track` for multi-agent work
 - `error-recovery/patterns.md` - Loaded when encountering unfamiliar errors
 - `triggers/reference.json` - Loaded by orchestrator for routing decisions
+- `references/memory-guide.md` - Loaded by memory commands
+- `references/ux-analysis-guide.md` - Loaded during UX analysis phases
 
 ## What You Get
 
-### Commands
+### Commands (39)
 
 | Command | Description |
 |---------|-------------|
+| **Setup & Context** | |
+| `/ce:init` | Bootstrap infrastructure for current project |
 | `/ce:spec` | Full project setup: interview, tech detect, CLAUDE.md, TODO.md |
 | `/ce:prime` | Load comprehensive project context (auto-runs at session start) |
+| `/ce:interview` | Conduct project specification interview |
+| **Planning & Execution** | |
 | `/ce:feature <name>` | Plan a feature, save to `.claude/plans/` |
+| `/ce:quick-plan` | Lightweight plan for small changes (30-60 min tasks) |
+| `/ce:plans` | List all plans by status |
 | `/ce:next` | Interactive feature workflow - pick, plan, execute with confirmations |
 | `/ce:autopilot` | Fully autonomous feature completion from TODO.md |
 | `/ce:execute <plan>` | Execute plan via `/ce:loop --plan` + `/ce:validate` |
-| `/ce:validate` | Stack-aware validation: lint, type-check, test, build |
-| `/ce:rca <issue>` | Root cause analysis for bugs |
+| `/ce:complete` | Mark a plan as completed and sync TODO.md |
+| `/ce:phase` | Phase management for TODO.md - insert, remove, move, reorder |
+| `/ce:blocker` | Mark a task as blocked in TODO.md with a reason |
 | `/ce:backlog` | Send current or specified task to the backlog |
-| `/ce:init` | Bootstrap infrastructure for current project |
-| `/ce:admin` | Admin commands: status, update, audit, export, import, mcp |
-| `/ce:interview` | Conduct project specification interview |
+| **Development** | |
 | `/ce:loop` | Autonomous loop: start, status, pause, resume, cancel, history |
-| `/ce:loop --plan <file>` | Execute structured plan file (phases/tasks) |
+| `/ce:validate` | Stack-aware validation: lint, type-check, test, build |
+| `/ce:tdd` | Test-Driven Development workflow |
+| `/ce:rca <issue>` | Root cause analysis for bugs |
+| `/ce:map` | Generate comprehensive codebase analysis |
 | `/ce:lsp` | LSP management: install, status |
-| `/ce:health` | Verify infrastructure integrity |
+| **Memory & Learning** | |
+| `/ce:recall` | Memory system: search, status, process pending |
+| `/ce:memory` | Memory mode control: auto/manual |
+| `/ce:do <task>` | Execute task with memory context injection |
 | `/ce:learn` | Learning system: review, implement |
 | `/ce:reflect` | Consolidate learnings, update project knowledge |
-| `/ce:reflect evolve` | Analyze failures and propose system improvements |
 | `/ce:patterns` | Force pattern analysis |
-| `/ce:triggers` | List skill and agent triggers |
-| `/ce:backup` | Backup management: create, restore, list |
+| **Session & Focus** | |
+| `/ce:focus` | Manage session focus - set, lock, clear work context |
+| `/ce:think` | Control reasoning depth: off/low/medium/high/max |
+| `/ce:verbose` | Verbosity control: on/off/status |
 | `/ce:autonomy` | Autonomy control: pause, resume |
+| **Admin & Debug** | |
+| `/ce:admin` | Admin commands: status, update, audit, export, import, mcp |
+| `/ce:health` | Verify infrastructure integrity |
+| `/ce:hooks` | Hook management: list, info, toggle |
+| `/ce:usage` | Token usage tracking and cost estimates |
+| `/ce:triggers` | List skill and agent triggers |
 | `/ce:debug` | Debug tools: hooks, agent |
+| `/ce:backup` | Backup management: create, restore, list |
 | `/ce:docs` | Documentation review and optimization |
 | `/ce:shipit` | Release: version bump, commit, push |
 
-### Skills (Auto-Invoked)
+### Skills (14 Auto-Invoked)
 
 | Skill | Purpose |
 |-------|---------|
 | `tech-detection` | Detects project stack and configures permissions |
 | `project-interview` | Conducts specification interviews |
 | `pattern-observer` | Observes patterns, consolidates learnings, suggests automations |
+| `memory` | Processes pending observations into searchable memory (FTS5 + embeddings) |
 | `meta-skill` | Creates new skills for unfamiliar technologies |
 | `skill-creator` | Scaffolds and validates skill directories |
 | `frontend-design` | Creates distinctive, production-grade UI |
+| `seo-geo-expert` | Optimizes content for search engines and AI/generative engines |
+| `tdd` | Enforces red-green-refactor TDD workflow |
+| `tool-search` | Discovers available tools and MCP capabilities on-demand |
 | `autonomous-loop` | Manages iterative development loops |
 | `lsp-setup` | Auto-detects and installs language servers |
 | `orchestrator` | Orchestrates complex tasks with parallel subagent execution |
@@ -173,27 +206,32 @@ After installation, your project's `.claude/` directory contains:
 ```
 your-project/
 └── .claude/
-    ├── CLAUDE.md           # Your instructions + @rules/claudenv.md import
+    ├── CLAUDE.md           # Your instructions + @rules/claudenv/core.md import
     ├── settings.json       # Permissions & hooks
     ├── version.json        # Framework version
     ├── rules/
-    │   ├── claudenv.md     # Framework instructions (imported)
-    │   ├── autonomy.md     # Autonomy definitions
-    │   ├── permissions.md  # Permission matrix
-    │   └── ...
-    ├── commands/           # 24 slash commands
-    ├── skills/             # 10 auto-invoked skills
+    │   ├── claudenv/       # Framework rules (core, plans, focus, tdd)
+    │   ├── permissions/    # Permission matrix
+    │   ├── error-recovery/ # Error patterns
+    │   ├── triggers/       # Skill/agent routing
+    │   └── autonomy.md     # Autonomy definitions
+    ├── commands/           # 39 slash commands
+    ├── skills/             # 14 auto-invoked skills
+    │   └── claudenv/       # Framework skills (ce: namespace)
     ├── agents/             # 12 specialist subagents
     ├── orchestration/      # Orchestration config
-    ├── scripts/            # Automation scripts
+    ├── scripts/            # 67 automation scripts
+    ├── references/         # 9 reference docs (on-demand)
     ├── templates/          # Generation templates
+    ├── memory/             # Persistent memory (SQLite DB + embeddings)
     ├── learning/           # Pattern observations
+    ├── state/              # Session state (focus, decisions, handoff)
     ├── loop/               # Loop state & history
     ├── logs/               # Execution logs
     └── backups/            # Auto-backups
 ```
 
-**Key point:** Your project instructions stay in `CLAUDE.md`. Framework instructions are imported via `@rules/claudenv.md`, so updates never overwrite your content.
+**Key point:** Your project instructions stay in `CLAUDE.md`. Framework instructions are imported via `@rules/claudenv/core.md`, so updates never overwrite your content.
 
 ## Autonomy Levels
 
@@ -228,12 +266,15 @@ When you run `/ce:init`, the framework:
 4. Generates `project-context.json`
 5. Updates `settings.json` with tech-specific permissions
 6. Migrates existing CLAUDE.md (preserving all content)
-7. Initializes learning system
+7. Initializes learning system and memory database
 8. Installs LSP servers (plugins first, then binaries)
-9. **Validates all required files were created**
-10. Runs health check
+9. Creates specialist agents for detected technologies
+10. **Validates all required files were created**
+11. Runs health check
 
 **Post-Init Validation:** The bootstrap verifies all required files, directories, and configurations exist before reporting success. Missing items are auto-created.
+
+**Hook Architecture (v5.0.0):** Hooks are consolidated for performance - a single `unified-gate.sh` handles all PreToolUse write checks (TDD, plans, read-before-write), and `post-write.sh` handles all PostToolUse operations. Memory capture runs asynchronously via `memory-capture.sh`.
 
 ### 2. Interview (`/ce:interview`)
 
@@ -280,6 +321,41 @@ Core philosophy:
 - "Merge over add — consolidate, don't accumulate"
 - "Specific over vague — skip insights that aren't actionable"
 - "Accurate over comprehensive — wrong info is worse than missing"
+
+### Memory System
+
+Persistent memory with hybrid FTS5 + sqlite-vss search for cross-session context. Stored in `.claude/memory/memory.db`.
+
+**Automatic Operation:**
+- **Capture:** PostToolUse hook (`memory-capture.sh`) queues significant operations asynchronously
+- **Process:** `memory` skill processes pending queue at session start, generating keyword-rich summaries
+- **Surface:** Relevant memories auto-injected at session start based on focus (configurable)
+
+**Commands:**
+```bash
+/ce:recall                    # Show status (DB size, observation count, pending)
+/ce:recall search "auth bug"  # Search memories (hybrid, keyword, or semantic)
+/ce:recall process            # Manually process pending observations
+/ce:recall get <id>           # Get full observation details
+/ce:memory                    # Show current mode
+/ce:memory auto|manual        # Toggle automatic surfacing
+/ce:do <task>                 # Execute task with memory context injection
+```
+
+**Search Modes:**
+- `--keyword` - FTS5 (fast, exact matches)
+- `--semantic` - sqlite-vss (fuzzy, meaning-based)
+- Default: hybrid (both combined)
+
+**Memory Mode:**
+- **Auto (default):** Context injected at session start, surfaced during file operations
+- **Manual:** Use `/ce:do <task>` to explicitly query memory before executing
+
+**Dependencies:**
+- `@xenova/transformers` - Local embedding generation (optional but recommended)
+- `sqlite-vss` - Vector similarity search (optional, falls back to FTS5)
+
+See `.claude/references/memory-guide.md` for details.
 
 ### 4. PIV Workflow (Prime-Implement-Validate)
 
@@ -569,7 +645,11 @@ cd "$PROJECT_ROOT" || exit 0
 **Built-in scripts using this pattern:**
 - `session-start.sh`
 - `session-end.sh`
-- `learning-observer.sh`
+- `unified-gate.sh`
+- `post-write.sh`
+- `track-read.sh`
+- `block-no-verify.sh`
+- `memory-capture.sh`
 
 ## Updating
 
@@ -582,6 +662,72 @@ To update an existing Claudenv installation to the latest version:
 This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
 
 ## Changelog
+
+### v5.0.0
+- **BREAKING:** Consolidated 3 PreToolUse hooks into single `unified-gate.sh` (3 bash processes per write reduced to 1)
+- **BREAKING:** Consolidated 3 PostToolUse hooks into single `post-write.sh`
+- **Removed:** Redundant rule files (`parallel-execution.md`, `error-recovery/core.md`, `documentation.md`) that restated native Claude Code behavior
+- **Added:** Setup hook for bootstrap on `claude --init`
+- **Added:** `task-bridge.sh` for TODO.md integration with native TaskCreate/TaskList
+- **Added:** Memory system: persistent SQLite-based memory with hybrid FTS5 + semantic search
+- **Added:** Memory commands: `/ce:recall`, `/ce:memory`, `/ce:do`
+- **Added:** Memory scripts: `memory-capture.sh`, `memory-compress.sh`, `memory-embed.js`, `memory-get.sh`, `memory-init.sh`, `memory-inject.sh`, `memory-migrate.sh`, `memory-search.sh`, `memory-status.sh`
+- **Added:** Memory processing skill for session-start observation processing
+- **Added:** SEO/GEO expert skill for search engine and AI engine optimization
+- **Changed:** Trimmed `autonomy.md` and `permissions/core.md` to remove entries already enforced by `settings.json`
+- **Deprecated:** `todo-coordinator.sh` (replaced by native task concurrency)
+
+### v4.10.0
+- **Added:** `/ce:think` command for runtime thinking depth control (off/low/medium/high/max)
+- **Added:** `/ce:hooks` command for hook management (list/info/toggle)
+- **Added:** `/ce:usage` command for token usage tracking and cost estimates
+- **Added:** Daily session logs in `memory/daily/`
+- **Added:** Decisions auto-populate `memory/decisions.md`
+
+### v4.9.0
+- **Changed:** Restructured learning directory - ephemeral files moved to `learning/working/`
+- **Changed:** Root `learning/` now contains only tracked files (`README.md`, `implemented.md`)
+- **Updated:** 12+ scripts/skills with new learning paths
+
+### v4.8.0
+- **Added:** Read-before-write enforcement via `track-read.sh` + `read-before-write.sh` hooks
+- **Added:** Auto-focus integration - `/ce:execute` auto-extracts plan files and locks focus
+- **Added:** Mandatory handoff - session-end creates `.needs-handoff` marker when work incomplete
+- **Added:** Decision reminders after 5+ file edits or critical file changes
+
+### v4.7.0
+- **Added:** `/ce:focus` command for session state management (set, lock, clear work focus)
+- **Added:** Session state persistence in `.claude/state/session-state.json`
+- **Added:** Focus lock enforcement - blocks edits outside scope when locked
+- **Added:** `state-manager.sh` for state operations
+
+### v4.6.0
+- **Added:** Plan enforcement system via unified `code-gate.sh`
+- **Added:** `/ce:quick-plan` for lightweight 30-60 min tasks
+- **Added:** `/ce:plans` to list plans by status
+- **Added:** `/ce:complete` to mark plans done
+- **Added:** Small file exemption (<50 lines skip plan requirement)
+- **Added:** `plan-sync.sh` for TODO.md status sync
+
+### v4.5.0
+- **Added:** TDD enforcement (enabled by default) - PreToolUse hook blocks writes unless test exists
+- **Added:** `/ce:tdd` command (disable/enable/status)
+- **Added:** TDD skill for red-green-refactor workflow guidance
+- **Added:** TDD rule with file mapping and enforcement details
+
+### v4.4.0
+- **Added:** Critical practices to core rules: read-before-modify, source verification
+- **Added:** `/ce:verbose` command for verbosity toggle (on/off/status)
+
+### v4.3.0
+- **Added:** Holistic UX integration - 6-pass UX analysis embedded into development pipeline
+- **Added:** `/ce:interview` now has `--quick`/`--demo` modes with PRD+UX phases
+- **Added:** `references/ux-analysis-guide.md`
+
+### v4.2.0
+- **Added:** Progressive disclosure infrastructure with agent tiering (4 core, 14 on-demand)
+- **Added:** `tool-search` skill for capability discovery
+- **Added:** `memory/` directory for file-based persistence
 
 ### v4.1.1
 - **Added:** `parallel-execution.md` rule - prefer subagents for independent work, launch up to 15 agents concurrently
@@ -814,6 +960,8 @@ This fetches the latest fixes from GitHub while preserving your custom hooks and
 - Claude Code CLI
 - Bash shell
 - Optional: `jq` for JSON parsing (falls back to Python)
+- Optional: `node` for memory embeddings (`@xenova/transformers`)
+- Optional: `sqlite3` for memory system (included on most systems)
 
 ## Contributing
 
