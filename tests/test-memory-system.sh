@@ -156,7 +156,8 @@ test_memory_capture_creates_pending() {
     setup_test_project
     cd "$TEST_DIR"
     mkdir -p .claude/memory
-    TOOL_NAME="Write" FILE_PATH="src/app.ts" bash .claude/scripts/memory-capture.sh
+    echo '{"tool_name":"Write","tool_input":{"file_path":"src/app.ts","content":"hello"},"tool_response":{"success":true}}' \
+        | bash .claude/scripts/memory-capture.sh
     [ -f ".claude/memory/.pending-observations.jsonl" ] &&
     local line=$(cat .claude/memory/.pending-observations.jsonl)
     echo "$line" | jq -e '.tool_name == "Write"' >/dev/null
@@ -166,7 +167,8 @@ test_memory_capture_importance_write() {
     setup_test_project
     cd "$TEST_DIR"
     mkdir -p .claude/memory
-    TOOL_NAME="Write" bash .claude/scripts/memory-capture.sh
+    echo '{"tool_name":"Write","tool_input":{"file_path":"src/app.ts","content":"hello"},"tool_response":{"success":true}}' \
+        | bash .claude/scripts/memory-capture.sh
     local line=$(cat .claude/memory/.pending-observations.jsonl)
     echo "$line" | jq -e '.importance == 2' >/dev/null
 }
@@ -175,7 +177,8 @@ test_memory_capture_importance_git_commit() {
     setup_test_project
     cd "$TEST_DIR"
     mkdir -p .claude/memory
-    TOOL_NAME="Bash" TOOL_INPUT="git commit -m 'test'" bash .claude/scripts/memory-capture.sh
+    echo '{"tool_name":"Bash","tool_input":{"command":"git commit -m '\''test'\''"},"tool_response":{"output":"committed"}}' \
+        | bash .claude/scripts/memory-capture.sh
     local line=$(cat .claude/memory/.pending-observations.jsonl)
     echo "$line" | jq -e '.importance == 3' >/dev/null
 }
@@ -184,7 +187,8 @@ test_memory_capture_silent_outside_project() {
     local tmp=$(mktemp -d)
     cd "$tmp"
     # Should exit silently without error
-    TOOL_NAME="Write" bash "$SCRIPTS/memory-capture.sh"
+    echo '{"tool_name":"Write","tool_input":{"file_path":"test.ts"},"tool_response":{"success":true}}' \
+        | bash "$SCRIPTS/memory-capture.sh"
     local result=$?
     rm -rf "$tmp"
     [ $result -eq 0 ]

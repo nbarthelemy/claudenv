@@ -195,7 +195,7 @@
           },
           {
             "type": "command",
-            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/memory-capture.sh\" ] && cd \"$d\" && bash .claude/scripts/memory-capture.sh &>/dev/null & exit 0; d=$(dirname \"$d\"); done'"
+            "command": "bash -c 'd=$PWD; while [ \"$d\" != \"/\" ]; do [ -f \"$d/.claude/scripts/memory-capture.sh\" ] && cd \"$d\" && bash .claude/scripts/memory-capture.sh && exit 0; d=$(dirname \"$d\"); done'"
           }
         ]
       }
