@@ -1,0 +1,35 @@
+import SwiftUI
+
+struct {ViewName}View: View {
+    @StateObject private var viewModel = {ViewName}ViewModel()
+
+    var body: some View {
+        NavigationStack {
+            content
+                .navigationTitle("{Title}")
+                .task {
+                    await viewModel.load()
+                }
+        }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if viewModel.isLoading {
+            ProgressView()
+        } else if let error = viewModel.error {
+            ContentUnavailableView(
+                "Error",
+                systemImage: "exclamationmark.triangle",
+                description: Text(error.localizedDescription)
+            )
+        } else {
+            // Main content here
+            Text("Content")
+        }
+    }
+}
+
+#Preview {
+    {ViewName}View()
+}

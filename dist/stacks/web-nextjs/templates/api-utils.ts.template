@@ -1,0 +1,153 @@
+// apps/web/src/lib/api-utils.ts
+// Siquora API Utilities
+//
+// Standard utilities for all API routes. Copy to new projects.
+
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@siquora/auth";
+import { ZodError } from "zod";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+type ApiHandler = (
+  req: NextRequest,
+  context?: { params: Record<string, string> }
+) => Promise<NextResponse>;
+
+interface ApiError {
+  message: string;
+  code?: string;
+  details?: unknown;
+}
+
+// ============================================================================
+// Response Helpers
+// ============================================================================
+
+export function successResponse<T>(data: T, status = 200): NextResponse {
+  return NextResponse.json({ data }, { status });
+}
+
+export function errorResponse(
+  message: string,
+  status = 400,
+  details?: unknown
+): NextResponse {
+  const error: ApiError = { message };
+  if (details) error.details = details;
+  return NextResponse.json({ error }, { status });
+}
+
+// ============================================================================
+// Auth Helper
+// ============================================================================
+
+export async function requireAuth() {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    throw new AuthError("Unauthorized");
+  }
+
+  return session.user;
+}
+
+export class AuthError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AuthError";
+  }
+}
+
+// ============================================================================
+// Error Handling Wrapper
+// ============================================================================
+
+export function withErrorHandling(handler: ApiHandler): ApiHandler {
+  return async (req, context) => {
+    try {
+      return await handler(req, context);
+    } catch (error) {
+      console.error("[API Error]", error);
+
+      // Auth error
+      if (error instanceof AuthError) {
+        return errorResponse(error.message, 401);
+      }
+
+      // Validation error
+      if (error instanceof ZodError) {
+        return errorResponse("Validation failed", 400, error.errors);
+      }
+
+      // Database errors
+      if (isDatabaseError(error)) {
+        return handleDatabaseError(error);
+      }
+
+      // Generic error
+      const message =
+        error instanceof Error ? error.message : "Internal server error";
+      return errorResponse(message, 500);
+    }
+  };
+}
+
+// ============================================================================
+// Database Error Handling (Drizzle/PostgreSQL)
+// ============================================================================
+
+function isDatabaseError(error: unknown): error is { code: string } {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof (error as { code: unknown }).code === "string"
+  );
+}
+
+function handleDatabaseError(error: { code: string }): NextResponse {
+  switch (error.code) {
+    case "23505": // unique_violation
+      return errorResponse("A record with this value already exists", 409);
+    case "23503": // foreign_key_violation
+      return errorResponse("Related record not found", 400);
+    case "23502": // not_null_violation
+      return errorResponse("Required field is missing", 400);
+    default:
+      return errorResponse("Database error", 500);
+  }
+}
+
+// ============================================================================
+// Pagination Helper
+// ============================================================================
+
+export function getPagination(req: NextRequest) {
+  const url = new URL(req.url);
+  const page = Math.max(1, parseInt(url.searchParams.get("page") ?? "1"));
+  const limit = Math.min(100, Math.max(1, parseInt(url.searchParams.get("limit") ?? "20")));
+  const skip = (page - 1) * limit;
+
+  return { page, limit, skip };
+}
+
+export function paginatedResponse<T>(
+  data: T[],
+  total: number,
+  page: number,
+  limit: number
+) {
+  return {
+    data,
+    pagination: {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      hasMore: page * limit < total,
+    },
+  };
+}

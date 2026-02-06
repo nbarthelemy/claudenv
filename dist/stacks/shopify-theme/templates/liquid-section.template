@@ -1,0 +1,106 @@
+{% comment %}
+  Template: Liquid Section
+  Stack: shopify-theme
+
+  Usage: Create a new section file in theme/sections/
+  Variables:
+    - {section_name}: Section name (e.g., "featured-collection")
+    - {section_title}: Human-readable title (e.g., "Featured Collection")
+    - {section_class}: CSS class (e.g., "featured-collection")
+{% endcomment %}
+
+{%- comment -%}
+  Section: {section_title}
+  -----------------------------------------------
+  Description: [Add description here]
+
+  Settings:
+  - heading: Section heading text
+  - [Add more settings documentation]
+{%- endcomment -%}
+
+<section
+  id="section-{{ section.id }}"
+  class="{section_class} section section--{{ section.settings.padding_top }}-top section--{{ section.settings.padding_bottom }}-bottom"
+>
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <div class="section__header">
+        <h2 class="section__heading h2">
+          {{ section.settings.heading }}
+        </h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="section__subheading">
+            {{ section.settings.subheading }}
+          </p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="{section_class}__content">
+      {%- comment -%} Section content here {%- endcomment -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "{section_title}",
+  "tag": "section",
+  "class": "{section_class}-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "{section_title}"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top padding",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "{section_title}"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,130 @@
+// apps/web/src/app/api/v1/{{route}}/route.ts
+// Siquora API Route Template
+//
+// Usage: Copy and replace {{placeholders}}
+// - {{route}}: Route path (e.g., "users", "workspaces/[id]")
+// - {{Model}}: Drizzle table name (e.g., "User", "Workspace")
+// - {{model}}: Lowercase model name (e.g., "user", "workspace")
+
+import { NextRequest } from "next/server";
+import { z } from "zod";
+import { db } from "@/lib/db";
+import {
+  withErrorHandling,
+  successResponse,
+  errorResponse,
+  requireAuth,
+} from "@/lib/api-utils";
+
+// ============================================================================
+// Validation Schema
+// ============================================================================
+
+const createSchema = z.object({
+  name: z.string().min(1).max(255),
+  // Add more fields as needed
+});
+
+const updateSchema = createSchema.partial();
+
+// ============================================================================
+// GET - List/Read
+// ============================================================================
+
+export const GET = withErrorHandling(async (req: NextRequest) => {
+  const user = await requireAuth();
+
+  const items = await db.{{model}}.findMany({
+    where: {
+      userId: user.id,
+      deletedAt: null, // Soft delete support
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return successResponse(items);
+});
+
+// ============================================================================
+// POST - Create
+// ============================================================================
+
+export const POST = withErrorHandling(async (req: NextRequest) => {
+  const user = await requireAuth();
+  const body = await req.json();
+  const data = createSchema.parse(body);
+
+  const item = await db.{{model}}.create({
+    data: {
+      ...data,
+      userId: user.id,
+    },
+  });
+
+  return successResponse(item, 201);
+});
+
+// ============================================================================
+// PATCH - Update (for dynamic routes like [id]/route.ts)
+// ============================================================================
+
+export const PATCH = withErrorHandling(async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const user = await requireAuth();
+  const body = await req.json();
+  const data = updateSchema.parse(body);
+
+  // Verify ownership
+  const existing = await db.{{model}}.findFirst({
+    where: {
+      id: params.id,
+      userId: user.id,
+      deletedAt: null,
+    },
+  });
+
+  if (!existing) {
+    return errorResponse("Not found", 404);
+  }
+
+  const item = await db.{{model}}.update({
+    where: { id: params.id },
+    data,
+  });
+
+  return successResponse(item);
+});
+
+// ============================================================================
+// DELETE - Soft delete (for dynamic routes)
+// ============================================================================
+
+export const DELETE = withErrorHandling(async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
+  const user = await requireAuth();
+
+  // Verify ownership
+  const existing = await db.{{model}}.findFirst({
+    where: {
+      id: params.id,
+      userId: user.id,
+      deletedAt: null,
+    },
+  });
+
+  if (!existing) {
+    return errorResponse("Not found", 404);
+  }
+
+  // Soft delete
+  await db.{{model}}.update({
+    where: { id: params.id },
+    data: { deletedAt: new Date() },
+  });
+
+  return successResponse({ deleted: true });
+});

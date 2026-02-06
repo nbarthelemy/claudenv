@@ -1,0 +1,45 @@
+package com.siquora.{app}.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class {ScreenName}ViewModel @Inject constructor(
+    // Inject dependencies here
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<{ScreenName}UiState>({ScreenName}UiState.Loading)
+    val uiState: StateFlow<{ScreenName}UiState> = _uiState.asStateFlow()
+
+    init {
+        load()
+    }
+
+    private fun load() {
+        viewModelScope.launch {
+            _uiState.value = {ScreenName}UiState.Loading
+            try {
+                // Load data here
+                _uiState.value = {ScreenName}UiState.Success
+            } catch (e: Exception) {
+                _uiState.value = {ScreenName}UiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun refresh() {
+        load()
+    }
+}
+
+sealed interface {ScreenName}UiState {
+    data object Loading : {ScreenName}UiState
+    data object Success : {ScreenName}UiState
+    data class Error(val message: String) : {ScreenName}UiState
+}

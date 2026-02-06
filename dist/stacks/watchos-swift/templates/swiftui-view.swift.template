@@ -1,0 +1,43 @@
+import SwiftUI
+
+/// {Title} view for {ProjectName}
+struct {ViewName}View: View {
+    @StateObject private var viewModel = {ViewName}ViewModel()
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 12) {
+                if viewModel.isLoading {
+                    ProgressView()
+                } else {
+                    // Content
+                    Text("Hello from {ViewName}")
+                        .font(.headline)
+                }
+            }
+            .padding()
+        }
+        .navigationTitle("{Title}")
+        .task {
+            await viewModel.load()
+        }
+    }
+}
+
+@MainActor
+class {ViewName}ViewModel: ObservableObject {
+    @Published var isLoading = false
+    
+    func load() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        // Load data
+    }
+}
+
+#Preview {
+    NavigationStack {
+        {ViewName}View()
+    }
+}

@@ -1,0 +1,94 @@
+# web-nextjs Stack
+# Full-stack Next.js application
+
+name: web-nextjs
+description: Next.js 16 with App Router, TypeScript, Drizzle, Tailwind
+
+# Runtime framework package
+framework: "@siquora/stack"
+version: ">=0.2.0"
+
+runtime:
+  package: "@siquora/stack"
+  subpaths:
+    - "@siquora/stack/server"
+    - "@siquora/stack/client"
+    - "@siquora/stack/test"
+    - "@siquora/stack/config"
+
+frameworks:
+  nextjs: "16.x"
+  react: "19.x"
+  typescript: "5.7.x"
+  drizzle: "0.38.x"
+  tailwind: "3.x"
+  node: "22.x"
+
+services:
+  auth: nextauth
+  payments: stripe
+  ai:
+    - vertex-ai
+    - anthropic
+
+# Assets in this stack's directory
+agents:
+  - nextjs-specialist
+  - db-specialist
+  - packages-specialist
+  - tailwind-specialist
+  - nextauth-specialist
+  - stripe-specialist
+  - ai-integration-specialist
+  - testing-specialist
+
+templates:
+  - api-route.ts.template
+  - server-component.tsx.template
+  - client-component.tsx.template
+  - drizzle-schema.template
+  - api-utils.ts.template
+
+skills:
+  - api-generator
+  - server-action
+  - component-generator
+  - auth-flow-generator
+  - form-generator
+  - data-fetching-generator
+
+commands:
+  - check
+  - preview
+
+rules:
+  - nextjs/core.md
+
+references:
+  - README.md
+  - search-guide.md
+
+# Documentation URLs for research
+documentation:
+  nextjs: https://nextjs.org/docs
+  react: https://react.dev
+  typescript: https://www.typescriptlang.org/docs
+  drizzle: https://orm.drizzle.team/docs/overview
+  tailwind: https://tailwindcss.com/docs
+  authjs: https://authjs.dev
+  stripe: https://stripe.com/docs
+  vercel-ai: https://sdk.vercel.ai
+  anthropic: https://docs.anthropic.com
+  jest: https://jestjs.io/docs/getting-started
+  playwright: https://playwright.dev/docs/intro
+  react-hook-form: https://react-hook-form.com
+  zod: https://zod.dev
+
+structure:
+  apps/web/src/app: "Next.js App Router"
+  apps/web/src/components: "React components"
+  apps/web/src/lib: "Business logic"
+  apps/web/src/db: "Database schema (Drizzle)"
+
+compatible_platforms:
+  - gcp

@@ -1,0 +1,69 @@
+# android-kotlin Stack
+# Android app development with Kotlin and Jetpack Compose
+
+name: android-kotlin
+description: Android app with Kotlin, Jetpack Compose, and modern Android frameworks
+
+frameworks:
+  kotlin: "2.0"
+  compose: "latest"
+  android: "API 26+"
+  gradle: "8.x"
+
+# Assets in this stack's directory
+agents:
+  - android-specialist
+  - compose-specialist
+  - room-specialist
+  - coroutines-specialist
+  - testing-specialist
+  - accessibility-specialist
+
+templates:
+  - compose-screen.kt.template
+  - compose-viewmodel.kt.template
+
+skills:
+  - compose-generator
+  - navigation-generator
+  - room-generator
+  - repository-generator
+
+commands:
+  - check
+  - preview
+
+rules:
+  - kotlin/core.md
+  - kotlin/accessibility.md
+
+references:
+  - README.md
+
+# Documentation URLs for research
+documentation:
+  kotlin: https://kotlinlang.org/docs
+  android: https://developer.android.com/docs
+  compose: https://developer.android.com/jetpack/compose
+  material3: https://m3.material.io
+  room: https://developer.android.com/training/data-storage/room
+  hilt: https://developer.android.com/training/dependency-injection/hilt-android
+  coroutines: https://kotlinlang.org/docs/coroutines-overview.html
+  flow: https://developer.android.com/kotlin/flow
+  testing: https://developer.android.com/training/testing
+  compose-testing: https://developer.android.com/jetpack/compose/testing
+  play-store: https://developer.android.com/distribute/google-play
+
+structure:
+  app/src/main/kotlin: "Kotlin source files"
+  app/src/main/kotlin/ui: "Compose UI"
+  app/src/main/kotlin/viewmodel: "ViewModels"
+  app/src/main/kotlin/data: "Data layer"
+  app/src/main/kotlin/domain: "Domain layer"
+  app/src/main/res: "Resources"
+  app/src/test: "Unit tests"
+  app/src/androidTest: "Instrumented tests"
+
+compatible_platforms:
+  - gcp
+  - firebase

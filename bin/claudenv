@@ -1,0 +1,77 @@
+#!/bin/bash
+# Claudenv CLI
+# Main dispatcher for the claudenv framework.
+#
+# Usage: claudenv <command> [options]
+#
+# Commands:
+#   init                         Initialize .claude/ in current directory
+#   update                       Update framework files to latest version
+#   workspace init               Initialize multi-project workspace
+#   workspace sync [project|all] Sync framework files to projects
+#   workspace add-stack <name>   Add a technology stack
+#   workspace add-platform <name> Add a cloud platform
+
+set -e
+
+CLAUDENV_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LIB_DIR="$CLAUDENV_SCRIPT_DIR/../lib/claudenv"
+
+source "$LIB_DIR/_common.sh"
+source "$LIB_DIR/_manifest.sh"
+
+case "${1:-help}" in
+  init)
+    shift
+    source "$LIB_DIR/init.sh"
+    cmd_init "$@"
+    ;;
+  update)
+    shift
+    source "$LIB_DIR/update.sh"
+    cmd_update "$@"
+    ;;
+  workspace)
+    shift
+    case "${1:-help}" in
+      init)
+        shift
+        source "$LIB_DIR/workspace-init.sh"
+        cmd_workspace_init "$@"
+        ;;
+      sync)
+        shift
+        source "$LIB_DIR/workspace-sync.sh"
+        cmd_workspace_sync "$@"
+        ;;
+      add-stack)
+        shift
+        source "$LIB_DIR/workspace-add.sh"
+        cmd_add_stack "$@"
+        ;;
+      add-platform)
+        shift
+        source "$LIB_DIR/workspace-add.sh"
+        cmd_add_platform "$@"
+        ;;
+      *)
+        source "$LIB_DIR/help.sh"
+        show_workspace_help
+        ;;
+    esac
+    ;;
+  version|--version|-v)
+    echo "claudenv 6.0.0"
+    ;;
+  help|--help|-h)
+    source "$LIB_DIR/help.sh"
+    show_help
+    ;;
+  *)
+    source "$LIB_DIR/help.sh"
+    echo -e "${RED}Unknown command: $1${NC}"
+    echo ""
+    show_help
+    exit 1
+    ;;
+esac

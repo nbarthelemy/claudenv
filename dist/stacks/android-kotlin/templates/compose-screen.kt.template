@@ -1,0 +1,61 @@
+package com.siquora.{app}.ui.screens.{screen}
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+
+@Composable
+fun {ScreenName}Screen(
+    viewModel: {ScreenName}ViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit = {}
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    {ScreenName}Content(
+        uiState = uiState,
+        onNavigateBack = onNavigateBack
+    )
+}
+
+@Composable
+private fun {ScreenName}Content(
+    uiState: {ScreenName}UiState,
+    onNavigateBack: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("{Title}") }
+            )
+        }
+    ) { padding ->
+        when (uiState) {
+            is {ScreenName}UiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            is {ScreenName}UiState.Success -> {
+                // Main content here
+                Text(
+                    text = "Content",
+                    modifier = Modifier.padding(padding)
+                )
+            }
+            is {ScreenName}UiState.Error -> {
+                Text(
+                    text = uiState.message,
+                    modifier = Modifier.padding(padding)
+                )
+            }
+        }
+    }
+}

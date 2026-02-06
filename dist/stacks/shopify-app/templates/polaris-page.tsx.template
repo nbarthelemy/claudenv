@@ -1,0 +1,113 @@
+/**
+ * Template: Polaris Page Route
+ * Stack: shopify-app
+ *
+ * Usage: Create a new route in app/routes/app.{page_name}.tsx
+ * Variables:
+ *   - {page_name}: Route name (e.g., "products", "settings")
+ *   - {PageTitle}: Human-readable title (e.g., "Products", "Settings")
+ */
+
+import { json, type LoaderFunctionArgs, type ActionFunctionArgs } from "@remix-run/node";
+import { useLoaderData, useSubmit, useNavigation } from "@remix-run/react";
+import {
+  Page,
+  Layout,
+  Card,
+  BlockStack,
+  Text,
+  Button,
+  Banner,
+} from "@shopify/polaris";
+import { authenticate } from "../shopify.server";
+
+// Loader - Fetch data for the page
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { admin, session } = await authenticate.admin(request);
+
+  // Fetch data from Shopify or database
+  // const response = await admin.graphql(`query { ... }`);
+
+  return json({
+    shop: session.shop,
+    // Add your data here
+  });
+};
+
+// Action - Handle form submissions
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const { admin } = await authenticate.admin(request);
+  const formData = await request.formData();
+  const action = formData.get("action");
+
+  switch (action) {
+    case "save":
+      // Handle save action
+      return json({ success: true });
+
+    default:
+      return json({ error: "Unknown action" }, { status: 400 });
+  }
+};
+
+export default function {PageTitle}Page() {
+  const { shop } = useLoaderData<typeof loader>();
+  const submit = useSubmit();
+  const navigation = useNavigation();
+
+  const isLoading = navigation.state === "submitting";
+
+  const handleSave = () => {
+    submit({ action: "save" }, { method: "POST" });
+  };
+
+  return (
+    <Page
+      title="{PageTitle}"
+      primaryAction={{
+        content: "Save",
+        onAction: handleSave,
+        loading: isLoading,
+      }}
+      secondaryActions={[
+        {
+          content: "Learn more",
+          url: "https://shopify.dev",
+          external: true,
+        },
+      ]}
+    >
+      <Layout>
+        <Layout.Section>
+          <Card>
+            <BlockStack gap="400">
+              <Text as="h2" variant="headingMd">
+                {PageTitle}
+              </Text>
+              <Text as="p" variant="bodyMd">
+                Connected to: {shop}
+              </Text>
+              {/* Add your content here */}
+            </BlockStack>
+          </Card>
+        </Layout.Section>
+
+        <Layout.Section variant="oneThird">
+          <Card>
+            <BlockStack gap="200">
+              <Text as="h2" variant="headingMd">
+                Help
+              </Text>
+              <Text as="p" variant="bodyMd">
+                Need assistance? Check our documentation or contact support.
+              </Text>
+              <Button url="https://help.shopify.com" external>
+                View documentation
+              </Button>
+            </BlockStack>
+          </Card>
+        </Layout.Section>
+      </Layout>
+    </Page>
+  );
+}

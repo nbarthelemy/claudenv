@@ -1,0 +1,18 @@
+# Workspace .gitignore
+# Auto-ignores all child project repos, tracks only shared infrastructure
+
+# Ignore all top-level items
+/*
+
+# Track shared claudenv infrastructure
+!/.claude/
+!/.gitignore
+
+# Ignore runtime files inside .claude
+.claude/logs/
+.claude/loop/
+.claude/backups/*.tar.gz
+.claude/memory/*.json
+
+# Dev server PIDs and logs (bin/dev)
+.dev-pids/

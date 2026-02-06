@@ -1,0 +1,60 @@
+# shopify-theme Stack
+# Shopify theme development
+
+name: shopify-theme
+description: Shopify theme with Liquid, CSS, JavaScript
+
+frameworks:
+  liquid: "latest"
+  tailwind: "4.x"
+
+# Assets in this stack's directory
+agents:
+  - shopify-theme-specialist
+  - storefront-api-specialist
+
+templates:
+  - liquid-section.template
+  - liquid-snippet.template
+
+skills:
+  - section-generator
+  - theme-settings
+  - metafield-generator
+  - ajax-cart-generator
+
+commands:
+  - check
+  - preview
+
+rules:
+  - liquid.md
+
+references:
+  - README.md
+
+# Documentation URLs for research
+documentation:
+  themes: https://shopify.dev/docs/themes
+  liquid-objects: https://shopify.dev/docs/api/liquid/objects
+  liquid-filters: https://shopify.dev/docs/api/liquid/filters
+  liquid-tags: https://shopify.dev/docs/api/liquid/tags
+  ajax-api: https://shopify.dev/docs/api/ajax
+  storefront-api: https://shopify.dev/docs/api/storefront
+  sections: https://shopify.dev/docs/themes/architecture/sections
+  settings: https://shopify.dev/docs/themes/architecture/settings
+  performance: https://shopify.dev/docs/themes/best-practices/performance
+  accessibility: https://shopify.dev/docs/themes/best-practices/accessibility
+  theme-check: https://shopify.dev/docs/themes/tools/theme-check
+
+structure:
+  assets: "CSS, JS, images"
+  config: "Theme settings"
+  layout: "Theme layouts"
+  locales: "Translations"
+  sections: "Theme sections"
+  snippets: "Reusable snippets"
+  templates: "Page templates (JSON)"
+
+compatible_platforms:
+  - shopify

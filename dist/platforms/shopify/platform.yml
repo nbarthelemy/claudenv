@@ -1,0 +1,50 @@
+# Shopify Platform
+# Shopify hosting and infrastructure
+
+name: shopify
+description: Shopify hosting for themes, apps, and extensions
+
+services:
+  compute: shopify-hosting
+  database: shopify-metafields
+  storage: shopify-files
+  cdn: shopify-cdn
+  ci: github-actions
+  auth: shopify-oauth
+  billing: shopify-billing-api
+
+# Assets in this platform's directory
+agents:
+  - shopify-specialist
+  - shopify-checkout-specialist
+  - shopify-metafield-specialist
+
+skills: []
+
+commands:
+  - deploy
+  - tunnel
+
+rules:
+  - shopify.md
+
+references:
+  - SHOPIFY.md
+
+# Documentation URLs for research
+documentation:
+  dev-docs: https://shopify.dev/docs
+  admin-api: https://shopify.dev/docs/api/admin-graphql
+  storefront-api: https://shopify.dev/docs/api/storefront
+  hydrogen: https://shopify.dev/docs/storefronts/headless/hydrogen
+  remix: https://shopify.dev/docs/apps/build
+  liquid: https://shopify.dev/docs/storefronts/themes/liquid
+  polaris: https://polaris.shopify.com
+  checkout-extensions: https://shopify.dev/docs/api/checkout-extensions
+  functions: https://shopify.dev/docs/apps/build/functions
+  app-extensions: https://shopify.dev/docs/apps/build/app-extensions
+  webhooks: https://shopify.dev/docs/apps/build/webhooks
+  billing: https://shopify.dev/docs/apps/build/billing
+  oauth: https://shopify.dev/docs/apps/build/authentication-authorization
+  theme-architecture: https://shopify.dev/docs/storefronts/themes/architecture
+  cli: https://shopify.dev/docs/api/shopify-cli

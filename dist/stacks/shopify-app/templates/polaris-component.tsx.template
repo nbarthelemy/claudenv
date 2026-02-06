@@ -1,0 +1,81 @@
+/**
+ * Template: Polaris Component
+ * Stack: shopify-app
+ *
+ * Usage: Create a new component in app/components/{ComponentName}.tsx
+ * Variables:
+ *   - {ComponentName}: Component name in PascalCase (e.g., "ProductCard")
+ *   - {component_name}: Component name in kebab-case (e.g., "product-card")
+ */
+
+import { useCallback, useState } from "react";
+import {
+  Card,
+  BlockStack,
+  InlineStack,
+  Text,
+  Button,
+  Badge,
+} from "@shopify/polaris";
+
+export interface {ComponentName}Props {
+  /** Primary content or identifier */
+  title: string;
+  /** Optional description */
+  description?: string;
+  /** Status indicator */
+  status?: "active" | "inactive" | "pending";
+  /** Callback when action is triggered */
+  onAction?: () => void;
+}
+
+export function {ComponentName}({
+  title,
+  description,
+  status = "active",
+  onAction,
+}: {ComponentName}Props) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAction = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await onAction?.();
+    } finally {
+      setIsLoading(false);
+    }
+  }, [onAction]);
+
+  const statusBadge = {
+    active: <Badge tone="success">Active</Badge>,
+    inactive: <Badge tone="critical">Inactive</Badge>,
+    pending: <Badge tone="warning">Pending</Badge>,
+  };
+
+  return (
+    <Card>
+      <BlockStack gap="300">
+        <InlineStack align="space-between" blockAlign="center">
+          <Text as="h3" variant="headingMd">
+            {title}
+          </Text>
+          {statusBadge[status]}
+        </InlineStack>
+
+        {description && (
+          <Text as="p" variant="bodyMd" tone="subdued">
+            {description}
+          </Text>
+        )}
+
+        {onAction && (
+          <InlineStack align="end">
+            <Button onClick={handleAction} loading={isLoading}>
+              Action
+            </Button>
+          </InlineStack>
+        )}
+      </BlockStack>
+    </Card>
+  );
+}

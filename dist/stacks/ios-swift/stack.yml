@@ -1,0 +1,66 @@
+# ios-swift Stack
+# iOS app development with Swift and SwiftUI
+
+name: ios-swift
+description: iOS app with Swift, SwiftUI, and modern Apple frameworks
+
+frameworks:
+  swift: "5.10"
+  swiftui: "latest"
+  ios: "17.0+"
+  xcode: "15.x"
+
+# Assets in this stack's directory
+agents:
+  - ios-specialist
+  - swiftui-specialist
+  - swiftdata-specialist
+  - networking-specialist
+  - testing-specialist
+  - accessibility-specialist
+
+templates:
+  - swiftui-view.swift.template
+  - swiftui-viewmodel.swift.template
+
+skills:
+  - swiftui-generator
+  - navigation-generator
+  - model-generator
+  - network-layer-generator
+
+commands:
+  - check
+  - preview
+
+rules:
+  - swift/core.md
+  - swift/accessibility.md
+
+references:
+  - README.md
+
+# Documentation URLs for research
+documentation:
+  swift: https://docs.swift.org
+  swiftui: https://developer.apple.com/documentation/swiftui
+  swiftdata: https://developer.apple.com/documentation/swiftdata
+  foundation: https://developer.apple.com/documentation/foundation
+  urlsession: https://developer.apple.com/documentation/foundation/urlsession
+  xctest: https://developer.apple.com/documentation/xctest
+  swift-testing: https://developer.apple.com/documentation/testing
+  hig: https://developer.apple.com/design/human-interface-guidelines
+  app-store: https://developer.apple.com/app-store/review/guidelines
+
+structure:
+  Sources: "Swift source files"
+  Sources/Views: "SwiftUI views"
+  Sources/ViewModels: "View models"
+  Sources/Models: "Data models"
+  Sources/Services: "API and business logic"
+  Resources: "Assets, localization"
+  Tests: "Unit and UI tests"
+
+compatible_platforms:
+  - apple
+  - firebase

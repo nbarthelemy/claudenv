@@ -1,0 +1,85 @@
+import WidgetKit
+import SwiftUI
+
+/// Timeline entry for {ViewName} complication
+struct {ViewName}Entry: TimelineEntry {
+    let date: Date
+    let value: String
+    let relevance: TimelineEntryRelevance?
+    
+    init(date: Date = .now, value: String = "--", relevance: TimelineEntryRelevance? = nil) {
+        self.date = date
+        self.value = value
+        self.relevance = relevance
+    }
+}
+
+/// Timeline provider for {ViewName} complication
+struct {ViewName}Provider: TimelineProvider {
+    func placeholder(in context: Context) -> {ViewName}Entry {
+        {ViewName}Entry(value: "---")
+    }
+    
+    func getSnapshot(in context: Context, completion: @escaping ({ViewName}Entry) -> Void) {
+        completion({ViewName}Entry(value: "42"))
+    }
+    
+    func getTimeline(in context: Context, completion: @escaping (Timeline<{ViewName}Entry>) -> Void) {
+        var entries: [{ViewName}Entry] = []
+        let currentDate = Date()
+        
+        for offset in 0..<5 {
+            let date = Calendar.current.date(byAdding: .minute, value: offset * 15, to: currentDate)!
+            entries.append({ViewName}Entry(date: date, value: "\(offset)"))
+        }
+        
+        completion(Timeline(entries: entries, policy: .atEnd))
+    }
+}
+
+/// {ViewName} complication widget
+struct {ViewName}Complication: Widget {
+    let kind: String = "{ViewName}Complication"
+    
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: {ViewName}Provider()) { entry in
+            {ViewName}ComplicationView(entry: entry)
+        }
+        .configurationDisplayName("{Title}")
+        .description("{Description}")
+        .supportedFamilies([
+            .accessoryCircular,
+            .accessoryRectangular,
+            .accessoryCorner,
+            .accessoryInline
+        ])
+    }
+}
+
+struct {ViewName}ComplicationView: View {
+    @Environment(\.widgetFamily) var family
+    var entry: {ViewName}Entry
+    
+    var body: some View {
+        switch family {
+        case .accessoryCircular:
+            ZStack {
+                AccessoryWidgetBackground()
+                Text(entry.value)
+                    .font(.headline)
+            }
+        case .accessoryRectangular:
+            HStack {
+                Text(entry.value)
+                    .font(.headline)
+                Spacer()
+            }
+        case .accessoryCorner:
+            Text(entry.value)
+        case .accessoryInline:
+            Text(entry.value)
+        @unknown default:
+            Text(entry.value)
+        }
+    }
+}

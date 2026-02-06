@@ -1,0 +1,52 @@
+# GCP Platform
+# Google Cloud Platform infrastructure
+
+name: gcp
+description: GCP Cloud Run, Cloud SQL, Cloud Storage, Vertex AI
+
+services:
+  compute: cloud-run
+  database: cloud-sql-postgres
+  storage: gcs
+  secrets: secret-manager
+  ci: cloud-build
+  registry: artifact-registry
+  ai: vertex-ai
+  cdn: cloudflare
+  dns: cloudflare
+
+# Assets in this platform's directory
+agents:
+  - gcp-architect
+  - cloud-run-specialist
+  - cloud-sql-specialist
+  - vertex-ai-specialist
+
+skills:
+  - terraform-generator
+  - cloud-run-deploy
+
+commands:
+  - deploy
+  - logs
+
+rules:
+  - gcp.md
+
+references:
+  - README.md
+  - GCP.md
+
+# Documentation URLs for research
+documentation:
+  cloud-run: https://cloud.google.com/run/docs
+  cloud-sql: https://cloud.google.com/sql/docs
+  cloud-build: https://cloud.google.com/build/docs
+  cloud-storage: https://cloud.google.com/storage/docs
+  secret-manager: https://cloud.google.com/secret-manager/docs
+  vertex-ai: https://cloud.google.com/vertex-ai/docs
+  artifact-registry: https://cloud.google.com/artifact-registry/docs
+  iam: https://cloud.google.com/iam/docs
+  vpc: https://cloud.google.com/vpc/docs
+  terraform-gcp: https://registry.terraform.io/providers/hashicorp/google/latest/docs
+  gcloud-cli: https://cloud.google.com/sdk/gcloud/reference

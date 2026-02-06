@@ -1,9 +1,21 @@
 #!/bin/bash
-# Claudenv Installer
+# Claudenv Installer (backward-compatible wrapper)
 # Usage: curl -sL https://raw.githubusercontent.com/nbarthelemy/claudenv/main/bin/install | bash
 #   or:  /path/to/claudenv/bin/install
+#
+# This script delegates to `claudenv init`. Kept for backward compatibility.
 
 set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
+
+# If running from a local repo checkout, use the CLI directly
+if [ -f "$SCRIPT_DIR/claudenv" ]; then
+  exec "$SCRIPT_DIR/claudenv" init "$@"
+fi
+
+# If piped from curl (no SCRIPT_DIR), fall back to the full installer logic
+# This handles: curl -sL .../bin/install | bash
 
 REPO_URL="https://github.com/nbarthelemy/claudenv"
 BRANCH="main"
@@ -23,20 +35,10 @@ while [ "$check_dir" != "/" ]; do
     check_dir="$parent_dir"
 done
 
-# Check if running from local repo
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
-if [ -d "$SCRIPT_DIR/../dist" ]; then
-    LOCAL_INSTALL=true
-    DIST="$SCRIPT_DIR/../dist"
-else
-    LOCAL_INSTALL=false
-fi
-
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  Claudenv Installer"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Report workspace detection
 if [ "$IS_SUBPROJECT" = true ]; then
     echo ""
     echo "📁 Workspace detected: $WORKSPACE_ROOT"
@@ -51,19 +53,16 @@ if [ -d "$TARGET" ]; then
     echo ""
     echo "Found existing .claude directory"
 
-    # Preserve existing CLAUDE.md content
     if [ -f "$TARGET/CLAUDE.md" ]; then
         EXISTING_CLAUDE_MD=$(cat "$TARGET/CLAUDE.md")
         echo "  - Will preserve your CLAUDE.md content"
     fi
 
-    # Backup existing settings.local.json
     if [ -f "$TARGET/settings.local.json" ]; then
         cp "$TARGET/settings.local.json" /tmp/claudenv-settings-local.json.bak
         echo "  - Will preserve settings.local.json"
     fi
 
-    # Note about custom content
     echo "  - Will preserve custom skills, commands, and agents"
 
     echo ""
@@ -74,42 +73,35 @@ if [ -d "$TARGET" ]; then
     fi
 fi
 
-# Download if not local install
-if [ "$LOCAL_INSTALL" = false ]; then
-    echo ""
-    echo "Downloading Claudenv..."
+# Download
+echo ""
+echo "Downloading Claudenv..."
 
-    # Create temp directory
-    TEMP_DIR=$(mktemp -d)
-    trap "rm -rf $TEMP_DIR" EXIT
+TEMP_DIR=$(mktemp -d)
+trap "rm -rf $TEMP_DIR" EXIT
 
-    # Download and extract
-    if command -v curl &> /dev/null; then
-        curl -sL "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
-    elif command -v wget &> /dev/null; then
-        wget -qO- "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
-    else
-        echo "Error: curl or wget required"
-        exit 1
-    fi
-
-    DIST="$TEMP_DIR/claudenv-${BRANCH}/dist"
+if command -v curl &> /dev/null; then
+    curl -sL "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
+elif command -v wget &> /dev/null; then
+    wget -qO- "${REPO_URL}/archive/refs/heads/${BRANCH}.tar.gz" | tar -xz -C "$TEMP_DIR"
+else
+    echo "Error: curl or wget required"
+    exit 1
 fi
 
-# Verify manifest exists
+DIST="$TEMP_DIR/claudenv-${BRANCH}/dist"
+
 if [ ! -f "$DIST/manifest.json" ]; then
     echo "Error: Missing manifest.json"
     exit 1
 fi
 
-# Create .claude directory if it doesn't exist
 mkdir -p "$TARGET"
 
 echo "Installing claudenv framework..."
 
-# If updating, remove deprecated files first
+# Remove deprecated files on update
 if [ "$IS_UPDATE" = true ] && [ -f "$TARGET/manifest.json" ]; then
-    # Remove files that are in OLD manifest but not in NEW manifest (deprecated)
     if command -v jq &> /dev/null; then
         while IFS= read -r file; do
             if [ -f "$TARGET/$file" ]; then
@@ -119,15 +111,12 @@ if [ "$IS_UPDATE" = true ] && [ -f "$TARGET/manifest.json" ]; then
     fi
 fi
 
-# Framework directories that should only exist at workspace root (not in subprojects)
 FRAMEWORK_DIRS="skills commands rules scripts templates agents orchestration"
 
-# Copy framework files using manifest (preserves custom content)
+# Copy framework files using manifest
 if command -v jq &> /dev/null; then
-    # Use manifest-based copy (preferred)
     while IFS= read -r file; do
         if [ -f "$DIST/$file" ]; then
-            # Skip framework directories for subprojects (they inherit from workspace root)
             if [ "$IS_SUBPROJECT" = true ]; then
                 skip=false
                 for dir in $FRAMEWORK_DIRS; do
@@ -145,10 +134,8 @@ if command -v jq &> /dev/null; then
         fi
     done < <(jq -r '.files[]' "$DIST/manifest.json" 2>/dev/null)
 else
-    # Fallback: copy all files but merge directories (don't delete)
     echo "  Note: Install jq for better custom content preservation"
     for dir in commands skills rules scripts templates learning agents orchestration; do
-        # Skip framework dirs for subprojects
         if [ "$IS_SUBPROJECT" = true ]; then
             skip=false
             for fdir in $FRAMEWORK_DIRS; do
@@ -168,34 +155,22 @@ else
     done
 fi
 
-# Copy config files (always overwrite framework configs)
 cp "$DIST/settings.json" "$TARGET/settings.json"
 cp "$DIST/version.json" "$TARGET/version.json"
 cp "$DIST/manifest.json" "$TARGET/manifest.json"
 [ -f "$DIST/settings.local.json.template" ] && cp "$DIST/settings.local.json.template" "$TARGET/settings.local.json.template"
 
-# Restore settings.local.json if it was backed up
 if [ -f /tmp/claudenv-settings-local.json.bak ]; then
     mv /tmp/claudenv-settings-local.json.bak "$TARGET/settings.local.json"
 fi
 
-# Create empty directories for user data
-mkdir -p "$TARGET/logs"
-mkdir -p "$TARGET/backups"
-mkdir -p "$TARGET/loop"
-mkdir -p "$TARGET/plans"
-mkdir -p "$TARGET/rca"
-mkdir -p "$TARGET/references"
-mkdir -p "$TARGET/memory"
-mkdir -p "$TARGET/state"
+mkdir -p "$TARGET"/{logs,backups,loop,plans,rca,references,memory,state}
 
-# Make scripts executable
 chmod +x "$TARGET/scripts/"*.sh 2>/dev/null || true
 chmod +x "$TARGET/scripts/"*.js 2>/dev/null || true
 
-# Migration: v4.x → v5.x (unified hooks)
+# Migration: v4.x → v5.x
 if [ "$IS_UPDATE" = true ]; then
-    # Detect old 3-hook settings pattern and clean up deprecated scripts
     if [ -f "$TARGET/scripts/code-gate.sh" ] && [ -f "$TARGET/scripts/unified-gate.sh" ]; then
         echo "  - Migrating hooks: 3-hook → unified-gate"
         rm -f "$TARGET/scripts/code-gate.sh"
@@ -206,20 +181,16 @@ if [ "$IS_UPDATE" = true ]; then
         rm -f "$TARGET/scripts/decision-reminder.sh"
         rm -f "$TARGET/scripts/learning-observer.sh"
     fi
-    # Clean up deleted rule files
     rm -f "$TARGET/rules/parallel-execution.md"
     rm -f "$TARGET/rules/error-recovery/core.md"
     rm -f "$TARGET/rules/documentation.md"
 fi
 
-# Handle CLAUDE.md - preserve user content, add claudenv import
+# Handle CLAUDE.md
 if [ -n "$EXISTING_CLAUDE_MD" ]; then
-    # Check if already has claudenv import
     if echo "$EXISTING_CLAUDE_MD" | grep -qE "@rules/claudenv(.md|/core.md)"; then
-        # Already has import, just restore the file
         echo "$EXISTING_CLAUDE_MD" > "$TARGET/CLAUDE.md"
     else
-        # Add claudenv import to existing content
         cat > "$TARGET/CLAUDE.md" << EOF
 $EXISTING_CLAUDE_MD
 
@@ -230,7 +201,6 @@ EOF
     fi
     echo "  - Preserved your CLAUDE.md, added framework import"
 else
-    # Create new CLAUDE.md with import
     cat > "$TARGET/CLAUDE.md" << 'EOF'
 # Project Instructions
 
@@ -243,13 +213,11 @@ EOF
     echo "  - Created CLAUDE.md with framework import"
 fi
 
-# Create TODO.md if it doesn't exist (check both .claude and root)
 if [ ! -f "$TARGET/TODO.md" ] && [ ! -f "./TODO.md" ]; then
     cp "$DIST/TODO.md" "$TARGET/TODO.md" 2>/dev/null || true
     echo "  - Created TODO.md"
 fi
 
-# Count what was installed
 LOCAL_SKILLS=$(find "$TARGET/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
 COMMANDS=$(find "$TARGET/commands" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 AGENTS=$(find "$TARGET/agents" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
@@ -274,30 +242,3 @@ echo "Next steps:"
 echo "  1. Start Claude Code: claude"
 echo "  2. Run bootstrap: /ce:init"
 echo ""
-
-# Check for optional dependencies
-echo "Optional dependencies:"
-
-# Check for sqlite-vss
-VSS_AVAILABLE=false
-for path in /opt/homebrew/lib/vss0.dylib /usr/local/lib/vss0.dylib /usr/lib/sqlite3/vss0.so; do
-    if [ -f "$path" ]; then
-        VSS_AVAILABLE=true
-        break
-    fi
-done
-if [ "$VSS_AVAILABLE" = true ]; then
-    echo "  ✓ sqlite-vss (semantic search)"
-else
-    echo "  ○ sqlite-vss (semantic search) - brew install sqlite-vss"
-fi
-
-# Check for transformers.js
-if npm list @xenova/transformers &>/dev/null 2>&1 || [ -d "node_modules/@xenova/transformers" ]; then
-    echo "  ✓ @xenova/transformers (embeddings)"
-else
-    echo "  ○ @xenova/transformers (embeddings) - npm i @xenova/transformers"
-fi
-
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

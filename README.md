@@ -52,19 +52,137 @@ rm -rf /tmp/claudenv
 echo -e "\n@rules/claudenv/core.md" >> .claude/CLAUDE.md
 ```
 
+### Option 3: CLI (for workspace management)
+
+```bash
+# Install claudenv CLI
+git clone https://github.com/nbarthelemy/claudenv.git ~/.claudenv
+export PATH="$HOME/.claudenv/bin:$PATH"
+
+# Initialize a project
+claudenv init
+
+# Initialize a multi-project workspace
+claudenv workspace init --org myorg --stack web-nextjs --platform gcp
+```
+
+## CLI Reference
+
+### `claudenv init`
+
+Initialize claudenv in the current project directory.
+
+```bash
+claudenv init              # Fresh install or update
+claudenv init --force      # Overwrite existing files
+```
+
+- Creates `.claude/` with all framework files
+- Detects workspace context (subproject inherits from parent)
+- Preserves existing `CLAUDE.md` and `settings.local.json`
+- Uses manifest for clean file tracking
+
+### `claudenv update`
+
+Update framework files to the latest version.
+
+```bash
+claudenv update            # Update to latest
+claudenv update --check    # Check if update available (no changes)
+claudenv update --dry-run  # Show what would change
+```
+
+- Manifest-based differential update
+- Safely removes deprecated files
+- Preserves user customizations
+
+### `claudenv workspace init`
+
+Initialize a multi-project workspace with stacks and platforms.
+
+```bash
+claudenv workspace init                                    # Interactive
+claudenv workspace init --org myorg                        # Set org name
+claudenv workspace init --org myorg --stack web-nextjs     # With stack
+claudenv workspace init --org myorg --platform gcp         # With platform
+```
+
+- Creates `stack-workspace.yml` (org-level configuration)
+- Sets up `.claude/stacks/` and `.claude/platforms/` directories
+- Creates `bin/` wrapper scripts
+- Generates `.gitignore`
+
+### `claudenv workspace sync`
+
+Sync framework files to workspace projects using 4-layer architecture.
+
+```bash
+claudenv workspace sync myapp        # Sync one project
+claudenv workspace sync all          # Sync all projects
+claudenv workspace sync all --dry-run # Preview changes
+```
+
+**Sync layers:**
+1. **Claudenv base** -- Core framework (inherited from workspace `.claude/`)
+2. **Workspace common** -- Shared workspace rules and settings
+3. **Stack-specific** -- Agents, commands, skills, and templates from the project's stack
+4. **Platform-specific** -- Agents, commands, and rules from the project's platform
+
+### `claudenv workspace add-stack`
+
+Add a technology stack's agents, skills, rules, and templates.
+
+```bash
+claudenv workspace add-stack web-nextjs     # Add Next.js stack
+claudenv workspace add-stack ios-swift      # Add iOS stack
+claudenv workspace add-stack --list         # List available stacks
+```
+
+**Available stacks:** `web-nextjs`, `ios-swift`, `android-kotlin`, `shopify-theme`, `shopify-app`, `watchos-swift`
+
+### `claudenv workspace add-platform`
+
+Add a cloud platform's commands, rules, and agents.
+
+```bash
+claudenv workspace add-platform gcp         # Add GCP platform
+claudenv workspace add-platform shopify     # Add Shopify platform
+claudenv workspace add-platform --list      # List available platforms
+```
+
+**Available platforms:** `gcp`, `shopify`
+
 ## Repository Structure
 
 ```
 claudenv/
 ├── CLAUDE.md          # Dev instructions (NOT distributed to users)
 ├── README.md          # This file
-├── bin/install        # User installer script
 ├── LICENSE
+├── bin/
+│   ├── claudenv       # CLI entry point (subcommand dispatch)
+│   └── install        # Legacy installer (delegates to claudenv init)
+├── lib/claudenv/      # CLI library modules
+│   ├── common.sh      # Shared utilities (logging, colors, paths)
+│   ├── init.sh        # claudenv init implementation
+│   ├── update.sh      # claudenv update implementation
+│   ├── workspace.sh   # claudenv workspace subcommands
+│   └── ...
 ├── .claude/           # Symlinks for self-dogfooding
 └── dist/              # Distributable content → user's .claude/
     ├── settings.json
     ├── version.json
     ├── manifest.json
+    ├── stacks/                # Technology stack definitions
+    │   ├── web-nextjs/        # Next.js agents, commands, rules, skills, templates
+    │   ├── ios-swift/         # iOS/SwiftUI agents, commands, rules, skills
+    │   ├── android-kotlin/    # Android/Compose agents, commands, rules, skills
+    │   ├── shopify-theme/     # Shopify theme agents, commands, rules
+    │   ├── shopify-app/       # Shopify app agents, commands, rules
+    │   └── watchos-swift/     # watchOS agents, commands, rules, skills
+    ├── platforms/             # Cloud platform definitions
+    │   ├── gcp/               # GCP agents, commands, rules
+    │   └── shopify/           # Shopify platform agents, commands, rules
     ├── rules/
     │   ├── claudenv/
     │   │   ├── core.md       # Core framework rules (always loaded)
@@ -232,6 +350,72 @@ your-project/
 ```
 
 **Key point:** Your project instructions stay in `CLAUDE.md`. Framework instructions are imported via `@rules/claudenv/core.md`, so updates never overwrite your content.
+
+## Workspace Support
+
+A workspace is a multi-project monorepo where projects share a common claudenv framework, organization-level configuration, and technology stacks. Workspaces enable consistent tooling across all projects while allowing per-project customization.
+
+### 4-Layer Sync Architecture
+
+When `claudenv workspace sync` runs, it merges configuration from four layers (later layers override earlier ones):
+
+1. **Claudenv base** -- Core framework files inherited from the workspace-level `.claude/` directory (rules, commands, skills, scripts, references)
+2. **Workspace common** -- Shared workspace rules and settings defined in the workspace root
+3. **Stack-specific** -- Agents, commands, skills, rules, and templates from the project's assigned technology stack (e.g., `web-nextjs`)
+4. **Platform-specific** -- Agents, commands, and rules from the project's assigned cloud platform (e.g., `gcp`)
+
+### Lifecycle
+
+```bash
+# 1. Initialize the workspace
+claudenv workspace init --org myorg
+
+# 2. Add technology stacks
+claudenv workspace add-stack web-nextjs
+claudenv workspace add-stack ios-swift
+
+# 3. Add cloud platforms
+claudenv workspace add-platform gcp
+
+# 4. Sync framework files to projects
+claudenv workspace sync myapp       # One project
+claudenv workspace sync all         # All projects
+```
+
+The workspace configuration lives in `stack-workspace.yml` at the repository root. Each project declares its stack and platform, and `claudenv workspace sync` assembles the correct `.claude/` directory for that project.
+
+## Stacks & Platforms
+
+Stacks and platforms are pre-built collections of agents, commands, rules, skills, templates, and references tailored to a specific technology or cloud provider.
+
+### What Each Stack Provides
+
+| Component | Description |
+|-----------|-------------|
+| **Agents** | Specialist subagents for the technology (e.g., Next.js route specialist) |
+| **Commands** | Stack-specific slash commands |
+| **Rules** | Coding standards, conventions, and best practices |
+| **Skills** | Auto-invoked skills for common patterns |
+| **Templates** | Scaffolding templates for new files and features |
+| **References** | On-demand reference documentation |
+
+### Available Stacks
+
+| Stack | Description |
+|-------|-------------|
+| `web-nextjs` | Next.js web applications (App Router, React Server Components) |
+| `ios-swift` | iOS applications with SwiftUI |
+| `android-kotlin` | Android applications with Jetpack Compose |
+| `shopify-theme` | Shopify theme development (Liquid, Dawn) |
+| `shopify-app` | Shopify app development (Remix, Polaris) |
+| `watchos-swift` | watchOS applications with SwiftUI |
+
+### Available Platforms
+
+| Platform | Description |
+|----------|-------------|
+| `gcp` | Google Cloud Platform (Cloud Run, Cloud SQL, Pub/Sub, etc.) |
+| `shopify` | Shopify platform (Admin API, Storefront API, webhooks, etc.) |
 
 ## Autonomy Levels
 
@@ -656,12 +840,30 @@ cd "$PROJECT_ROOT" || exit 0
 To update an existing Claudenv installation to the latest version:
 
 ```bash
+# CLI (preferred)
+claudenv update            # Update to latest
+claudenv update --check    # Check if update available (no changes)
+claudenv update --dry-run  # Show what would change
+
+# From within Claude Code
 /ce:admin update
 ```
 
-This fetches the latest fixes from GitHub while preserving your custom hooks and settings.
+Both methods fetch the latest fixes from GitHub while preserving your custom hooks and settings. The CLI uses manifest-based differential updates and safely removes deprecated files.
 
 ## Changelog
+
+### v6.0.0
+- **Added:** `bin/claudenv` CLI with subcommand dispatch architecture
+- **Added:** `claudenv init` command (refactored from `bin/install`)
+- **Added:** `claudenv update` command with manifest-based differential updates
+- **Added:** `claudenv workspace init` for multi-project workspace initialization
+- **Added:** `claudenv workspace sync` with 4-layer sync (claudenv base, workspace common, stack-specific, platform-specific)
+- **Added:** `claudenv workspace add-stack` and `claudenv workspace add-platform`
+- **Added:** `dist/stacks/` with 6 technology stack definitions (web-nextjs, ios-swift, android-kotlin, shopify-theme, shopify-app, watchos-swift)
+- **Added:** `dist/platforms/` with 2 platform definitions (gcp, shopify)
+- **Added:** `lib/claudenv/` modular CLI library with shared utilities
+- **Changed:** `bin/install` now delegates to `claudenv init` for backward compatibility
 
 ### v5.0.0
 - **BREAKING:** Consolidated 3 PreToolUse hooks into single `unified-gate.sh` (3 bash processes per write reduced to 1)

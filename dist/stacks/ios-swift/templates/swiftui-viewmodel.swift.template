@@ -1,0 +1,22 @@
+import SwiftUI
+
+@MainActor
+final class {ViewName}ViewModel: ObservableObject {
+    @Published private(set) var isLoading = false
+    @Published private(set) var error: Error?
+
+    // Add your published properties here
+    // @Published private(set) var items: [Item] = []
+
+    func load() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            // Load data here
+            // items = try await service.fetchItems()
+        } catch {
+            self.error = error
+        }
+    }
+}

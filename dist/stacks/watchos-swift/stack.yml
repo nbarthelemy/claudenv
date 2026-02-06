@@ -1,0 +1,66 @@
+# watchos-swift Stack
+# watchOS app development with Swift and SwiftUI
+
+name: watchos-swift
+description: watchOS app with Swift, SwiftUI, and WidgetKit complications
+
+frameworks:
+  swift: "5.10"
+  swiftui: "latest"
+  watchos: "10.0+"
+  xcode: "15.x"
+
+# Assets in this stack's directory
+agents:
+  - watchos-specialist
+  - swiftui-specialist
+  - complications-specialist
+  - connectivity-specialist
+  - testing-specialist
+  - accessibility-specialist
+
+templates:
+  - swiftui-view.swift.template
+  - complication.swift.template
+
+skills:
+  - swiftui-generator
+  - complication-generator
+  - model-generator
+  - connectivity-generator
+
+commands:
+  - check
+  - preview
+
+rules:
+  - swift/core.md
+  - swift/accessibility.md
+
+references:
+  - README.md
+
+# Documentation URLs for research
+documentation:
+  swift: https://docs.swift.org
+  swiftui: https://developer.apple.com/documentation/swiftui
+  watchos: https://developer.apple.com/documentation/watchos-apps
+  widgetkit: https://developer.apple.com/documentation/widgetkit
+  watchconnectivity: https://developer.apple.com/documentation/watchconnectivity
+  healthkit: https://developer.apple.com/documentation/healthkit
+  swift-testing: https://developer.apple.com/documentation/testing
+  hig-watch: https://developer.apple.com/design/human-interface-guidelines/designing-for-watchos
+
+structure:
+  Sources: "Swift source files"
+  Sources/Views: "SwiftUI views"
+  Sources/ViewModels: "View models"
+  Sources/Models: "Data models"
+  Sources/Services: "API and business logic"
+  Sources/Complications: "WidgetKit complications"
+  Resources: "Assets, localization"
+  Tests: "Unit and UI tests"
+
+compatible_platforms:
+  - apple
+  - firebase

@@ -1,0 +1,70 @@
+# shopify-app Stack
+# Shopify app development
+
+name: shopify-app
+description: Shopify app with Node.js, Remix, Polaris
+
+frameworks:
+  node: "22.x"
+  react: "19.x"
+  typescript: "5.7.x"
+  polaris: "latest"
+  drizzle: "0.38.x"
+  remix: "latest"
+
+# Assets in this stack's directory
+agents:
+  - shopify-app-specialist
+  - shopify-graphql-specialist
+  - shopify-api-specialist
+  - shopify-functions-specialist
+  - shopify-extensions-specialist
+  - db-specialist
+
+templates:
+  - polaris-page.tsx.template
+  - polaris-component.tsx.template
+  - drizzle-schema.template
+
+skills:
+  - polaris-generator
+  - graphql-query-generator
+  - webhook-handler
+  - function-generator
+  - extension-generator
+
+commands:
+  - check
+  - preview
+
+rules:
+  - polaris.md
+
+references:
+  - README.md
+
+# Documentation URLs for research
+documentation:
+  admin-api: https://shopify.dev/docs/api/admin-graphql
+  storefront-api: https://shopify.dev/docs/api/storefront
+  app-bridge: https://shopify.dev/docs/api/app-bridge
+  polaris: https://polaris.shopify.com
+  checkout-ui: https://shopify.dev/docs/api/checkout-ui-extensions
+  functions: https://shopify.dev/docs/api/functions
+  webhooks: https://shopify.dev/docs/apps/webhooks
+  oauth: https://shopify.dev/docs/apps/auth/oauth
+  billing: https://shopify.dev/docs/apps/billing
+  remix: https://remix.run/docs
+  drizzle: https://orm.drizzle.team/docs/overview
+
+structure:
+  app/routes: "Remix routes"
+  app/components: "React/Polaris components"
+  app/graphql: "GraphQL queries and mutations"
+  app/services: "Business logic"
+  extensions: "Shopify extensions"
+  src/db: "Database schema (Drizzle)"
+
+compatible_platforms:
+  - shopify
+  - gcp

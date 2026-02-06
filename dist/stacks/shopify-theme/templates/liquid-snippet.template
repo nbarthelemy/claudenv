@@ -1,0 +1,33 @@
+{% comment %}
+  Template: Liquid Snippet
+  Stack: shopify-theme
+
+  Usage: Create a new snippet file in theme/snippets/
+  Variables:
+    - {snippet_name}: Snippet name (e.g., "card-product")
+{% endcomment %}
+
+{%- comment -%}
+  Snippet: {snippet_name}
+  -----------------------------------------------
+  Renders: [Describe what this snippet renders]
+
+  Accepts:
+  - param1: {Type} Description (required)
+  - param2: {Type} Description (optional, default: value)
+
+  Usage:
+  {%- render '{snippet_name}', param1: value, param2: value -%}
+
+  Example:
+  {%- render '{snippet_name}', product: product -%}
+{%- endcomment -%}
+
+{%- liquid
+  # Set defaults for optional parameters
+  # assign param2 = param2 | default: 'default_value'
+-%}
+
+<div class="{snippet_name}">
+  {%- comment -%} Snippet content here {%- endcomment -%}
+</div>

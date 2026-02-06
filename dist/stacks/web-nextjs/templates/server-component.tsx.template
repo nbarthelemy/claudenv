@@ -1,0 +1,107 @@
+// apps/web/src/app/(app)/{{route}}/page.tsx
+// Siquora Server Component Template
+//
+// Usage: Copy and replace {{placeholders}}
+// - {{route}}: Route path (e.g., "dashboard", "settings")
+// - {{PageName}}: Component name (e.g., "Dashboard", "Settings")
+// - {{Model}}: Drizzle table for data (e.g., "User", "Workspace")
+
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth } from "@siquora/auth";
+import { db } from "@/lib/db";
+
+// ============================================================================
+// Metadata
+// ============================================================================
+
+export const metadata: Metadata = {
+  title: "{{PageName}}",
+  description: "{{PageName}} page description",
+};
+
+// ============================================================================
+// Data Fetching
+// ============================================================================
+
+async function getData(userId: string) {
+  const data = await db.{{model}}.findMany({
+    where: {
+      userId,
+      deletedAt: null,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return data;
+}
+
+// ============================================================================
+// Page Component (Server Component)
+// ============================================================================
+
+export default async function {{PageName}}Page() {
+  // Auth check
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  // Fetch data on server
+  const data = await getData(session.user.id);
+
+  return (
+    <div className="container py-8">
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold">{{PageName}}</h1>
+        <p className="text-muted-foreground">
+          Description of this page
+        </p>
+      </header>
+
+      <main>
+        {data.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <{{PageName}}List items={data} />
+        )}
+      </main>
+    </div>
+  );
+}
+
+// ============================================================================
+// Sub-components (can be moved to separate files)
+// ============================================================================
+
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 text-center">
+      <p className="text-muted-foreground mb-4">
+        No items yet
+      </p>
+      {/* Add CTA button if needed */}
+    </div>
+  );
+}
+
+function {{PageName}}List({ items }: { items: any[] }) {
+  return (
+    <div className="grid gap-4">
+      {items.map((item) => (
+        <{{PageName}}Card key={item.id} item={item} />
+      ))}
+    </div>
+  );
+}
+
+function {{PageName}}Card({ item }: { item: any }) {
+  return (
+    <div className="rounded-lg border p-4">
+      <h3 className="font-medium">{item.name}</h3>
+      <p className="text-sm text-muted-foreground">
+        Created {new Date(item.createdAt).toLocaleDateString()}
+      </p>
+    </div>
+  );
+}

@@ -1,0 +1,83 @@
+// Shopify App Drizzle Schema Template
+//
+// Add to: src/db/schema.ts
+//
+// Usage: Copy and replace {{placeholders}}
+// - {{Model}}: Model name (PascalCase, e.g., "Product", "Order")
+// - {{model}}: Lowercase (e.g., "product", "order")
+// - {{models}}: Plural lowercase (e.g., "products", "orders")
+
+import { pgTable, text, timestamp, boolean, jsonb, index, unique } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { shops } from "./schema";
+
+// ============================================================================
+// Shop-Scoped Model (Standard Pattern)
+// ============================================================================
+
+export const {{models}} = pgTable("{{models}}", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  shopifyId: text("shopify_id"), // Shopify resource ID if synced
+  name: text("name").notNull(),
+  shopId: text("shop_id").notNull().references(() => shops.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  deletedAt: timestamp("deleted_at"), // Soft delete
+}, (table) => ({
+  shopIdIdx: index("{{models}}_shop_id_idx").on(table.shopId),
+  deletedAtIdx: index("{{models}}_deleted_at_idx").on(table.deletedAt),
+  uniqueShopifyId: unique("{{models}}_shop_shopify_unique").on(table.shopId, table.shopifyId),
+}));
+
+export const {{models}}Relations = relations({{models}}, ({ one }) => ({
+  shop: one(shops, {
+    fields: [{{models}}.shopId],
+    references: [shops.id],
+  }),
+}));
+
+// Type exports
+export type {{Model}} = typeof {{models}}.$inferSelect;
+export type New{{Model}} = typeof {{models}}.$inferInsert;
+
+// ============================================================================
+// Shopify Webhook Data Model
+// ============================================================================
+
+export const {{model}}Webhooks = pgTable("{{model}}_webhooks", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  topic: text("topic").notNull(), // e.g., "products/update"
+  shopifyId: text("shopify_id").notNull(),
+  payload: jsonb("payload").notNull(),
+  processed: boolean("processed").default(false).notNull(),
+  shopId: text("shop_id").notNull().references(() => shops.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => ({
+  shopProcessedIdx: index("{{model}}_webhooks_shop_processed_idx").on(table.shopId, table.processed),
+  topicIdx: index("{{model}}_webhooks_topic_idx").on(table.topic),
+}));
+
+// ============================================================================
+// Settings Model (One per Shop)
+// ============================================================================
+
+export const {{model}}Settings = pgTable("{{model}}_settings", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  enabled: boolean("enabled").default(true).notNull(),
+  config: jsonb("config").default({}).notNull(),
+  shopId: text("shop_id").notNull().unique().references(() => shops.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ============================================================================
+// Remember to:
+// ============================================================================
+// 1. Add relation to shops table in schema.ts:
+//    {{models}}: many({{models}}),
+//
+// 2. Generate migration:
+//    pnpm db:generate
+//
+// 3. Apply migration:
+//    pnpm db:migrate
